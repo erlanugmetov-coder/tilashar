@@ -715,7 +715,11 @@ button.gcard:active{transform:scale(.96)}
 .rep .rmist{margin-top:10px;line-height:1.6;font-size:15px}
 </style></head><body>
 <div class="wrap" id="app"></div>
-<script>try{Telegram.WebApp.ready();Telegram.WebApp.expand()}catch(e){}</script>
+<script>var TG=window.Telegram&&Telegram.WebApp;try{TG.ready();TG.expand();TG.setHeaderColor('#f3f6f7');TG.setBackgroundColor('#f3f6f7');TG.disableVerticalSwipes&&TG.disableVerticalSwipes()}catch(e){}
+var KID=(TG&&TG.initDataUnsafe&&TG.initDataUnsafe.user&&TG.initDataUnsafe.user.first_name)||"досым";
+function haptic(t){try{var h=TG&&TG.HapticFeedback;if(!h)return;if(t==='ok')h.notificationOccurred('success');else if(t==='bad')h.notificationOccurred('error');else h.impactOccurred('light')}catch(e){}}
+var AUTHOR='Creatorofarts';
+function writeAuthor(){var u='https://t.me/'+AUTHOR+'?text='+encodeURIComponent('Отзыв о Тілашар: ');try{if(TG&&TG.openTelegramLink){TG.openTelegramLink(u);return}}catch(e){}window.open(u,'_blank')}</script>
 <script>
 /* ===================== common ===================== */
 const BACK='аоұы', FRONT='әеөүі', VOWELS='аәеоөұүыіиуэюя';
@@ -746,9 +750,24 @@ const SRC={"бала": "Қазақ тілі, 4 сынып", "қала": "Қаз�
 /* ===================== storage ===================== */
 const KEY='tilashar-public-v1';
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){S._t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}cloudSave()}
+/* Telegram CloudStorage: progress lives in the child's Telegram account (values ≤4096 chars → chunks) */
+const CS=(()=>{try{const c=window.Telegram&&Telegram.WebApp;return c&&c.isVersionAtLeast&&c.isVersionAtLeast('6.9')&&c.CloudStorage}catch(e){return null}})();
+let cloudT=null,cloudN=0,cloudReady=false,cloudDirty=false;
+function cloudSave(){if(!CS)return;if(!cloudReady){cloudDirty=true;return}clearTimeout(cloudT);cloudT=setTimeout(()=>{try{
+  const j=JSON.stringify(S),n=Math.ceil(j.length/3900);
+  for(let i=0;i<n;i++)CS.setItem('s'+i,j.slice(i*3900,(i+1)*3900));
+  CS.setItem('sn',String(n)+'|'+S._t);
+  if(cloudN>n){const old=[];for(let i=n;i<cloudN;i++)old.push('s'+i);CS.removeItems(old)}cloudN=n;
+}catch(e){}},1500)}
+function cloudGo(){cloudReady=true;if(cloudDirty)cloudSave()}
+function cloudLoad(){if(!CS)return;try{CS.getItem('sn',(err,v)=>{if(err||!v)return cloudGo();const [n,t]=v.split('|').map(Number);cloudN=n;
+  if(!(t>BOOT_T))return cloudGo();const keys=[...Array(n)].map((_,i)=>'s'+i);
+  CS.getItems(keys,(e2,vals)=>{if(e2||!vals)return cloudGo();try{const j=keys.map(k=>vals[k]||'').join('');const c=JSON.parse(j);
+    if(c&&c._t===t){localStorage.setItem(KEY,j);location.reload()}else cloudGo()}catch(e){cloudGo()}})})}catch(e){cloudGo()}}
+function cloudClear(cb){if(!CS)return cb();try{const keys=['sn'];for(let i=0;i<Math.max(cloudN,60);i++)keys.push('s'+i);CS.removeItems(keys,()=>cb())}catch(e){cb()}}
 const fresh=()=>({coins:0,xp:0,streak:0,last:'',welcomed:{},mute:false,allOpen:false,expand:{},b:{}});
-const S=Object.assign(fresh(),load()); if(S.coins==null)S.coins=0;
+const S=Object.assign(fresh(),load()); const BOOT_T=S._t||0; if(S.coins==null)S.coins=0;
 const BS=id=>S.b[id]||(S.b[id]={stars:{},seen:{},best:null,full:false,ws:{},nd:null});
 const dayStr=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 function bumpStreak(){const t=dayStr(new Date());if(S.last===t)return;const ys=dayStr(new Date(Date.now()-864e5));S.streak=(S.last===ys?S.streak:0)+1;S.last=t}
@@ -1900,7 +1919,7 @@ const topBar=()=>`<div class="top"><div class="brand">Тілашар</div>
 
 function letter(bi){
   const bl=BLOCKS[bi];
-  app.innerHTML=`<div class="letter"><h1>Сәлем, досым!</h1>${bl.letter()}
+  app.innerHTML=`<div class="letter"><h1>Сәлем, ${esc(KID)}!</h1>${bl.letter()}
    <div class="newpart">${robotNow()}</div>
    <button class="btn wide" id="go" type="button">Бастадық! — Начали!</button></div>`;
   window.scrollTo(0,0);
@@ -2478,7 +2497,8 @@ const P=S.path||(S.path={});
 Object.entries({done:{},cur:0,today:{d:0,n:0},money:{d:0,n:0},wallet:{earned:0,paid:0,pays:[]},chestDay:0,bonusDays:[],log:[],intro:false,built:{}}).forEach(([k,v])=>{if(P[k]==null)P[k]=v});
 const todayN=()=>P.today.d===dayNum()?P.today.n:0;
 const moneyToday=()=>P.money.d===dayNum()?P.money.n:0;
-const fmt=n=>n.toLocaleString('ru-RU')+' ₸';
+const CU=()=>S.realMoney?'₸':'монет';
+const fmt=n=>n.toLocaleString('ru-RU')+' '+CU();
 const TYPES={letter:'✉️',secret:'📖',lesson:'⭐',mix:'🔀',speed:'🎮',boss:'🏆',words:'📚'};
 
 /* ---------- the path: one robot = one module (12 steps), then endless training ---------- */
@@ -2789,10 +2809,10 @@ function completeNode(i,stars){
 
 /* ---------- screens ---------- */
 const miniGoal=(tn,mt)=>`<button class="mg${tn>=GOAL?' done':''}" id="mg" type="button" style="--p:${Math.min(1,tn/GOAL)}" aria-label="Цель на сегодня"><b>${Math.min(tn,GOAL)}/${GOAL}</b></button>
- <div class="mg-pop" id="mgpop"><b>${tn>=GOAL?'День закрыт! 🔥':`Цель дня: ещё ${GOAL-tn} — и сундук`}</b><span>Копилка сегодня: ${mt} из ${CAP} ₸</span></div>`;
+ <div class="mg-pop" id="mgpop"><b>${tn>=GOAL?'День закрыт! 🔥':`Цель дня: ещё ${GOAL-tn} — и сундук`}</b><span>Копилка сегодня: ${mt} из ${CAP} ${CU()}</span></div>`;
 const topBarP=()=>`<div class="top"><div class="brand">Тілашар</div>
   <div class="stat" title="Дней подряд">${ICON.fire}<span>${liveStreak()}</span></div>
-  <div class="stat" title="Теңге">${ICON.coin}<span id="coinn">${S.coins}</span> ₸</div></div>`;
+  <div class="stat" title="Теңге">${ICON.coin}<span id="coinn">${S.coins}</span></div></div>`;
 /* ---------- bottom menu (hidden inside lessons) ---------- */
 function nav(active){
   const it=(id,ico,label,badge)=>`<button class="nv${active===id?' on':''}" data-nav="${id}" type="button"${active===id?' aria-current="page"':''}><span class="ni">${ico}${badge?`<i>${badge}</i>`:''}</span><span class="nl">${label}</span></button>`;
@@ -2818,7 +2838,7 @@ function home(){
   const tn=todayN(), mt=moneyToday();
   const goal=`<div class="goal${tn>=GOAL?' done':''}"><div class="goal-ring" style="--p:${Math.min(1,tn/GOAL)}"><b>${Math.min(tn,GOAL)}/${GOAL}</b></div><div class="goal-txt">
      <div class="kind">Цель на сегодня</div><h2>${tn>=GOAL?'День закрыт! 🔥':`Ещё ${GOAL-tn} — и откроется сундук`}</h2>
-     <p class="hint">Копилка сегодня: <b>${mt} из ${CAP} ₸</b>${mt>=CAP?' — полна!':''}</p></div></div>`;
+     <p class="hint">Копилка сегодня: <b>${mt} из ${CAP} ${CU()}</b>${mt>=CAP?' — полна!':''}</p></div></div>`;
   const last=Math.max(P.cur+4,MODS[0].steps.length-1);
   let html='';
   for(let i=0;i<=last;i++){
@@ -2868,7 +2888,7 @@ function intro(step){
   const go=(label,next)=>`<button class="btn sun wide" id="go" type="button">${label}</button>`;
   const pages=[
     ()=>`<div class="splash"><div class="splash-robot">${ROB.draw(12,ROB.ARKA,false,'happy')}</div><h1>Тілашар</h1><p>Казахский — как конструктор</p>${go('Ашу — открыть')}</div>`,
-    ()=>`<div class="letter"><h1>Сәлем, досым!</h1>
+    ()=>`<div class="letter"><h1>Сәлем, ${esc(KID)}!</h1>
       <p>Это <b>Тілашар</b> — тренажёр казахского по школьной программе. Здесь ты тренируешь казахский, как английский в Duolingo: короткие уроки, роботы и монеты.</p>
       <p>Казахский ты уже понимаешь. Здесь мы доведём окончания, падежи и время до автоматизма — чтобы говорить и писать без ошибок.</p>
       <p><b>За правильные ответы ты получаешь монеты.</b> Договорись с родителями, на что их можно обменять.</p>
@@ -2902,7 +2922,7 @@ const LETTERS={
 };
 function letterNode(i){
   const m=node(i).mod;
-  app.innerHTML=`<div class="letter"><h1>Сәлем, досым!</h1>${LETTERS[m.key]()}<p class="sign">${esc(m.name)}</p>
+  app.innerHTML=`<div class="letter"><h1>Сәлем, ${esc(KID)}!</h1>${LETTERS[m.key]()}<p class="sign">${esc(m.name)}</p>
    <div class="newpart">${ROB.draw(1,m.sc)}</div><button class="btn wide" id="go" type="button">Бастадық! — Начали!</button></div>`;
   window.scrollTo(0,0);
   document.getElementById('go').onclick=()=>finishRead(i);
@@ -2934,7 +2954,7 @@ function summary(out){
   const res=pass?completeNode(i,stars):(save(),{});
   app.innerHTML=`<div class="card sum"><h2>${out?'Сердечки закончились':!pass?'Почти! Ещё разок':r>=1?'Мінсіз! Без ошибок':'Жарайсың!'}</h2>
    <div class="big">${score}/${base}</div>${starsHTML(stars)}
-   <div class="grid3"><div class="cell"><b>+${L.coins} ₸</b><span>заработал</span></div><div class="cell"><b>${L.best}</b><span>лучшее комбо</span></div><div class="cell"><b>${Math.min(todayN(),GOAL)}/${GOAL}</b><span>цель дня</span></div></div>
+   <div class="grid3"><div class="cell"><b>+${L.coins}</b><span>заработал</span></div><div class="cell"><b>${L.best}</b><span>лучшее комбо</span></div><div class="cell"><b>${Math.min(todayN(),GOAL)}/${GOAL}</b><span>цель дня</span></div></div>
    ${moneyToday()>=CAP?`<p class="hint">Копилка на сегодня полна. Звёзды и детали робота идут дальше.</p>`:''}
    ${pass?`<div class="newpart robotpop">${ROB.draw(ro.stage,ro.sc)}</div><p class="burst"><b>${esc(ro.name)}: ${esc(n.part)}!</b></p>`
          :`<p class="hint">Нужно ${Math.ceil(base*L.pass)} из ${base} с первого раза. Деталь ждёт тебя.</p>`}
@@ -2953,7 +2973,7 @@ function speedEnd(){
   endLog({score:20-SP.errors.length,base:20,pass:true,sec:Math.round(t),mist:SP.errors});
   const res=completeNode(i,stars); confetti(); sFanfare();
   app.innerHTML=`<div class="card sum"><h2>${rec?'Жаңа рекорд! Новый рекорд!':'Жарайсың!'}</h2><div class="big">${t.toFixed(1)} с</div>${starsHTML(stars)}
-   <p class="foot">Ошибок: ${SP.errors.length} (каждая +3 с) · Рекорд: ${b.best.toFixed(1)} с · <b>+${SP.coins||0} ₸</b><br>Три звезды — 20 за 60 секунд без ошибок.</p>
+   <p class="foot">Ошибок: ${SP.errors.length} (каждая +3 с) · Рекорд: ${b.best.toFixed(1)} с · <b>+${SP.coins||0} ${CU()}</b><br>Три звезды — 20 за 60 секунд без ошибок.</p>
    <div class="newpart robotpop">${ROB.draw(ro.stage,ro.sc)}</div><p class="burst"><b>${esc(ro.name)}: ${esc(n.part)}!</b></p>
    ${SP.errors.length?`<div class="mist"><b>Повтори:</b><br>${SP.errors.map(w=>'• '+esc(w)).join('<br>')}</div>`:''}
    <div class="row2"><button class="btn sun" id="go" type="button">Жалғастыру — дальше</button><button class="btn ghost" id="again" type="button">Ещё раз на скорость</button></div></div>`;
@@ -3009,8 +3029,8 @@ function chestScreen(){
     setTimeout(()=>{svg.classList.remove('shake');svg.classList.add('open');
       const n=20+Math.floor(Math.random()*21); gift(n); P.chestDay=dayNum();
       let bonus=0; const sk=liveStreak(); if(sk>0&&sk%7===0&&!P.bonusDays.includes(dayNum())){bonus=gift(WEEK_BONUS);P.bonusDays.push(dayNum())}
-      save(); document.getElementById('prize').textContent=`+${n} ₸!`;
-      if(bonus) document.getElementById('bon').innerHTML=`<b>7 дней подряд! Бонус +${bonus} ₸</b>`;
+      save(); document.getElementById('prize').textContent=`+${n} ${CU()}!`;
+      if(bonus) document.getElementById('bon').innerHTML=`<b>7 дней подряд! Бонус +${bonus} ${CU()}</b>`;
       sFanfare(); confetti(); burstCoins(ch); finish()},520)};
 }
 const dn=n=>n%10===1&&n%100!==11?'день':[2,3,4].includes(n%10)&&![12,13,14].includes(n%100)?'дня':'дней';
@@ -3148,9 +3168,9 @@ function awards(){
   const tile=(ico,v,l)=>`<div class="atile"><span class="ai">${ico}</span><b>${v}</b><span>${l}</span></div>`;
   app.innerHTML=`${topBarP()}<div class="card"><h2>Награды</h2>
    <div class="agrid">${tile('🔥',liveStreak(),'дней подряд')}${tile(ICON.coin,fmt(P.wallet.earned),'заработано всего')}${tile('⭐',stars,'звёзд')}${tile('📚',lessons,'уроков пройдено')}
-    ${tile('🤖',mods+pros,'роботов собрано')}${tile('🦾',titans,'титанов')}${tile('📅',days,'дней занятий')}${tile('🎁',moneyToday()+' / '+CAP+' ₸','копилка сегодня')}</div>
+    ${tile('🤖',mods+pros,'роботов собрано')}${tile('🦾',titans,'титанов')}${tile('📅',days,'дней занятий')}${tile('🎁',moneyToday()+' / '+CAP,'копилка сегодня')}</div>
    <div class="gsec">Рекорды скорости</div>${rec}
-   <p class="hint">7 дней подряд — бонус ${WEEK_BONUS} ₸. Сейчас: ${liveStreak()%7} из 7.</p></div>${nav('awards')}`;
+   <p class="hint">7 дней подряд — бонус ${WEEK_BONUS} ${CU()}. Сейчас: ${liveStreak()%7} из 7.</p></div>${nav('awards')}`;
   window.scrollTo(0,0); wireNav();
 }
 /* ---------- parents: wallet + journal ---------- */
@@ -3170,25 +3190,36 @@ function parent(){
       <table><thead><tr><th>Время</th><th>Урок</th><th>Итог</th><th>Длит.</th></tr></thead><tbody>${es.map(e=>`<tr>
         <td>${tm(e.s)}–${tm(e.e)}</td><td>${TYPES[e.type]||''} ${esc(e.title)}${e.mist&&e.mist.length?`<div class="jm">ошибки: ${e.mist.map(esc).join(', ')}</div>`:''}</td>
         <td>${e.quit?'вышел':e.read?'прочитал':`${e.score}/${e.base}${e.pass?' ✓':' ✗'}`}</td><td>${mins(e.act)}</td></tr>`).join('')}</tbody></table></details>`}).join('');
-  app.innerHTML=`<div class="card"><div class="kind">Для родителей</div><h2>Кошелёк</h2>
+  const guide=`<div class="card"><div class="kind">Для родителей</div><h2>Как помочь ребёнку, если вы сами не говорите по-казахски</h2>
+    <p><b>Для кого Тілашар.</b> Для школьников 2–5 класса, которые понимают казахский, но путаются в грамматике: окончания, «мой-твой-его», лица, времена, падежи. Особенно — для детей из казахских классов, которые дома говорят по-русски.</p>
+    <p><b>Как запустить.</b> Договоритесь с ребёнком о норме — 5 уроков (10–15 минут) в день — и о награде за монеты: деньги, минуты в телефоне, поход куда-то. Вечером спросите: «Покажи, какого робота собрал». Похвала за серию дней работает лучше, чем проверка ошибок.</p>
+    <p><b>Знать казахский не нужно.</b> Все правила объяснены на русском. Ниже — минуты по дням и журнал: какие уроки пройдены и в каких словах были ошибки.</p>
+    <p class="hint">Прогресс сохраняется в Telegram-аккаунте ребёнка — не потеряется при смене телефона.</p>
+    <button class="btn sun wide" id="fb" type="button">✍️ Написать отзыв автору</button>
+    <p class="hint">Что понравилось, что трудно, что исправить — пишите, читаю каждое сообщение.</p></div>`;
+  const wallet=S.realMoney?`<div class="card"><h2>Кошелёк</h2>
     <div class="grid3"><div class="cell"><b>${fmt(W.earned)}</b><span>заработано</span></div><div class="cell"><b>${fmt(W.paid)}</b><span>выдано</span></div><div class="cell due"><b>${fmt(due)}</b><span>к выдаче</span></div></div>
     ${due>0?`<button class="btn sun wide" id="pay" type="button">Я выдал ${fmt(due)}</button>`:''}
-    ${W.pays.length?`<p class="hint">Выдачи: ${W.pays.slice(-5).map(p=>`${new Date(p.t).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})} — ${fmt(p.n)}`).join(' · ')}</p>`:''}</div>
+    ${W.pays.length?`<p class="hint">Выдачи: ${W.pays.slice(-5).map(p=>`${new Date(p.t).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})} — ${fmt(p.n)}`).join(' · ')}</p>`:''}</div>`:'';
+  app.innerHTML=`${guide}${wallet}
    ${typeof reportHTML==='function'?reportHTML():''}
    <div class="card"><h2>Минут в день</h2>${bars}</div>
    <div class="card"><h2>Журнал занятий</h2>${dayHTML||'<p class="hint">Пока пусто. Здесь появится каждый урок: когда начал, когда закончил, сколько занимался и где ошибся.</p>'}
-    <p class="hint">Время считается только пока приложение открыто на экране. Журнал хранится на этом устройстве.</p></div>
+    <p class="hint">Время считается только пока приложение открыто на экране. Журнал сохраняется вместе с прогрессом.</p></div>
    <div class="card"><h2>Настройки</h2><div class="setrow">
+    <button class="btn ghost" id="money" type="button">${S.realMoney?'Монеты = тенге: вкл — выключить':'Монеты = настоящие тенге (вы выдаёте сами): включить'}</button>
     <button class="btn ghost" id="letter" type="button">Письмо-приветствие</button>
     <button class="btn ghost" id="allopen" type="button">${S.allOpen?'Вернуть порядок':'Открыть все уроки'}</button>
     <button class="btn ghost" id="reset" type="button">Начать заново</button></div></div>
    <div class="card"><h2>Звук</h2><button class="btn ghost" id="mute2" type="button">${S.mute?'Звук: выкл — включить':'Звук: вкл — выключить'}</button></div>${nav('parent')}`;
   window.scrollTo(0,0); wireNav();
   document.getElementById('mute2').onclick=()=>{S.mute=!S.mute;save();parent()};
+  document.getElementById('money').onclick=()=>{S.realMoney=!S.realMoney;save();parent()};
+  document.getElementById('fb').onclick=writeAuthor;
   document.getElementById('letter').onclick=()=>{P.intro=false;intro(1)};
   document.getElementById('allopen').onclick=()=>{S.allOpen=!S.allOpen;save();parent()};
   const pay=document.getElementById('pay'); if(pay) pay.onclick=()=>{if(pay.dataset.sure){W.pays.push({t:Date.now(),n:due});W.paid+=due;save();parent()}else{pay.dataset.sure=1;pay.textContent=`Точно выдал ${fmt(due)}? Нажми ещё раз`}};
-  const rs=document.getElementById('reset'); rs.onclick=()=>{if(rs.dataset.sure){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}else{rs.dataset.sure=1;rs.textContent='Точно? Сотрётся всё, включая кошелёк'}};
+  const rs=document.getElementById('reset'); rs.onclick=()=>{if(rs.dataset.sure){try{localStorage.removeItem(KEY)}catch(e){}cloudClear(()=>location.reload())}else{rs.dataset.sure=1;rs.textContent='Точно? Сотрётся весь прогресс'}};
 }
 LETTERS.uaqyt=()=>`<p>Мен — <b>Уақыт</b>, робот-часовщик! У меня на груди часы и три кнопки: <b>было</b>, <b>сейчас</b>, <b>будет</b>.</p>
  <p style="text-align:center">⏪ <b>Кеше</b> мен мектепке <b>бардым</b>.<br>▶️ <b>Қазір</b> мен мектепке <b>бара жатырмын</b>.<br>⏩ <b>Ертең</b> мен мектепке <b>барамын</b>.</p>
@@ -3210,7 +3241,9 @@ LETTERS.kilt=()=>`<p>Сәлем! Мен — <b>Кілт</b>, робот-ключ
  <p>А деталь <b>-ға</b> ты уже знаешь — это Барыс, друг Бағдара!</p>
  <p><b>12 уроков — и я оживу!</b></p>`;
 window.__t={G,F,E,D,A,B,C,S,P,node,gen,NODES,MODS,ROB,L:()=>L,SP:()=>SP};
-home();
+{const _fb=feedback;feedback=function(ok,k){haptic(ok?'ok':'bad');return _fb.apply(this,arguments)};}
+document.addEventListener('click',e=>{if(e.target.closest('button'))haptic('tap')},true);
+home(); cloudLoad();
 
 /* ===================== «Напиши сам» — recall: type the ending / the word on a Kazakh keyboard (22.10) ===================== */
 const KZROWS=['әіңғүұқөһ','йцукенгшзх','фывапролджэ','ячсмитьбю'];
