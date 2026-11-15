@@ -1288,7 +1288,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v144'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v145'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3715,28 +3715,40 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   try{navigator.clipboard.writeText(u).then(ok,function(){fallback()})}catch(_){fallback()}
   function fallback(){try{var t=document.createElement('textarea');t.value=u;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();ok()}catch(_){b.textContent='Зажми ссылку выше, чтобы скопировать'}}},true);
 
-/* v141: карточка «Что ты теперь умеешь» после проверки модуля 1 */
-function sumPhrases(){var nm=st.name||'',my=null;if(nm){var f='Мен '+nm+tailOf(nm,'men');if(canSay(f))my=[f,'я '+nm+' — кто ты']}
-  return [my||['Мен оқушымын','я ученик — кто ты'],['Сен аспазсың','ты повар — про друга'],['Сіз мұғалімсіз','вы учитель — вежливо взрослому'],['Біз жанкүйерміз','мы болельщики — про вас вместе'],['Сәлем! · Сау бол!','привет · пока']]}
+/* v145: карточки «Что ты теперь умеешь» после проверки каждого модуля */
+var SUMD={
+ 0:{b:'🏆 Тема 1 пройдена · Чип «Кто я?»',sec:'Главный секрет: <b>слово + хвостик = фраза</b><br>оқушы<i style="background:#378ADD">мын</i> · биші<i style="background:#D4537E">мін</i> · дос<i style="background:#378ADD">пын</i><br>Ты освоил первый хвостик — «кто я». Впереди — новые! 🚀',
+  p:function(){var nm=st.name||'',my=null;if(nm){var f='Мен '+nm+tailOf(nm,'men');if(canSay(f))my=[f,'я '+nm+' — кто ты']}return [my||['Мен оқушымын','я ученик — кто ты'],['Сен аспазсың','ты повар — про друга'],['Сіз мұғалімсіз','вы учитель — вежливо взрослому'],['Біз жанкүйерміз','мы болельщики — про вас вместе'],['Сәлем! · Сау бол!','привет · пока']]}},
+ 1:{b:'🎨 Тема 2 пройдена · Ярмарка',sec:'Главный секрет: <b>сначала какой — потом кто</b><br>күшті жігіт · Мен белсенді оқушы<i style="background:#378ADD">мын</i><br>Признак не меняется, хвостик — в самом конце. 🚂',
+  p:function(){return [['Мен батылмын','я смелый — какой ты'],['Сен мейірімдісің','ты добрый — про друга'],['күшті жігіт','сильный парень — сначала какой'],['Мен белсенді оқушымын','я активный ученик — хвостик в конце'],['Қалайсың? · Жақсы, рахмет!','как дела? · хорошо, спасибо']]}},
+ 2:{b:'🦁 Тема 3 пройдена · Зоопарк',sec:'Главный секрет: <b>три якоря</b> ⚓<br>аю<i style="background:#378ADD">лар</i> · арыстан<i style="background:#378ADD">дар</i> · барыс<i style="background:#378ADD">тар</i><br>Сравни с якорем — и любой зверь станет «много»! 🐾',
+  p:function(){return [['аюлар','медведи — после гласной -лар'],['арыстандар','львы — после «н» -дар'],['барыстар','барсы — после шептуна -тар'],['ақ аюлар','белые медведи — признак не меняется']]}},
+ 3:{b:'🍎 Тема 4 пройдена · Базар',sec:'Главный секрет: <b>после числа «много» не нужно</b><br>бес алма, а не «бес алма<i style="background:#D4537E">лар</i>»<br>Число уже сказало, что их много! ✋',
+  p:function(){return [['бір, екі, үш','1, 2, 3 — считаешь до десяти'],['Бұл қанша?','сколько стоит? — на базаре'],['бес алма','пять яблок — без «много»'],['Мен он жастамын','мне 10 лет'],['Біз үшеуміз','нас трое — считаем людей']]}}};
+function sumPhrases(th){return SUMD[th||0].p()}
 function sumSay(list,i){if(i>=list.length)return;var rows=document.querySelectorAll('.srow');var r=rows[i];if(!r)return;r.classList.add('saying');var t=list[i][0].split(' · ');
   (function nx(j){if(j>=t.length){r.classList.remove('saying');setTimeout(function(){sumSay(list,i+1)},350);return}try{say(t[j],function(){setTimeout(function(){nx(j+1)},250)})}catch(e){nx(j+1)}})(0)}
-function sumCard(fromMe){var o=document.getElementById('sumov');if(o)o.remove();var P=sumPhrases(),nm=st.name?esc(st.name):'';
+var SUMTH=0;
+function sumCard(fromMe,th){th=th||0;SUMTH=th;var o=document.getElementById('sumov');if(o)o.remove();var D=SUMD[th],P=D.p(),nm=st.name?esc(st.name):'';
   var d=document.createElement('div');d.className='sumov';d.id='sumov';
-  d.innerHTML='<div class="sumc"><span class="sbadge">🏆 Тема 1 пройдена · Чип «Кто я?»</span><h3>Что ты теперь умеешь</h3><p class="ssub">'+(nm?nm+', теперь ты можешь сказать по-казахски:':'Теперь ты можешь сказать по-казахски:')+'</p>'+
+  d.innerHTML='<div class="sumc"><span class="sbadge">'+D.b+'</span><h3>Что ты теперь умеешь</h3><p class="ssub">'+(nm?nm+', теперь ты можешь сказать по-казахски:':'Теперь ты можешь сказать по-казахски:')+'</p>'+
     P.map(function(p,i){return '<div class="srow" data-sumi="'+i+'"><span class="spk">🔊</span><div><b class="kk">'+p[0]+'</b><small>'+p[1]+'</small></div></div>'}).join('')+
-    '<div class="ssec">Главный секрет: <b>слово + хвостик = фраза</b><br>оқушы<i style="background:#378ADD">мын</i> · биші<i style="background:#D4537E">мін</i> · дос<i style="background:#378ADD">пын</i><br>Ты освоил первый хвостик — «кто я». Впереди — новые! 🚀</div>'+
+    '<div class="ssec">'+D.sec+'</div>'+
     '<div class="sbtns"><button class="sl" data-a="sumplay">🔊 Послушать</button><button class="sg" data-a="'+(fromMe?'sumclose':'city')+'">'+(fromMe?'Понятно':'В город →')+'</button></div></div>';
   document.body.appendChild(d);setTimeout(function(){sumSay(P,0)},600)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-a],.srow');if(!b)return;
-  if(b.classList.contains('srow')){var P=sumPhrases(),i=+b.dataset.sumi;b.classList.add('saying');var t=P[i][0].split(' · ');(function nx(j){if(j>=t.length){b.classList.remove('saying');return}say(t[j],function(){nx(j+1)})})(0);return}
-  var a=b.dataset.a;if(a==='sumplay'){sumSay(sumPhrases(),0);return}
+  if(b.classList.contains('srow')){var P=sumPhrases(SUMTH),i=+b.dataset.sumi;b.classList.add('saying');var t=P[i][0].split(' · ');(function nx(j){if(j>=t.length){b.classList.remove('saying');return}say(t[j],function(){nx(j+1)})})(0);return}
+  var a=b.dataset.a;if(a==='sumplay'){sumSay(sumPhrases(SUMTH),0);return}
   if(a==='sumclose'){var o=document.getElementById('sumov');if(o)o.remove();return}
   if(a==='city'||a==='world'){var o2=document.getElementById('sumov');if(o2)o2.remove()}
-  if(a==='summe'){var p=document.getElementById('cpanel');if(p)p.classList.remove('on');sumCard(true);return}},true);
+  if(a==='summe'){var p=document.getElementById('cpanel');if(p)p.classList.remove('on');sumCard(true,+(b.dataset.v||0));return}},true);
+function sumKey(th){return th?'sum'+(th+1):'sum1'}
 (function(){var _fin=finish;finish=function(){var wasBoss=L&&L.boss&&!L.warm,th=THX;_fin.apply(this,arguments);
-  try{if(wasBoss&&th===0&&document.querySelector('#ctl .final [data-a=city]')&&!st.sum1){setTimeout(function(){if(st.sum1)return;st.sum1=1;save();sumCard(!!document.querySelector('.cityscr'))},1200)}}catch(e){}}})();
-(function(){var _mp=mePanel;mePanel=function(){_mp.apply(this,arguments);try{var p=document.getElementById('cpanel');if(p&&p.dataset.me&&(st.sum1||isDoneTh0Boss())){var l=p.querySelector('.melinks');if(l&&!p.querySelector('[data-a=summe]'))l.insertAdjacentHTML('beforebegin','<button class="fbbtn" data-a="summe" style="width:100%;margin:0 0 8px;background:#FAEEDA;color:#633806;box-shadow:0 4px 0 #e0c48f">🏆 Что я умею · Тема 1</button>')}}catch(e){}}})();
-function isDoneTh0Boss(){try{return themeDone(0)}catch(e){return false}}
+  try{if(wasBoss&&SUMD[th]&&document.querySelector('#ctl .final [data-a=city]')&&!st[sumKey(th)]){setTimeout(function(){if(st[sumKey(th)])return;st[sumKey(th)]=1;save();sumCard(!!document.querySelector('.cityscr'),th)},1200)}}catch(e){}}})();
+function thDone(th){try{return themeDone(th)}catch(e){return false}}
+(function(){var _mp=mePanel;mePanel=function(){_mp.apply(this,arguments);try{var p=document.getElementById('cpanel');if(p&&p.dataset.me&&!p.querySelector('[data-a=summe]')){var l=p.querySelector('.melinks'),h='';
+  [0,1,2,3].forEach(function(th){if(st[sumKey(th)]||thDone(th))h+='<button class="fbbtn" data-a="summe" data-v="'+th+'" style="flex:1 1 45%;margin:0;padding:9px 4px;font-size:13px;background:#FAEEDA;color:#633806;box-shadow:0 4px 0 #e0c48f">🏆 Тема '+(th+1)+'</button>'});
+  if(h&&l)l.insertAdjacentHTML('beforebegin','<p style="margin:0 0 6px;font:800 13px var(--body);color:#6b8291">Что я умею:</p><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+h+'</div>')}}catch(e){}}})();
 </script>
 
 </body></html>
