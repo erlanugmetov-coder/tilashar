@@ -1260,7 +1260,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v127'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v128'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3634,7 +3634,8 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   if(a==='shoptab'){e.stopPropagation();e.preventDefault();sTap&&sTap();shopPanel(b.dataset.v);return}
   if(a==='me'){e.stopPropagation();e.preventDefault();sTap&&sTap();mePanel();return}
   if(a==='dclose'||a==='cupclose'){SHOPMODE=0;var pp=document.getElementById('cpanel');if(pp)pp.dataset.me=''}},true);
-(function(){var _sc=showCity;showCity=function(o){_sc(o);try{nbBuild();setTimeout(function(){try{cnameFix()}catch(e){}},50)}catch(e){console.error(e)}}})();
+function showErr(err,where){if(window.ERRSHOWN)return;window.ERRSHOWN=1;var m=String(err&&err.message||err),stk=String(err&&err.stack||'');setTimeout(function(){var o=document.getElementById('fbov');if(o)o.remove();var d=document.createElement('div');d.className='fbov';d.id='fbov';d.innerHTML='<div class="fbcard">'+AINA('think',60)+'<h3>Ой, что-то сломалось 🛠</h3><p>Сфотографируй этот экран и отправь папе 📸</p><p style="font:600 12px monospace;background:#f4f8fa;border-radius:10px;padding:8px;word-break:break-word;text-align:left">['+esc(where||'')+' '+CURV+'] '+esc(m).slice(0,300)+'<br>'+esc(stk).slice(0,400)+'</p><button class="fblater" data-a="fblater">Понятно</button></div>';document.body.appendChild(d)},700)}
+(function(){var _sc=showCity;showCity=function(o){try{_sc(o)}catch(e){console.error(e);showErr(e,'city')}try{nbBuild();setTimeout(function(){try{cnameFix()}catch(e){}},50)}catch(e){console.error(e);showErr(e,'menu')}}})();
 (function(){var _cr=cityRender;cityRender=function(){var r=_cr.apply(this,arguments);try{var b=document.querySelector('.cbot.nb');if(b){var s=b.querySelector('.nbi[data-a=shop] small');if(s)s.textContent='🪙 '+st.coins}}catch(e){}return r}})();
 
 /* v124: магазин-витрина — выбрал предмет, потом нажал на травку */
@@ -3659,6 +3660,9 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 (function(){var _ps=placeStart;placeStart=function(k){if(k==='myhome'&&decoList().some(function(it){return it.k==='myhome'})){sNo&&sNo();var p=document.getElementById('cpanel');if(p)p.classList.remove('on');ainaSay('Твой дом уже стоит! 🏡 Нажми на него и подержи — можно переставить.',3600);return}return _ps.apply(this,arguments)};
   var _db=decoBuy;decoBuy=function(k){if(k==='myhome'&&decoList().some(function(it){return it.k==='myhome'})){var p=document.getElementById('cpanel');if(p)p.classList.remove('on');ainaSay('Твой дом уже стоит! 🏡 Нажми на него и подержи — можно переставить.',3600);return}var r=_db.apply(this,arguments);
     if(k==='myhome'&&decoList().some(function(it){return it.k==='myhome'}))setTimeout(function(){ainaMood('love');ainaSay((st.name?esc(st.name)+', это ':'Это ')+'твой дом! <b>Менің үйім</b> — мой дом 🏡',3800)},2900);return r}})();
+
+/* v128: первый показ города при открытии игры — тоже с новым меню */
+(function(){if(document.querySelector('.cityscr')){try{nbBuild();cnameFix();setTimeout(function(){try{coinHint(0)}catch(_){}},1800)}catch(e){showErr(e,'load')}}})();
 </script>
 
 </body></html>
