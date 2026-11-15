@@ -222,6 +222,10 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .cityscr.hasnb .czone{display:none}
 .cityscr.tl .nbi,.cityscr.tl .nbprog,.cityscr.tl .nbbar{opacity:.35;pointer-events:none;filter:grayscale(.6)}
 .cityscr.hasnb .cpin{bottom:calc(150px + env(safe-area-inset-bottom))}
+.dplace{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 98px);transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:10px;background:#fff;border:3px solid #ffd200;border-radius:99px;padding:6px 6px 6px 14px;font:800 14px var(--body);color:#14222c;box-shadow:0 6px 18px rgba(0,0,0,.25);width:min(360px,calc(100% - 24px));box-sizing:border-box;border-radius:18px;line-height:1.25;animation:ctipin .3s ease-out}
+.dplace span{flex:1}
+.dplace button{background:#eef3f6;color:#3d5566;border-radius:99px;padding:6px 12px;font:800 13px var(--body)}
+.cityscr.placing .cview{cursor:crosshair}
 .shtabs{display:flex;gap:6px;margin:0 0 10px;overflow-x:auto;scrollbar-width:none}.shtabs::-webkit-scrollbar{display:none}
 .shtabs button{flex:none;padding:7px 12px;border-radius:99px;background:#eef3f6;font:800 13px var(--body);color:#3d5566}.shtabs button.on{background:#2fbf7f;color:#fff}
 .shcoin{font:800 14px var(--body);background:#fff4c2;color:#8a6200;border-radius:99px;padding:3px 10px;margin-left:auto;margin-right:8px}
@@ -1256,7 +1260,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v123'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v124'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3613,6 +3617,25 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   if(a==='dclose'||a==='cupclose'){SHOPMODE=0;var pp=document.getElementById('cpanel');if(pp)pp.dataset.me=''}},true);
 (function(){var _sc=showCity;showCity=function(o){_sc(o);try{nbBuild();setTimeout(function(){try{cnameFix()}catch(e){}},50)}catch(e){console.error(e)}}})();
 (function(){var _cr=cityRender;cityRender=function(){var r=_cr.apply(this,arguments);try{var b=document.querySelector('.cbot.nb');if(b){var s=b.querySelector('.nbi[data-a=shop] small');if(s)s.textContent='🪙 '+st.coins}}catch(e){}return r}})();
+
+/* v124: магазин-витрина — выбрал предмет, потом нажал на травку */
+var DPLACE=null;
+function placeEnd(){DPLACE=null;var b=document.getElementById('dplace');if(b)b.remove();var sc=document.querySelector('.cityscr');if(sc)sc.classList.remove('placing')}
+function placeStart(k){var d=decoOf(k),scr=document.querySelector('.cityscr');if(!d||!scr)return;
+  if(st.coins<d[3]){sNo();ainaSay('Не хватает монет 🪙. Их дают задания и подарки!',2600);return}
+  var p=document.getElementById('cpanel');if(p)p.classList.remove('on');SHOPMODE=0;placeEnd();DPLACE=k;scr.classList.add('placing');
+  var b=document.createElement('div');b.id='dplace';b.className='dplace';b.innerHTML='<span>👆 Куда поставить <b>'+d[1].toLowerCase()+'</b>? Нажми на травку</span><button data-a="dpcancel">✕</button>';scr.appendChild(b)}
+(function(){var _ct=cityTap;cityTap=function(e,el){if(DPLACE){var k=DPLACE,p=worldPt(e);
+    if(decoOK(k,p.x,p.y)){placeEnd();DPT=p;decoBuy(k);try{var sh=document.querySelector('.nbi[data-a=shop] small');if(sh)sh.textContent='🪙 '+st.coins}catch(_){}}
+    else{decoBad(p);ainaSay('Здесь не поместится 🙈 Нажми на свободную травку — подальше от домов и дорог.',2800)}
+    return}
+  return _ct.apply(this,arguments)}})();
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;
+  if(b.dataset.a==='dbuy'&&SHOPMODE){e.stopPropagation();e.preventDefault();sTap&&sTap();placeStart(b.dataset.v);return}
+  if(b.dataset.a==='dpcancel'){e.stopPropagation();e.preventDefault();sTap&&sTap();placeEnd();return}
+  if(DPLACE&&['lessons','go','boss','zones','shop','me','warm'].indexOf(b.dataset.a)>=0)placeEnd()},true);
+(function(){var _sc=showCity;showCity=function(o){DPLACE=null;return _sc.apply(this,arguments)}})();
+(function(){var _cd2=cityDouble;cityDouble=function(p,el){SHOPMODE=0;if(DPLACE)placeEnd();return _cd2.apply(this,arguments)}})();
 </script>
 
 </body></html>
