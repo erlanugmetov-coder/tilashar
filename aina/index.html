@@ -469,6 +469,11 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .ibub{background:#fff;color:#14222c;border:3px solid #ff8a3d;border-radius:18px;padding:12px 14px;font:700 17px/1.4 var(--body);box-shadow:0 6px 0 rgba(13,59,79,.12)}
 .ibub b{color:#d96a1f}
 .cintro .go{width:100%;max-width:320px}
+.isplash{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:340px;text-align:center}
+.islogo{font:900 54px var(--display);color:#ff8a3d;text-shadow:0 4px 0 #c75f1c,0 0 18px #fff,0 0 30px #fff;letter-spacing:1px}
+.issub{font:800 16px var(--body);color:#1f5fae;margin-top:-4px;background:rgba(255,255,255,.85);border-radius:99px;padding:4px 12px}
+.iszz{margin:14px 0 6px;animation:isbob 2.4s ease-in-out infinite}@keyframes isbob{50%{transform:translateY(-8px)}}
+.isgo{font-size:24px!important;padding:16px!important;animation:pulse 1.2s ease-in-out infinite}
 .iopts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .iopts .opt{background:#fff;color:#14222c;box-shadow:0 4px 0 #c7d6dc;padding:10px 14px;font-size:16px}
 .icity .opt{padding:8px 11px;font-size:15px}
@@ -1253,7 +1258,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v133'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v134'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -1457,6 +1462,7 @@ document.addEventListener('click',function(e){
   if(a==='world'||a==='city'){var g=CGAIN;CGAIN=0;showCity({gain:g});return}
   if(a==='lessons'||a==='themes'){themesScreen();return}
   if(a==='theme'){themeOpen(+b.dataset.v);return}
+  if(a==='istart'){MUSOK=true;musicSync();try{sTap()}catch(_){}INTRO=0;introShow();return}
   if(a==='inext'){INTRO++;introShow();return}
   if(a==='ititle'){st.title=b.dataset.v;save();INTRO=2;introShow();return}
   if(a==='icity'){st.city_name=b.dataset.v;save();INTRO=3;introShow();return}
@@ -2408,7 +2414,10 @@ function tutStep(ev,id){var c=cst();if(!tutOn())return;
 
 /* заставка */
 var INTRO=0;
-function introFlow(){INTRO=0;var o=document.createElement('div');o.className='cintro';o.id='cintro';document.querySelector('.cityscr').appendChild(o);introShow()}
+function introFlow(){INTRO=0;var o=document.createElement('div');o.className='cintro';o.id='cintro';document.querySelector('.cityscr').appendChild(o);
+  if(MUSOK){introShow();return}
+  o.innerHTML='<div class="isplash"><div class="islogo">Тілашар</div><div class="issub">Город Айны · казахский язык</div><div class="iszz">'+AINA('sleepy',110)+'</div><button class="go isgo" data-a="istart">▶ Играть</button></div>';
+  try{MUSOK=true;musicSync();if(MUS&&MUS.paused)MUSOK=false}catch(e){MUSOK=false}}
 function introShow(){var o=document.getElementById('cintro');if(!o)return;var s=INTRO,c=cst(),h;
   if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';
   else if(s===1)h='<div class="iav">'+AINA('look',110)+'</div><div class="ibub">Сәлем! Я — <b>Айна</b>, робот. Кажется, я упала и <b>всё забыла</b>… 🤔 Как тебя называть?</div><div class="iopts">'+TITLES.map(function(t){return '<button class="opt" data-a="ititle" data-v="'+t+'">'+t+'</button>'}).join('')+'</div>';
