@@ -1288,7 +1288,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v143'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v144'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3734,7 +3734,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   if(a==='city'||a==='world'){var o2=document.getElementById('sumov');if(o2)o2.remove()}
   if(a==='summe'){var p=document.getElementById('cpanel');if(p)p.classList.remove('on');sumCard(true);return}},true);
 (function(){var _fin=finish;finish=function(){var wasBoss=L&&L.boss&&!L.warm,th=THX;_fin.apply(this,arguments);
-  try{if(wasBoss&&th===0&&document.querySelector('#ctl .final [data-a=city]')&&!st.sum1){st.sum1=1;save();setTimeout(function(){if(!document.querySelector('.cityscr'))sumCard(false)},2600)}}catch(e){}}})();
+  try{if(wasBoss&&th===0&&document.querySelector('#ctl .final [data-a=city]')&&!st.sum1){setTimeout(function(){if(st.sum1)return;st.sum1=1;save();sumCard(!!document.querySelector('.cityscr'))},1200)}}catch(e){}}})();
 (function(){var _mp=mePanel;mePanel=function(){_mp.apply(this,arguments);try{var p=document.getElementById('cpanel');if(p&&p.dataset.me&&(st.sum1||isDoneTh0Boss())){var l=p.querySelector('.melinks');if(l&&!p.querySelector('[data-a=summe]'))l.insertAdjacentHTML('beforebegin','<button class="fbbtn" data-a="summe" style="width:100%;margin:0 0 8px;background:#FAEEDA;color:#633806;box-shadow:0 4px 0 #e0c48f">🏆 Что я умею · Тема 1</button>')}}catch(e){}}})();
 function isDoneTh0Boss(){try{return themeDone(0)}catch(e){return false}}
 </script>
