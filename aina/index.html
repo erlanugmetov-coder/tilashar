@@ -914,7 +914,7 @@ var LESSONS1=[
   gen:function(){return liveLesson('aina',1)}},
  {title:'Проверка: кто я?',sub:'соберёт Чип «Кто я?»',boss:1,end:'Посмотри на мою грудь — панель загорелась! Я вспомнила, кто я. И кто ты: ты — %T%! Спасибо! 😎',papa:'Расскажи кому-то из семьи по-казахски: кто ты, кто он, кто вы вместе. Хотя бы три фразы!',
   intro:[{s:'look',t:'<p>🏆 <b>Проверка!</b> Всё, что было в теме. Попробуй вспомнить всё, чему научился. Ошибёшься — не страшно! 💪</p>'}],
-  gen:function(){var v=h1pick(6),pr=pairsLesson('aina')[0];pr.round=0;pr.yes='Все пары на месте! 🎯 Дальше — задания.';pr.yes='Все пары на месте! 🎯 А теперь — на слух!';var pa=pairsAudio('aina',pr);if(!pa)pr.yes='Все пары на месте! 🎯 Дальше — задания.';return [pr].concat(pa?[pa]:[]).concat(b2sh([h1Det(v[0]),h1Det(v[1]),h1Trap(b2one(h1VV())),h1Hear(),h1Ask(v[3]),h1Build(v[4])]))}}
+  gen:function(){var v=h1pick(6),pr=pairsLesson('aina')[0];pr.ps=pr.ps.slice(0,4);pr.round=0;pr.yes='Все пары на месте! 🎯 А теперь — на слух!';var pa=pairsAudio('aina',pr);if(pa)pa.ps=pa.ps.slice(0,3);else pr.yes='Все пары на месте! 🎯 Дальше — задания.';return [pr].concat(pa?[pa]:[]).concat(b2sh([h1Det(v[0]),h1Trap(b2one(h1VV())),h1Hear()]).concat([h1Ask(v[3])]))}}
 ];
 LESSONS1.forEach(function(l){l.steps=l.intro});
 /* переход со старого прогресса Темы 1 (8 уроков + Проверка=9) на новый список: 0–6 те же, «Живые фразы» 7→8, Проверка 9→12; смесь и пары засчитываем */
@@ -1267,7 +1267,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v138'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v139'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
