@@ -1260,7 +1260,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v124'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v125'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -2293,7 +2293,26 @@ var DECO=[
  ['lamp','Фонарь','шам',8,function(x,y){return vlampD(x,y)},[10,14,64,6],'city'],
  ['swing','Качели','әткеншек',20,function(x,y){return vswingD(x,y)},[32,32,52,8],'city'],
  ['yurt','Юрта','киіз үй',25,function(x,y){return vyurt(x,y)},[48,48,78,14],'city']];
-var DTABS=[['tree','🌳 Деревья'],['flower','🌷 Цветы'],['city','🪑 Для города']];
+var DTABS=[['house','🏠 Здания'],['tree','🌳 Деревья'],['flower','🌷 Цветы'],['city','🪑 Для города']];
+/* v125: здания, которые ребёнок ставит сам */
+function vlabel(x,y,txt,col){var w=Math.max(34,txt.length*7.4+14);return '<rect x="'+(x-w/2)+'" y="'+(y-9)+'" width="'+w+'" height="18" rx="5" fill="#fffaf0" stroke="'+col+'" stroke-width="2"/><text x="'+x+'" y="'+(y+4.5)+'" text-anchor="middle" font-family="Rubik,Arial Black,sans-serif" font-weight="800" font-size="11" fill="'+col+'">'+txt+'</text>'}
+function vshopD(x,y,c1,c2,lab){var s=sh(x,y+4,40,8)+'<rect x="'+(x-34)+'" y="'+(y-46)+'" width="68" height="48" rx="4" fill="#fff6e6" stroke="#c9b38a" stroke-width="2"/>';
+  for(var i=0;i<6;i++)s+='<path d="M'+(x-38+i*12.7)+' '+(y-46)+' h12.7 v10 a6.35 6.35 0 0 1 -12.7 0z" fill="'+(i%2?'#fff':c1)+'" stroke="'+c2+'" stroke-width="1"/>';
+  s+='<rect x="'+(x-26)+'" y="'+(y-26)+'" width="22" height="16" rx="2" fill="#bfe6ff" stroke="#8fb9d4" stroke-width="1.5"/><rect x="'+(x+6)+'" y="'+(y-28)+'" width="20" height="30" rx="2" fill="'+c2+'"/><circle cx="'+(x+22)+'" cy="'+(y-12)+'" r="1.8" fill="#ffd200"/>';
+  return s+vlabel(x,y-58,lab,c2)}
+function vkiosk(x,y){var s=sh(x,y+4,30,7)+'<rect x="'+(x-24)+'" y="'+(y-34)+'" width="48" height="36" rx="5" fill="#ffe1ef" stroke="#e78bb4" stroke-width="2"/><rect x="'+(x-18)+'" y="'+(y-28)+'" width="36" height="14" rx="3" fill="#bfe6ff"/>'+
+  '<path d="M'+(x-30)+' '+(y-34)+' Q'+x+' '+(y-56)+' '+(x+30)+' '+(y-34)+'Z" fill="#ff6fa6" stroke="#d94c86" stroke-width="2"/>'+
+  '<path d="M'+(x-4)+' '+(y-56)+' l4 14 l4 -14z" fill="#e0a85a"/><circle cx="'+x+'" cy="'+(y-60)+'" r="6" fill="#fff6c8" stroke="#e8c96b" stroke-width="1.5"/><circle cx="'+x+'" cy="'+(y-66)+'" r="4.5" fill="#ff9fcb"/>';return s}
+function vmyhome(x,y){var nm=(st.name||'').toUpperCase().slice(0,10);return vhouse(x-36,y-46,72,48,'#ff6fa6','#d94c86',{rh:26,rows:1,cols:2})+vbush(x-44,y,'#ffd200')+vbush(x+44,y,'#e05a9c')+(nm?vlabel(x,y-84,esc(nm),'#d94c86'):'')}
+function vuyD(x,y){return vhouse(x-32,y-42,64,44,'#2fb3a0','#1f8a7a',{rh:24,rows:1,cols:2})}
+DECO.push(
+ ['myhome','Мой дом','менің үйім',30,function(x,y){return vmyhome(x,y)},[48,48,96,10],'house'],
+ ['uyD','Домик','үй',20,function(x,y){return vuyD(x,y)},[34,34,70,8],'house'],
+ ['dukenD','Магазин','дүкен',25,function(x,y){return vshopD(x,y,'#2fbf7f','#1f8a5c','ДҮКЕН')},[40,40,70,8],'house'],
+ ['nanD','Хлебный','нан дүкені',25,function(x,y){return vshopD(x,y,'#e0a85a','#a8703c','НАН')},[40,40,70,8],'house'],
+ ['kitapD','Книжный','кітап дүкені',25,function(x,y){return vshopD(x,y,'#5aa9ff','#2f78c9','КІТАП')},[40,40,70,8],'house'],
+ ['balmD','Мороженое','балмұздақ',20,function(x,y){return vkiosk(x,y)},[32,32,72,8],'house']);
+
 function decoOf(k){return DECO.filter(function(d){return d[0]===k})[0]}
 function decoList(){var c=cst();c.deco=c.deco||[];return c.deco}
 function decoSprites(){return decoList().map(function(it,i){var d=decoOf(it.k);if(!d)return '';var b=d[5];
@@ -3596,7 +3615,7 @@ var SHOPMODE=0,SHOPTAB='up';
 function shopPatch(){var p=document.getElementById('cpanel');if(!p||!SHOPMODE)return;var h=p.querySelector('.cph b');if(h)h.textContent='🏪 Магазин';
   p.querySelectorAll('.dtabs,.dwarn').forEach(function(e){e.remove()});var o=p.querySelector('.shtabs');if(o)o.remove();var oc=p.querySelector('.shcoin');if(oc)oc.remove();
   var cph=p.querySelector('.cph');if(!cph)return;cph.querySelector('b').insertAdjacentHTML('afterend','<span class="shcoin">🪙 '+st.coins+'</span>');
-  cph.insertAdjacentHTML('afterend','<div class="shtabs">'+[['up','✨ Город'],['tree','🌳 Деревья'],['flower','🌷 Цветы'],['city','🪑 Разное']].map(function(t){return '<button class="'+(t[0]===SHOPTAB?'on':'')+'" data-a="shoptab" data-v="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>')}
+  cph.insertAdjacentHTML('afterend','<div class="shtabs">'+[['up','✨ Город'],['house','🏠 Здания'],['tree','🌳 Деревья'],['flower','🌷 Цветы'],['city','🪑 Разное']].map(function(t){return '<button class="'+(t[0]===SHOPTAB?'on':'')+'" data-a="shoptab" data-v="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>')}
 function shopPanel(tab){SHOPTAB=tab||SHOPTAB||'up';SHOPMODE=1;var p=document.getElementById('cpanel');if(!p)return;p.classList.remove('on');
   if(SHOPTAB==='up'){cupPanel()}else{DPT=grassSpot()||{x:CAM?Math.round(((document.getElementById('cview')||{}).clientWidth/2-CAM.x)/(CAM.z||1)):400,y:600};decoShop(SHOPTAB);p.classList.add('on')}
   shopPatch()}
@@ -3636,6 +3655,10 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   if(DPLACE&&['lessons','go','boss','zones','shop','me','warm'].indexOf(b.dataset.a)>=0)placeEnd()},true);
 (function(){var _sc=showCity;showCity=function(o){DPLACE=null;return _sc.apply(this,arguments)}})();
 (function(){var _cd2=cityDouble;cityDouble=function(p,el){SHOPMODE=0;if(DPLACE)placeEnd();return _cd2.apply(this,arguments)}})();
+
+(function(){var _ps=placeStart;placeStart=function(k){if(k==='myhome'&&decoList().some(function(it){return it.k==='myhome'})){sNo&&sNo();var p=document.getElementById('cpanel');if(p)p.classList.remove('on');ainaSay('Твой дом уже стоит! 🏡 Нажми на него и подержи — можно переставить.',3600);return}return _ps.apply(this,arguments)};
+  var _db=decoBuy;decoBuy=function(k){if(k==='myhome'&&decoList().some(function(it){return it.k==='myhome'})){var p=document.getElementById('cpanel');if(p)p.classList.remove('on');ainaSay('Твой дом уже стоит! 🏡 Нажми на него и подержи — можно переставить.',3600);return}var r=_db.apply(this,arguments);
+    if(k==='myhome'&&decoList().some(function(it){return it.k==='myhome'}))setTimeout(function(){ainaMood('love');ainaSay((st.name?esc(st.name)+', это ':'Это ')+'твой дом! <b>Менің үйім</b> — мой дом 🏡',3800)},2900);return r}})();
 </script>
 
 </body></html>
