@@ -844,7 +844,7 @@ function pairsUI(s){var L1=b2sh(s.ps),R1=b2sh(s.ps),left=s.ps.length,hits=0,aud=
     else{tries++;cmb=0;sNo();[b,sel].forEach(function(x){x.classList.add('bad');setTimeout(function(){x.classList.remove('bad')},500)})}}})}
 /* ---------- секреты модуля «Айна» (тексты старого Тілашара), Айна рассказывает их по частям ---------- */
 function h1row(p,a,b){var A=H1W.filter(function(v){return v[0]===a})[0],Bb=H1W.filter(function(v){return v[0]===b})[0];return '<div class="krow2"><b>'+PRE[p]+' <small>— '+PRU1[p]+'</small></b><span>'+lego(a,tailOf(a,p))+' <small>'+h1ru(A[1],p)+'</small></span><span>'+lego(b,tailOf(b,p))+' <small>'+h1ru(Bb[1],p)+'</small></span></div>'}
-function h1row1(p,a){var A=h1W(a);return '<div class="krow2"><b>'+PRE[p]+' <small>— '+PRU1[p]+'</small></b><span>'+lego(a,tailOf(a,p))+' <small>'+h1ru(A[1],p)+'</small></span></div>'}
+function h1row1(p,a){var A=h1W(a),ph=PRE[p]+' '+a+(tailOf(a,p)||'').replace(/[^А-Яа-яЁёӘәҒғҚқҢңӨөҰұҮүҺһІі]/g,'');return '<div class="krow2" data-auto="'+ph+'" data-say="'+ph+'"><b>'+PRE[p]+' <small>— '+PRU1[p]+'</small> <span class="spk">🔊</span></b><span>'+lego(a,tailOf(a,p))+' <small>'+h1ru(A[1],p)+'</small></span></div>'}
 var LAWS1='<div class="laws">🧱 <b>Законы конструктора</b><br><b>Закон 1</b> — твёрдо или мягко: синяя или розовая деталь — оқушы<b>мын</b> · биші<b>мін</b> ✓<br><b>Закон 2</b> — шептун на конце меняет первую букву детали — дос<b>п</b>ын · қыз<b>б</b>ын ✓</div>';
 var LAWS0='<div class="laws">🧱 <b>Закон конструктора</b><br><b>Закон 1</b> — твёрдо или мягко: синяя или розовая деталь — оқушы<b>мын</b> · биші<b>мін</b> ✓</div>';
 var LAWS2='<div class="laws">🧱 <b>Законы конструктора</b><br><b>Закон 1</b> — твёрдо или мягко: синяя или розовая деталь — ақылды<b>мын</b> · мейірімді<b>мін</b> ✓<br><b>Закон 2</b> — шептун на конце меняет первую букву детали — биік<b>п</b>ін ✓</div>';
@@ -1267,7 +1267,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v137'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v138'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
