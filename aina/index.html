@@ -207,6 +207,12 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .dopts .opt.tail{padding:8px 4px}
 .cube{white-space:nowrap}
 .fbbtn{align-self:center;margin:6px 0 2px;padding:12px 20px;border-radius:16px;background:#ffd84d;color:#3a2a00;font:800 16px var(--body);box-shadow:0 4px 0 #c9a21e}
+.fbrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-self:center}.fbrow .fbbtn{align-self:auto}
+.chbtn{background:#5aa9ff;color:#fff;box-shadow:0 4px 0 #2f78c9}
+.chint{position:absolute;font-size:38px;transform:translate(-50%,-100%);pointer-events:none;z-index:60;animation:chpress 1.3s ease-in-out infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.chint:after{content:'';position:absolute;left:50%;top:100%;width:46px;height:46px;margin:-14px 0 0 -23px;border-radius:50%;border:3px solid #fff;animation:chring 1.3s ease-out infinite}
+@keyframes chpress{0%,100%{margin-top:-10px}40%,70%{margin-top:6px}}@keyframes chring{0%,35%{opacity:0;transform:scale(.4)}50%{opacity:1}100%{opacity:0;transform:scale(1.3)}}
+.cpill.coinglow{animation:pulse .9s ease-in-out 5;box-shadow:0 0 0 3px #ffd200,0 0 16px rgba(255,210,0,.9)}
 .fbov{position:fixed;inset:0;z-index:9999;background:rgba(10,30,50,.55);display:flex;align-items:center;justify-content:center;padding:20px}
 .fbcard{background:#fff;border-radius:22px;padding:20px 18px;max-width:340px;width:100%;text-align:center;color:#24384a;box-shadow:0 10px 40px rgba(0,0,0,.3)}
 .fbcard h3{margin:6px 0 6px;font:800 20px var(--display)}.fbcard p{margin:0 0 14px;font-size:15px;line-height:1.35}
@@ -1161,7 +1167,7 @@ function map(){CBUSY=false;stopTown();
    '<div class="path">'+nodes+'</div>'+
    '<div class="legend">Цвет хвостика: <b style="color:#7fa9ff">синий</b> — твёрдое слово (а, о, ұ, ы), <b style="color:#ff9fcb">розовый</b> — мягкое (ә, е, і, ү, ө).</div>'+
    (st.name?'<div class="notes"><b>Айна запомнила</b><p>Тебя зовут '+esc(st.name)+'. '+(tailOf(st.name,'men')[0]==='м'?'<span class="kk">Мен '+esc(st.name)+tailOf(st.name,'men')+'</span>':'<span class="kk">Менің атым '+esc(st.name)+'</span>')+'</p></div>':'')+
-   '<p class="note">Нажми на любое казахское слово — Айна его произнесёт.</p>'+'<button class="fbbtn" data-a="feedback">📝 Оставить отзыв</button>'+'<button class="restart" style="align-self:center" data-a="reset">↺ Начать игру заново</button>';
+   '<p class="note">Нажми на любое казахское слово — Айна его произнесёт.</p>'+'<div class="fbrow"><button class="fbbtn" data-a="feedback">📝 Оставить отзыв</button><button class="fbbtn chbtn" data-a="channel">📢 Наш канал</button></div>'+'<button class="restart" style="align-self:center" data-a="reset">↺ Начать игру заново</button>';
   window.scrollTo(0,0);
   var c2=document.getElementById('tcv2');if(c2)townMount(c2);
 }
@@ -1223,7 +1229,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v120'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v121'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -1445,6 +1451,8 @@ document.addEventListener('click',function(e){
   if(a==='town'){var v=b.dataset.v;townScreen({next:v==null||v===''?null:(v==='boss'?'boss':+v)});return}
   if(a==='wake'){townScreen({wake:!city().awake});return}
   if(a==='feedback'){openFeedback();return}
+  if(a==='channel'){openChannel();return}
+  if(a==='coinhint'){coinHint(1);return}
   if(a==='fblater'){var o=document.getElementById('fbov');if(o)o.remove();return}
   if(a==='reset'){if(b.dataset.sure){try{localStorage.removeItem('tilashar-aina-tg')}catch(e){}st={coins:0,done:[],mute:st.mute,name:'',title:'',cur:null,m37:1};CBUSY=false;CHIP=false;save();showCity();return}b.dataset.sure=1;b.textContent='Точно? Нажми ещё раз — всё сотрётся';return}
   if(a==='island'){map();return}
@@ -1833,7 +1841,7 @@ function showCity(o){o=o||{};stopTown();L=null;busy=false;run++;clearTimeout(tim
   var nl=nextLessonIdx();if(c.tut===3&&st.energy>0)tutStep('back');
   app.innerHTML='<div class="cityscr"><div class="cview" id="cview"><div class="cworld-w" id="cworld" style="width:'+CW+'px;height:'+CH+'px"><div class="csvg"></div><div class="csprites" id="csprites"></div><div class="cmov" id="cmov"></div><div class="cbubs"></div>'+
     '<div class="caina" id="caina" style="left:'+(c.ax||440)+'px;top:'+(c.ay||565)+'px"><div class="cav2">'+AINA('happy',58)+'</div></div><div class="ccars" id="ccars"></div>'+shadesHTML()+'<div class="csay" id="csay"></div><div class="csay rs" id="crsay"></div>'+cloudsHTML()+'</div></div>'+
-   '<div class="chud"><button class="chome" data-a="lessons" aria-label="Уроки">'+AINA('happy',38)+'</button><div class="cstats"><div class="cpill">⚡<b id="cen">'+st.energy+'</b><span class="cbar"><i id="cenbar"></i></span></div><div class="cpill">🪙<b id="cn">'+st.coins+'</b></div></div><button class="cmute" data-a="mute" aria-label="Звук">'+(st.mute?'🔇':'🔊')+'</button></div>'+
+   '<div class="chud"><button class="chome" data-a="lessons" aria-label="Уроки">'+AINA('happy',38)+'</button><div class="cstats"><div class="cpill">⚡<b id="cen">'+st.energy+'</b><span class="cbar"><i id="cenbar"></i></span></div><div class="cpill" data-a="coinhint">🪙<b id="cn">'+st.coins+'</b></div></div><button class="cmute" data-a="mute" aria-label="Звук">'+(st.mute?'🔇':'🔊')+'</button></div>'+
    '<div class="cname">'+esc(st.city_name||'Мой город')+' · Айнаның үйі</div>'+
    '<button class="cpin" id="cnext" data-a="cnext" aria-label="К следующему заданию">📍</button>'+
    '<div class="cbot"><button class="cbtn" data-a="lessons" aria-label="Уроки">📚<small>Уроки</small></button><button class="cbtn" data-a="cup" aria-label="Улучшения">🎨<small>Красота</small></button>'+
@@ -3492,6 +3500,36 @@ function fbOffer(){if(st.fbAsk||lessonsDoneTotal()<3||(cst().tut||9)<9)return;
     d.innerHTML='<div class="fbcard">'+AINA('laugh',64)+'<h3>Рахмет, что играешь!</h3><p>Расскажи, как тебе игра? Это 2–3 минуты. Твои ответы помогут сделать Тілашар ещё лучше.</p><button class="fbbtn" data-a="feedback">📝 Ответить</button><button class="fblater" data-a="fblater">Потом</button></div>';
     document.body.appendChild(d)},4500)}
 (function(){var _sc=showCity;showCity=function(o){_sc(o);try{if(o&&o.gain!=null)fbOffer()}catch(e){}}})();
+
+/* v121: канал + подсказка про монеты */
+var CHURL='https://t.me/tilashar_kz';
+function openChannel(){var o=document.getElementById('fbov');if(o)o.remove();st.chAsk=2;save();
+  try{var T=window.Telegram&&Telegram.WebApp;if(T&&T.openTelegramLink&&T.initData){T.openTelegramLink(CHURL);return}}catch(e){}
+  try{var w=window.open(CHURL,'_blank');if(w)return}catch(e){}location.href=CHURL}
+function chOffer(){if(st.chAsk||!st.fbAsk||lessonsDoneTotal()<5||(cst().tut||9)<9)return;
+  setTimeout(function(){if(st.chAsk||document.getElementById('fbov')||!document.querySelector('.cityscr')||document.getElementById('cneed'))return;
+    st.chAsk=1;save();var d=document.createElement('div');d.className='fbov';d.id='fbov';
+    d.innerHTML='<div class="fbcard">'+AINA('star',64)+'<h3>Хочешь узнавать первым?</h3><p>Скоро в городе появятся новые районы и уроки. Подпишись на наш канал — там все новости!</p><button class="fbbtn chbtn" data-a="channel">📢 Открыть канал</button><button class="fblater" data-a="fblater">Потом</button></div>';
+    document.body.appendChild(d)},4500)}
+function grassFree(x,y,r,Z){var sx=r.left+CAM.x+x*Z,sy=r.top+CAM.y+y*Z;if(sx<30||sx>innerWidth-30||sy<120||sy>innerHeight-130)return false;
+  return [[0,0],[0,-50],[-26,-25],[26,-25],[0,20]].every(function(d){var e=document.elementFromPoint(sx+d[0],sy+d[1]);return e&&e.closest&&e.closest('.csvg')})}
+function grassSpot(){var v=document.getElementById('cview');if(!v)return null;var r=v.getBoundingClientRect(),Z=CAM.z||1,
+  cx=(r.width/2-CAM.x)/Z,cy=(r.height*0.45-CAM.y)/Z,best=null;
+  var ai=document.getElementById('caina'),ax=ai?parseFloat(ai.style.left):-999,ay=ai?parseFloat(ai.style.top):-999;
+  [75,40].forEach(function(PAD){if(!best)for(var R=60;R<=300&&!best;R+=30)for(var a=0;a<6.28&&!best;a+=0.5){var x=Math.round(cx+R*Math.cos(a)),y=Math.round(cy+R*Math.sin(a));if(Math.hypot(x-ax,y-ay)>110&&(CGIFT||[]).every(function(g){return Math.hypot(g.x-x,g.y-y)>60})&&decoOK('tree',x,y)&&cvisible(x,y,PAD)&&grassFree(x,y,r,Z))best={x:x,y:y}}});
+  return best}
+function coinHint(manual){var c=cst();if(!document.querySelector('.cityscr'))return;
+  if(!manual){if(c.coinHint||st.coins<10||(c.tut||9)<9||document.getElementById('fbov')||document.getElementById('cneed'))return;c.coinHint=1;save()}
+  var pill=document.querySelector('.cpill[data-a=coinhint]');if(pill){pill.classList.remove('coinglow');void pill.offsetWidth;pill.classList.add('coinglow')}
+  ainaMood&&ainaMood('wink');
+  ainaSay(st.coins>=10?'У тебя '+st.coins+' 🪙! Удержи палец на травке — и посади дерево 🌳, цветы или качели!':'🪙 Монеты — на деревья, цветы и качели. Удержи палец на травке, чтобы выбрать!',5200);
+  var p=grassSpot(),w=document.getElementById('cworld');if(!p||!w)return;
+  var o=document.querySelector('.chint');if(o)o.remove();
+  var h=document.createElement('span');h.className='chint';h.textContent='👆';h.style.left=p.x+'px';h.style.top=p.y+'px';(w.querySelector('.cbubs')||w).appendChild(h);
+  setTimeout(function(){h.remove()},6500)}
+(function(){var _sc=showCity;showCity=function(o){_sc(o);try{if(o&&o.gain!=null)chOffer();setTimeout(function(){coinHint(0)},1800)}catch(e){}}})();
+(function(){var _tg=takeGift;takeGift=function(id){_tg(id);try{setTimeout(function(){coinHint(0)},1200)}catch(e){}}})();
+(function(){var _cd=cityDouble;cityDouble=function(p,el){var h=document.querySelector('.chint');if(h)h.remove();return _cd(p,el)}})();
 </script>
 
 </body></html>
