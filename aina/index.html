@@ -1250,7 +1250,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v130'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v131'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3532,7 +3532,7 @@ function waitMsgFor(f){var n=cNextLv(f);if(n==null)return null;var nm=CTASK.filt
 var FBURL='https://tally.so/r/VpQgGJ';
 function openFeedback(){var o=document.getElementById('fbov');if(o)o.remove();st.fbAsk=2;save();
   try{var T=window.Telegram&&Telegram.WebApp;if(T&&T.openLink&&T.initData){T.openLink(FBURL);return}}catch(e){}
-  try{var w=window.open(FBURL,'_blank');if(w)return}catch(e){}location.href=FBURL}
+  try{var w=window.open(FBURL,'_blank');if(w)return}catch(e){}linkCard(FBURL,'📝 Опрос')}
 function lessonsDoneTotal(){return ['done','d2','d3','d4'].reduce(function(n,f){return n+(st[f]||[]).length},0)}
 function fbOffer(){if(st.fbAsk||lessonsDoneTotal()<3||(cst().tut||9)<9)return;
   setTimeout(function(){if(st.fbAsk||document.getElementById('fbov')||!document.querySelector('.cityscr'))return;
@@ -3546,7 +3546,7 @@ function fbOffer(){if(st.fbAsk||lessonsDoneTotal()<3||(cst().tut||9)<9)return;
 var CHURL='https://t.me/tilashar_kz';
 function openChannel(){var o=document.getElementById('fbov');if(o)o.remove();st.chAsk=2;save();
   try{var T=window.Telegram&&Telegram.WebApp;if(T&&T.openTelegramLink&&T.initData){T.openTelegramLink(CHURL);return}}catch(e){}
-  try{var w=window.open(CHURL,'_blank');if(w)return}catch(e){}location.href=CHURL}
+  try{var w=window.open(CHURL,'_blank');if(w)return}catch(e){}linkCard(CHURL,'📢 Канал')}
 function chOffer(){if(st.chAsk||!st.fbAsk||lessonsDoneTotal()<5||(cst().tut||9)<9)return;
   setTimeout(function(){if(st.chAsk||document.getElementById('fbov')||!document.querySelector('.cityscr')||document.getElementById('cneed'))return;
     st.chAsk=1;save();var d=document.createElement('div');d.className='fbov';d.id='fbov';
@@ -3661,6 +3661,15 @@ function pinCount(){var pn=document.getElementById('cnext');if(!pn)return;var n=
 (function(){var _sc3=showCity;showCity=function(o){var r=_sc3.apply(this,arguments);try{pinCount()}catch(e){}return r}})();
 try{pinCount()}catch(e){}
 (function(){var _ch=cityHud;cityHud=function(){var r=_ch.apply(this,arguments);try{pinCount()}catch(e){}return r}})();
+
+/* v131: ссылка не открылась (песочница) — показываем её, а не уходим со страницы игры */
+function linkCard(url,title){var o=document.getElementById('fbov');if(o)o.remove();var d=document.createElement('div');d.className='fbov';d.id='fbov';
+  var short=url.replace(/^https?:\/\//,'');
+  d.innerHTML='<div class="fbcard">'+AINA('wink',56)+'<h3>'+title+'</h3><p>Здесь ссылка не открывается сама. Открой её в браузере или в Telegram:</p><p style="font:800 18px var(--body);background:#f4f8fa;border-radius:12px;padding:10px;user-select:all;-webkit-user-select:all;color:#2f78c9">'+short+'</p><button class="fbbtn" data-a="lcopy" data-v="'+url+'">📋 Скопировать</button><button class="fblater" data-a="fblater">Закрыть</button></div>';
+  document.body.appendChild(d)}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-a=lcopy]');if(!b)return;e.stopPropagation();var u=b.dataset.v,ok=function(){b.textContent='✓ Скопировано'};
+  try{navigator.clipboard.writeText(u).then(ok,function(){fallback()})}catch(_){fallback()}
+  function fallback(){try{var t=document.createElement('textarea');t.value=u;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();ok()}catch(_){b.textContent='Зажми ссылку выше, чтобы скопировать'}}},true);
 </script>
 
 </body></html>
