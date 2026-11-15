@@ -1258,7 +1258,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v134'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v135'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -2416,7 +2416,7 @@ function tutStep(ev,id){var c=cst();if(!tutOn())return;
 var INTRO=0;
 function introFlow(){INTRO=0;var o=document.createElement('div');o.className='cintro';o.id='cintro';document.querySelector('.cityscr').appendChild(o);
   if(MUSOK){introShow();return}
-  o.innerHTML='<div class="isplash"><div class="islogo">Тілашар</div><div class="issub">Город Айны · казахский язык</div><div class="iszz">'+AINA('sleepy',110)+'</div><button class="go isgo" data-a="istart">▶ Играть</button></div>';
+  o.innerHTML='<div class="isplash"><div class="islogo">Тілашар</div><div class="issub">Казахский как игра 🎮</div><div class="iszz">'+AINA('sleepy',110)+'</div><button class="go isgo" data-a="istart">▶ Играть</button></div>';
   try{MUSOK=true;musicSync();if(MUS&&MUS.paused)MUSOK=false}catch(e){MUSOK=false}}
 function introShow(){var o=document.getElementById('cintro');if(!o)return;var s=INTRO,c=cst(),h;
   if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';
