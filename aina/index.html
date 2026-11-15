@@ -207,6 +207,28 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .dopts .opt.tail{padding:8px 4px}
 .cube{white-space:nowrap}
 .fbbtn{align-self:center;margin:6px 0 2px;padding:12px 20px;border-radius:16px;background:#ffd84d;color:#3a2a00;font:800 16px var(--body);box-shadow:0 4px 0 #c9a21e}
+.cbot.nb{display:block;padding:8px 10px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-radius:22px 22px 0 0;box-shadow:0 -4px 18px rgba(0,0,0,.18)}
+.nbprog{display:flex;justify-content:space-between;gap:8px;font:800 12px var(--body);color:#3d5566;margin:0 4px 5px;white-space:nowrap}.nbprog span{overflow:hidden;text-overflow:ellipsis}
+.nbbar{height:8px;border-radius:99px;background:#e3ebef;margin:0 4px 8px;overflow:hidden}.nbbar i{display:block;height:100%;background:linear-gradient(90deg,#2fbf7f,#7ddc5a);border-radius:99px;transition:width .6s}
+.nbrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) minmax(0,1.5fr) repeat(2,minmax(0,1fr));gap:5px;align-items:stretch}
+.nbi{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 clamp(10px,2.8vw,12px) var(--body);padding:6px 0 5px;line-height:1.1;border-radius:16px;color:#fff;overflow:hidden;box-shadow:0 4px 0 rgba(0,0,0,.18);margin-bottom:4px;min-width:0}
+.nbi .em{font-size:25px;line-height:1.1}.nbi small{font:700 clamp(9px,2.5vw,11px) var(--body);color:rgba(255,255,255,.92);margin-top:1px;white-space:nowrap}
+.nbi:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.nbi[data-a=lessons]{background:#4f8ff7}.nbi[data-a=zones]{background:#9b6bf2}.nbi[data-a=shop]{background:#ffb020}.nbi[data-a=me]{background:#ff6fa6}
+.nbi.lock{filter:grayscale(.5);opacity:.75}
+.nbi .nbdot{position:absolute;top:2px;right:3px;min-width:18px;height:18px;border-radius:99px;background:#ff4d4d;color:#fff;font:800 11px var(--body);display:grid;place-items:center;padding:0 4px;border:2px solid #fff}
+.cbot.nb .cplay{height:auto;min-height:60px;margin-bottom:4px;flex:none;font-size:clamp(16px,4.6vw,20px)!important;min-width:0}
+.cbot.nb .cplay small{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;padding:0 4px}
+.cityscr.hasnb .czone{display:none}
+.cityscr.tl .nbi,.cityscr.tl .nbprog,.cityscr.tl .nbbar{opacity:.35;pointer-events:none;filter:grayscale(.6)}
+.cityscr.hasnb .cpin{bottom:calc(150px + env(safe-area-inset-bottom))}
+.shtabs{display:flex;gap:6px;margin:0 0 10px;overflow-x:auto;scrollbar-width:none}.shtabs::-webkit-scrollbar{display:none}
+.shtabs button{flex:none;padding:7px 12px;border-radius:99px;background:#eef3f6;font:800 13px var(--body);color:#3d5566}.shtabs button.on{background:#2fbf7f;color:#fff}
+.shcoin{font:800 14px var(--body);background:#fff4c2;color:#8a6200;border-radius:99px;padding:3px 10px;margin-left:auto;margin-right:8px}
+.meprof{display:flex;gap:12px;align-items:center;margin:4px 0 12px}.meprof .av{width:58px;height:58px;border-radius:50%;background:#e6f1fb;display:grid;place-items:center;flex:none}
+.meprof b{font:800 20px var(--display);display:block;color:#14222c}.meprof small{color:#2f78c9;font:700 14px var(--body)}
+.mestats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}.mest{background:#f4f8fa;border-radius:14px;padding:10px 4px;text-align:center;color:#14222c}.mest .n{font:800 21px var(--display);display:block}.mest small{font:700 11px var(--body);color:#6b8291}
+.melinks{display:flex;gap:8px}.melinks .fbbtn{flex:1;margin:0;padding:11px 4px;font-size:14px}
 .fbrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-self:center}.fbrow .fbbtn{align-self:auto}
 .chbtn{background:#5aa9ff;color:#fff;box-shadow:0 4px 0 #2f78c9}
 .chint{position:absolute;font-size:38px;transform:translate(-50%,-100%);pointer-events:none;z-index:60;animation:chpress 1.3s ease-in-out infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
@@ -1234,7 +1256,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v122'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v123'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -2362,7 +2384,7 @@ function tutStep(ev,id){var c=cst();if(!tutOn())return;
   if(ev==='done'&&c.tut===1&&id==='house'){c.tut=2;save();setTimeout(function(){var w=document.querySelector('.cbubs');if(w)w.innerHTML=bubblesHTML();ainaMood('wink');ainaSay('Ура! 🎉 А теперь давай уберём мусор 👇',4000);tutApply()},3400)}
   else if(ev==='noen'&&c.tut===2){c.tut=3;save();setTimeout(tutApply,350)}
   else if(ev==='back'&&c.tut===3&&st.energy>0){c.tut=4;save()}
-  else if(ev==='done'&&c.tut===4&&st.coins>=10){c.tut=9;save();setTimeout(function(){ainaMood('love');ainaSay('У тебя уже 🪙'+st.coins+'! Можно украсить город — жми 🎨 внизу',5000);var b=document.querySelector('.cbtn[data-a="cup"]');if(b){b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}},3200)}
+  else if(ev==='done'&&c.tut===4&&st.coins>=10){c.tut=9;save();setTimeout(function(){ainaMood('love');ainaSay('У тебя уже 🪙'+st.coins+'! Можно украсить город — жми 🏪 Магазин внизу',5000);var b=document.querySelector('.nbi[data-a="shop"]')||document.querySelector('.cbtn[data-a="cup"]');if(b){b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}},3200)}
   else if(ev==='buy'&&c.tut===5){c.tut=9;save();document.getElementById('cpanel').classList.remove('on');
     setTimeout(function(){var g=CGIFT.filter(function(g){return c.gifts.indexOf(g.id)<0&&cvisible(g.x,g.y,50)})[0];cityRender();if(!g)return;camTo(g.x,g.y,800);
       setTimeout(function(){ainaMood('wow');ainaSay('Ого! 😮 Что это там светится? 🎁 Жми!',5000)},850)},2600)}
@@ -3542,6 +3564,55 @@ function cnameFix(){var h=document.querySelector('.chud'),n=document.querySelect
 (function(){var _cd=cityDouble;cityDouble=function(p,el){var h=document.querySelector('.chint');if(h)h.remove();var t=document.getElementById('ctip');if(t)t.remove();return _cd(p,el)}})();
 
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;if(['go','boss','lessons','drill','themes','restart','zone','yzone'].indexOf(b.dataset.a)>=0){var t=document.getElementById('ctip');if(t)t.remove()}},true);
+
+/* v123: новое нижнее меню — цветные плитки */
+function nbZone(){try{if(typeof inBaz==='function'&&inBaz())return [3,'bl','🍎'];if(inZoo())return [2,'zl','🦁'];if(inYarm())return [1,'lv','🎪']}catch(e){}return [0,'cl','🏠']}
+function nbThemeLen(th){var sv=THX;setTheme(th);var n=NL;setTheme(sv);return n}
+function nbProgress(){var z=nbZone(),th=z[0],f=z[1],n=nbThemeLen(th),d=doneList(th).length,tot=0,dn=0;
+  CTASK.forEach(function(t){if(t[f]!=null){tot++;if(cdone(t.id))dn++}});return {em:z[2],d:Math.min(d,n),n:n,b:dn,bt:tot}}
+function nbZonesCount(){var n=1;try{if(yArea())n++;if(zArea())n++;if(bArea())n++}catch(e){}return n}
+function nbStreak(){try{return SD().streak||0}catch(e){return 0}}
+function nbBuild(){var bot=document.querySelector('.cbot'),scr=document.querySelector('.cityscr');if(!bot||!scr||bot.classList.contains('nb'))return;
+  var pl=document.getElementById('cplay');if(!pl)return;var P=nbProgress(),zc=nbZonesCount(),sk=nbStreak();
+  var nl=pl.dataset.v,lab='▶ '+(pl.dataset.a==='boss'?'Проверка':pl.dataset.a==='lessons'?'Повторить':'Урок '+(+nl+1)),sub='';
+  if(pl.dataset.a==='go'&&nl!==''){var t=(LESSONS[+nl]||{}).title||'';sub='+⚡'+lessonGain(THX,+nl)}
+  if(pl.dataset.a==='go'||pl.dataset.a==='boss')pl.innerHTML=lab+(sub?'<small>'+sub+'</small>':'');
+  var cheap=Math.min.apply(null,CUP.filter(function(u){return !cst().up[u.id]}).map(function(u){return u.cost}).concat(DECO.map(function(d){return d[3]})));
+  bot.classList.add('nb');scr.classList.add('hasnb');
+  bot.innerHTML='<div class="nbprog"><span>'+P.em+' '+zoneName()+' · урок '+P.d+' из '+P.n+'</span><span>построено '+P.b+' из '+P.bt+'</span></div><div class="nbbar"><i style="width:'+Math.round(P.b/Math.max(1,P.bt)*100)+'%"></i></div>'+
+    '<div class="nbrow"><button class="nbi" data-a="lessons"><span class="em">📚</span>Уроки<small>'+P.d+' / '+P.n+'</small></button>'+
+    '<button class="nbi'+(zc>1?'':' lock')+'" data-a="zones"><span class="em">🗺️</span>Районы<small>'+(zc>1?zc+' открыто':'🔒 скоро')+'</small></button>'+
+    '<span class="nbplayslot"></span>'+
+    '<button class="nbi" data-a="shop"><span class="em">🏪</span>Магазин<small>🪙 '+st.coins+'</small>'+(st.coins>=Math.max(10,cheap)?'<span class="nbdot">!</span>':'')+'</button>'+
+    '<button class="nbi" data-a="me"><span class="em">⭐</span>Я<small>'+(sk?'🔥 '+sk+' '+(sk===1?'день':sk<5?'дня':'дней'):'профиль')+'</small></button></div>';
+  bot.querySelector('.nbplayslot').replaceWith(pl)}
+function nbZones(){var z=document.querySelector('.czone');if(z){z.click();setTimeout(function(){var b=document.querySelector('.cbot');if(b){b.classList.remove('nb');nbBuild()}},800);return}
+  sNo&&sNo();ainaSay('Новые районы откроются, когда пройдёшь уроки Дома Айны 🏠 Ярмарка уже ждёт!',3600)}
+var SHOPMODE=0,SHOPTAB='up';
+function shopPatch(){var p=document.getElementById('cpanel');if(!p||!SHOPMODE)return;var h=p.querySelector('.cph b');if(h)h.textContent='🏪 Магазин';
+  p.querySelectorAll('.dtabs,.dwarn').forEach(function(e){e.remove()});var o=p.querySelector('.shtabs');if(o)o.remove();var oc=p.querySelector('.shcoin');if(oc)oc.remove();
+  var cph=p.querySelector('.cph');if(!cph)return;cph.querySelector('b').insertAdjacentHTML('afterend','<span class="shcoin">🪙 '+st.coins+'</span>');
+  cph.insertAdjacentHTML('afterend','<div class="shtabs">'+[['up','✨ Город'],['tree','🌳 Деревья'],['flower','🌷 Цветы'],['city','🪑 Разное']].map(function(t){return '<button class="'+(t[0]===SHOPTAB?'on':'')+'" data-a="shoptab" data-v="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>')}
+function shopPanel(tab){SHOPTAB=tab||SHOPTAB||'up';SHOPMODE=1;var p=document.getElementById('cpanel');if(!p)return;p.classList.remove('on');
+  if(SHOPTAB==='up'){cupPanel()}else{DPT=grassSpot()||{x:CAM?Math.round(((document.getElementById('cview')||{}).clientWidth/2-CAM.x)/(CAM.z||1)):400,y:600};decoShop(SHOPTAB);p.classList.add('on')}
+  shopPatch()}
+(function(){var _cp=cupPanel;cupPanel=function(){_cp.apply(this,arguments);shopPatch()};var _ds=decoShop;decoShop=function(){_ds.apply(this,arguments);shopPatch()}})();
+function mePanel(){var p=document.getElementById('cpanel');if(!p)return;if(p.classList.contains('on')&&p.dataset.me){p.classList.remove('on');p.dataset.me='';return}
+  SHOPMODE=0;var nm=st.name||'',sk=nbStreak(),ls=lessonsDoneTotal(),bd=(cst().done||[]).length;
+  var ph=nm?(tailOf(nm,'men')[0]==='м'?'Мен '+esc(nm)+tailOf(nm,'men'):'Менің атым '+esc(nm)):'Айна ждёт твоё имя 😊';
+  p.dataset.me=1;p.innerHTML='<div class="cph"><b>⭐ Я</b><button data-a="dclose" aria-label="Закрыть">×</button></div>'+
+    '<div class="meprof"><div class="av">'+AINA('happy',50)+'</div><div><b>'+(nm?esc(nm):'Игрок')+'</b><small class="kk">'+ph+'</small></div></div>'+
+    '<div class="mestats"><div class="mest"><span class="n">🔥 '+sk+'</span><small>дней подряд</small></div><div class="mest"><span class="n">'+ls+'</span><small>уроков</small></div><div class="mest"><span class="n">'+bd+'</span><small>построено</small></div></div>'+
+    '<div class="melinks"><button class="fbbtn" data-a="feedback">📝 Отзыв</button><button class="fbbtn chbtn" data-a="channel">📢 Канал</button></div>';
+  p.classList.add('on')}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;var a=b.dataset.a;
+  if(a==='zones'){e.stopPropagation();e.preventDefault();sTap&&sTap();nbZones();return}
+  if(a==='shop'){e.stopPropagation();e.preventDefault();sTap&&sTap();var p=document.getElementById('cpanel');if(p&&p.classList.contains('on')&&SHOPMODE){p.classList.remove('on');SHOPMODE=0;return}shopPanel('up');return}
+  if(a==='shoptab'){e.stopPropagation();e.preventDefault();sTap&&sTap();shopPanel(b.dataset.v);return}
+  if(a==='me'){e.stopPropagation();e.preventDefault();sTap&&sTap();mePanel();return}
+  if(a==='dclose'||a==='cupclose'){SHOPMODE=0;var pp=document.getElementById('cpanel');if(pp)pp.dataset.me=''}},true);
+(function(){var _sc=showCity;showCity=function(o){_sc(o);try{nbBuild();setTimeout(function(){try{cnameFix()}catch(e){}},50)}catch(e){console.error(e)}}})();
+(function(){var _cr=cityRender;cityRender=function(){var r=_cr.apply(this,arguments);try{var b=document.querySelector('.cbot.nb');if(b){var s=b.querySelector('.nbi[data-a=shop] small');if(s)s.textContent='🪙 '+st.coins}}catch(e){}return r}})();
 </script>
 
 </body></html>
