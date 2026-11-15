@@ -1260,7 +1260,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v125'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v126'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -1454,7 +1454,7 @@ document.addEventListener('click',function(e){
   var b=e.target.closest('[data-a]');
   if(!b)return;
   var a=b.dataset.a;
-  if(a==='warm'){sTap();startWarm();return}
+  if(a==='warm'){try{sTap()}catch(_){}try{startWarm()}catch(err){window.LASTERR=String(err&&err.message||err);try{console.error(err)}catch(_){}WENTRY=1;try{var d0=SD();d0.warm=TODAY();save()}catch(_){}showCity();setTimeout(function(){ainaSay('Ой, что-то сломалось 🛠 Повторим слова в другой раз! <small style="opacity:.6">('+esc(window.LASTERR).slice(0,80)+')</small>',6000)},800)}return}
   if(a==='parents'){sTap();parentGate();return}
   if(a==='pgok'){pgCheck();return}
   if(a==='wclose'){var wt=document.getElementById('wtoast');if(wt)wt.remove();return}
