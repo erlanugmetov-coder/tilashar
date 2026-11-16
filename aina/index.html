@@ -1289,7 +1289,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v151'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v152'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3892,6 +3892,8 @@ function pwheelf(x,y){var cy=y-110,s=sh(x,y+8,70,10)+'<path d="M'+(x-50)+' '+y+'
   case 'pclear':return vdebris(x-24,y)+vdebris(x+26,y+6);case 'pgate':return pgatef(x,y,0);case 'pfount':return vweeds(x-30,y-30,60,40);case 'pwheel':return vweeds(x-80,y-60,160,80);
   case 'ptrack':case 'ptramp':case 'pbooks':case 'pmusic':case 'pcafe':case 'pwall':case 'pdance':case 'pbike':case 'pbench':return vweeds(x-75,y-60,150,80)}return _vf(t)};
 })();
+/* v152: облака раскрываются над каждой открытой постройкой (на ярмарке «Тир» и «Второй ряд фонариков» оставались под облаком — молоток считал их, а построить было нельзя) */
+(function(){var _cr=crevealPts;crevealPts=function(){var p=_cr();try{CTASK.forEach(function(t){if(!cdone(t.id)&&lessonOpen(t))p.push({x:t.x,y:t.y,r:150})})}catch(e){}return p}})();
 /* районы: + Саябақ */
 function inPark(){var c=cst();return (c.ax||0)>BX&&(c.ay||0)>=1300&&(c.ay||0)<=ZTOP}
 function parkGo(){var c=cst(),s=freeSpot(1460,1640);c.ax=s.x;c.ay=s.y;save()}
