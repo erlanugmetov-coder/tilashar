@@ -565,7 +565,7 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .wspin{animation:wspin 24s linear infinite}@keyframes wspin{to{transform:rotate(360deg)}}
 .cbub.lock{background:#e9edf0;color:#5b6b75;box-shadow:0 4px 0 #b9c3c9;filter:none;animation:bbob 2.2s ease-in-out infinite}.cbub.lock small{color:#5b6b75}
 .onemany{display:flex;gap:10px;margin:8px 0}.onemany>div{flex:1;background:#fff7e8;border:2px solid #f1d9a8;border-radius:14px;padding:8px;text-align:center}.onemany small{display:block;font-weight:800;color:#c56a1a;letter-spacing:.5px}.onemany b{display:block;font-size:1.15em}.onemany span{font-size:.85em;color:#555}.onemany .om{color:#e0559b;font-size:1em}.dlg{background:#f3f7ff;border-radius:12px;padding:6px 10px;margin:6px 0}.dlg p{margin:3px 0}.dlg small{color:#667}.lego .t.none{background:transparent!important;border:2px dashed #c9b88f;color:#b8a77e!important;box-shadow:none}
-</style>
+button,.cube,[data-a]{touch-action:manipulation}</style>
 
 <div class="wrap" id="app"></div>
 
@@ -1289,7 +1289,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v147'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v148'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -1389,11 +1389,15 @@ function done(ok,btn,label,v){
       var sp=ctl().querySelector('[data-a="sendpick"]');if(sp)sp.disabled=true;scrollEnd()})},350);
   }
 }
+function missWhy(s,got){var m=s.c.filter(function(x){return got.indexOf(x)<0})[0];if(!m)return 'Чего-то не хватает. Проверь, все ли детали на месте.';
+  if(m[0]==='+'){var x=m.slice(1);if(THX===2&&/^(мыз|міз|сыңдар|сіңдер|сыздар|сіздер)$/.test(x))return 'Звери есть, а «мы» потерялось! 😄 Нужен ещё хвостик <b>-'+x+'</b> — в самом конце.';
+    if(THX===2&&/^[лдт][ае]р$/.test(x))return 'Потерялся хвостик «много»! Нужен <b>-'+x+'</b>.';return 'Не хватает хвостика <b>-'+x+'</b>.'}
+  return 'Не хватает слова <b>'+m+'</b>.'}
 function sendBuild(){if(busy||!B)return;var s=B.s,got=B.line.map(function(i){return B.all[i].t}),txt=buildText(got),ok=got.join('|')===s.c.join('|');
   var why='';if(!ok){var same=got.slice().sort().join('|')===s.c.slice().sort().join('|');
     var bad=got.filter(function(t){return s.c.indexOf(t)<0})[0];
     if(THX===3){why=ok?'':bad&&/^\+[мпбс]/.test(bad)?'У «Ол» хвостика нет — как в «Кто я?»: <b>Ол бес жаста</b>.':bad&&bad[0]==='+'?'После числа хвостик «много» не нужен — число уже сказало, что их много!':same?(String(s.ru).indexOf('по порядку')>=0?'Считай по порядку: от меньшего к большему.':'Порядок не тот: сначала число, потом слово.'):bad?'Лишняя деталь «'+bad+'». Посмотри, что просят.':'Чего-то не хватает.';B.err=ok?null:'detail';done(ok,null,'<span class="kk">'+esc(txt)+'</span>',why);return}
-    why=THX===2&&!same&&bad?(bad[0]==='+'?p3BadTail(s,bad.slice(1)):'Лишняя деталь «'+bad+'». '+(bad.length>4&&P3ALLT.indexOf(bad.slice(-3))>=0?'Слово, которое описывает, не меняется — «много» только у того, кто назван.':'Посмотри, что просят.')):same?(THX>=1?'Порядок: признак — <b>перед</b> словом, хвостик — в самом конце.':'Порядок: сначала <b>кто</b> ('+s.c[0]+'), потом слово, хвостик — в самом конце.'):bad&&bad[0]==='+'?'Хвостик «-'+bad.slice(1)+'» не подходит. Слушай последнюю гласную: твёрдая — синий, мягкая — розовый.':bad?'Лишняя деталь «'+bad+'». Посмотри, что просят.':'Чего-то не хватает. Проверь, все ли детали на месте.'}
+    why=THX===2&&!same&&bad?(bad[0]==='+'?p3BadTail(s,bad.slice(1)):'Лишняя деталь «'+bad+'». '+(bad.length>4&&P3ALLT.indexOf(bad.slice(-3))>=0?'Слово, которое описывает, не меняется — «много» только у того, кто назван.':'Посмотри, что просят.')):same?(THX>=1?'Порядок: признак — <b>перед</b> словом, хвостик — в самом конце.':'Порядок: сначала <b>кто</b> ('+s.c[0]+'), потом слово, хвостик — в самом конце.'):bad&&bad[0]==='+'?'Хвостик «-'+bad.slice(1)+'» не подходит. Слушай последнюю гласную: твёрдая — синий, мягкая — розовый.':bad?'Лишняя деталь «'+bad+'». Посмотри, что просят.':missWhy(s,got)}
   var ct=(s.c.filter(function(t){return t[0]==='+'})[0]||'+').slice(1),bo=bad&&bad[0]==='+'?jkOther(bad.slice(1),ct):null;
   var flip=!ok&&THX===1&&s.c.length===2&&s.c[0][0]!=='+'&&got.length===2&&got[0]===s.c[1]&&got[1]===s.c[0];
   if(THX===2){B.err=ok?null:same?'order':'detail';done(ok,null,'<span class="kk">'+esc(txt)+'</span>',why);return}
