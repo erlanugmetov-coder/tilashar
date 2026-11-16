@@ -1289,7 +1289,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v149'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v150'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3346,7 +3346,7 @@ function warmPicks(){var d=SD(),pool=[];[0,1,2,3].forEach(function(th){doneList(
   var er=d.errs.filter(function(e){return has(e)&&!out.some(function(o){return same(o,e)})});if(er.length){var e=er[Math.floor(Math.random()*er.length)];out.push({th:e.th,k:e.k,why:'err'})}
   var rest=pool.filter(function(p){return !out.some(function(o){return same(o,p)})});
   rest.sort(function(a,b){return (a.th-b.th)||(a.k-b.k)});var old=rest.slice(0,Math.max(1,Math.ceil(rest.length/2)));
-  while(out.length<3){var src=old.length?old:rest.length?rest:pool;var p=src.splice(Math.floor(Math.random()*src.length),1)[0];if(!p){p=pool[Math.floor(Math.random()*pool.length)]}out.push({th:p.th,k:p.k,why:'old'});rest=rest.filter(function(x){return !same(x,p)})}
+  while(out.length<3){var src=old.length?old:rest.length?rest:pool.slice();var p=src.splice(Math.floor(Math.random()*src.length),1)[0];if(!p){p=pool[Math.floor(Math.random()*pool.length)]}if(!p)break;out.push({th:p.th,k:p.k,why:'old'});rest=rest.filter(function(x){return !same(x,p)})}
   return out.slice(0,3)}
 function warmTasks(){var picks=warmPicks(),used={},res=[];
   picks.forEach(function(p){var ts=lessonTasks(p.th,p.k);if(!ts.length)return;var fresh=ts.filter(function(t){return !used[t.task]}),t=(fresh.length?fresh:ts)[Math.floor(Math.random()*(fresh.length?fresh:ts).length)];used[t.task]=1;t._why=p.why;res.push(t)});
