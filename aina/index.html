@@ -866,7 +866,7 @@ var LESSONS1=[
  {title:'Мен …мын — своё имя',sub:'Знакомимся · хвостик «это я»',end:'Я вспомнила первый хвостик — <b>«это я»</b>! Спасибо, %T%!',papa:'Скажи кому-то из своих по-казахски, кто ты: «Мен …мын» со своим именем. Пусть он скажет так же про себя — а ты проверь хвостик!',
   intro:[
   {s:'look',t:'<p>Облако забвения стёрло казахские слова из моей памяти. И не только у меня — все жители города тоже всё забыли! 😱</p>'},
-  {s:'happy',t:'<p>Но главное я помню: казахский — это <b>конструктор</b> 🧱. <b>Слова</b> — большие детали, <b>хвостики</b> — маленькие, они цепляются в конец слова.</p><p>Поможешь мне вернуть слова и оживить город? 🙏</p>'},
+  {s:'happy',t:'<p>Но главное я помню: казахский язык — это <b>конструктор</b> 🧱. <b>Слова</b> — большие детали, <b>хвостики</b> — маленькие, они цепляются в конец слова.</p><p>Поможешь мне вернуть слова и оживить город? 🙏</p>'},
   {s:'wow',t:'<p>Смотри, какой поезд собирается из одного слова: 🚂</p><div data-auto="дос" style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:.8em;margin:5px 0"><span class="lego"><span class="r">дос</span></span><span style="font-size:1.1em">&nbsp;— друг</span></div><div data-auto="достар" style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:.8em;margin:5px 0"><span class="lego"><span class="r">дос</span></span><span class="lego"><span class="t h">тар</span></span><span style="font-size:1.1em">&nbsp;— друзья</span></div><div data-auto="достарымыз" style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:.8em;margin:5px 0"><span class="lego"><span class="r">дос</span></span><span class="lego"><span class="t h">тар</span></span><span class="lego"><span class="t h">ымыз</span></span><span style="font-size:1.1em">&nbsp;— наши друзья</span></div><div data-auto="достарымызбен" style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:.8em;margin:5px 0"><span class="lego"><span class="r">дос</span></span><span class="lego"><span class="t h">тар</span></span><span class="lego"><span class="t h">ымыз</span></span><span class="lego"><span class="t s">бен</span></span><span style="font-size:1.1em">&nbsp;— <b>с нашими друзьями!</b></span></div><p>Запоминать пока не надо 😄 Начнём с одного хвостика.</p>'},
   {s:'wink',t:'<p>Я ведь робот-зеркало. 🪞 Моя работа — показывать самого главного человека. Угадай кого? <b>ТЕБЯ</b>. 😎</p>'},
   {s:'happy',t:'<p>Сам посмотри: мама — «Ты поел?», учитель — «Домашку сделал?», бабушка — «Шапку надел?». Все — про тебя! Ты — главный персонаж. 🎮</p>'},
@@ -1071,7 +1071,7 @@ var LESSONS2=[
  {title:'Сначала признак: жақсы әке',sub:'признак — перед словом',end:'Признак — впереди, и он как скала: не меняется. 🗿',papa:'Игра «Какой?»: назовите по-русски кого-то из семьи («хороший папа», «радостная бабушка»), а ребёнок говорит по-казахски: «жақсы әке», «қуанышты әже»…',
   intro:[
   {s:'wow',t:'<p>Два секрета признака! 🔑</p><p><b>Секрет 1:</b> признак стоит <b>ПЕРЕД</b> словом.</p>'+exA('жақсы','әке','жақсы әке — хороший папа 👨')},
-  {s:'laugh',t:'<p><b>Секрет 2:</b> признак <b>не меняется</b>! 🗿</p>'+exA('үлкен','аға','үлкен аға — старший брат')+exA('үлкен','апа','үлкен апа — старшая сестра')+'<p>В русском «старш<b>ий</b> / старш<b>ая</b>» меняется, а в казахском <b>үлкен</b> — всегда <b>үлкен</b>. Удобно! 😌</p>'},
+  {s:'laugh',t:'<p><b>Секрет 2:</b> признак <b>не меняется</b>! 🗿</p>'+exA('үлкен','аға','үлкен аға — старший брат')+exA('үлкен','апа','үлкен апа — старшая сестра')+'<p>В русском «старш<b>ий</b> / старш<b>ая</b>» меняется, а в казахском языке <b>үлкен</b> — всегда <b>үлкен</b>. Удобно! 😌</p>'},
   {s:'look',t:'<p>Запомни: сначала <b>какой</b>, потом <b>кто</b>. Как в очереди: признак всегда стоит первым. 🚶‍♂️🚶</p>'}],
   mix:function(){var I=this.intro;return [I[0],I[1],
    {task:'build',ru:'Маленький братишка 👶',c:['кішкентай','іні'],x:['үлкен']},
@@ -1196,8 +1196,8 @@ function showMap(){CBUSY=false;stopTown();
       '<text x="'+x+'" y="'+(y+6)+'" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="17" fill="'+(open?'#14222c':'#9fbcc3')+'">'+(full?'✓':open?i+1:'🔒')+'</text></g>'}).join('');
   var route=pos.map(function(p){return p[0]+','+(p[1]+80)}).join(' ');
   app.innerHTML=topBar()+
-   '<div class="hero">'+AINA(CHIP?'laugh':'look',78)+'<div><h1 style="font-size:23px">Помоги Айне вспомнить казахский</h1>'+
-   '<p>Айна упала с полки и забыла все слова. На каждом острове ты вернёшь ей кусочек казахского.</p>'+
+   '<div class="hero">'+AINA(CHIP?'laugh':'look',78)+'<div><h1 style="font-size:23px">Помоги Айне вспомнить казахский язык</h1>'+
+   '<p>Айна упала с полки и забыла все слова. На каждом острове ты вернёшь ей кусочек казахского языка.</p>'+
    '<button class="ttl" data-a="title">Айна зовёт тебя: '+esc(T())+' ✎</button></div></div>'+
    '<div class="map"><svg viewBox="0 0 340 680" role="img" aria-label="Карта 13 островов">'+
    '<polyline points="'+route+'" fill="none" stroke="#7fb3c2" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" opacity=".7"/>'+isl+'</svg></div>'+
@@ -1289,7 +1289,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v153'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v154'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -2451,7 +2451,7 @@ function tutStep(ev,id){var c=cst();if(!tutOn())return;
 var INTRO=0;
 function introFlow(){INTRO=0;var o=document.createElement('div');o.className='cintro';o.id='cintro';document.querySelector('.cityscr').appendChild(o);
   if(MUSOK){introShow();return}
-  o.innerHTML='<div class="isplash"><div class="islogo">Тілашар</div><div class="issub">Казахский как игра 🎮</div><div class="iszz">'+AINA('sleepy',110)+'</div><button class="go isgo" data-a="istart">▶ Играть</button></div>';
+  o.innerHTML='<div class="isplash"><div class="islogo">Тілашар</div><div class="issub">Казахский язык как игра 🎮</div><div class="iszz">'+AINA('sleepy',110)+'</div><button class="go isgo" data-a="istart">▶ Играть</button></div>';
   try{MUSOK=true;musicSync();if(MUS&&MUS.paused)MUSOK=false}catch(e){MUSOK=false}}
 function introShow(){var o=document.getElementById('cintro');if(!o)return;var s=INTRO,c=cst(),h;
   if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';
@@ -2860,7 +2860,7 @@ var LESSONS3=[
   intro:[{s:'dizzy',t:'<p>Облако забвения стёрло у меня одно маленькое, но важное слово — <b>«много»</b>.</p>'},
    {s:'dizzy',t:'<p>Вижу одного медведя, одного льва… А их же много! 😱 Поможешь вернуть?</p>'},
    {s:'happy',t:'Один медведь — <b>аю</b>. Много медведей — <b>аюлар</b>. Прицепил хвостик «много» — готово! 🐻🐻🐻'+E3('аю','медведи')},
-   {s:'look',t:'В русском слово меняется: яблок<b>о</b> → яблок<b>и</b>. А в казахском слово остаётся целым — к нему просто цепляется деталь «МНОГО». 🧱'},
+   {s:'look',t:'В русском слово меняется: яблок<b>о</b> → яблок<b>и</b>. А в казахском языке слово остаётся целым — к нему просто цепляется деталь «МНОГО». 🧱'},
    {s:'wink',t:'Твёрдое слово → синий <b>-лар</b>, мягкое → розовый <b>-лер</b>.'+E3('түйе','верблюды 🐫')},
    {s:'look',t:'Помнишь буквы с характером из «Кто я?» 😄 Здесь то же самое: последний звук слова выбирает первую букву хвостика.'},
    {s:'happy',t:'После <b>л, м, н, ң, з, ж</b> хвостик начинается с <b>Д</b>:'+E3('арыстан','львы 🦁')+E3('піл','слоны 🐘')+'А з и ж — наши знакомые жужжалки! 🐝'}],
@@ -3130,7 +3130,7 @@ var LESSONS4=[
    hearOr('алты','6',['7','8'])]}},
  {title:'Неше? — сколько?',sub:'после числа «много» не нужно',end:'Число сказало «много» — хвостик не нужен! 🍉🥕 На базаре открылись прилавки с фруктами и овощами!',papa:'Спросите ребёнка по-казахски «Неше?» про фрукты дома: «Неше алма?» Пусть ответит: «Үш алма!»',
   intro:[{s:'look',t:'<p>Покупатель на базаре спрашивает: '+kk('Неше алма?')+' — «Сколько яблок?» 🍎</p><p><b>Неше?</b> — это «сколько?».</p>'},
-   {s:'wow',t:'<p>А теперь секрет! 🔑 В русском слово меняется: три ябло<b>ка</b>, пять ябло<b>к</b>. А в казахском после числа слово <b>не меняется</b>:</p>'+E4('үш алма','три яблока 🍎🍎🍎')},
+   {s:'wow',t:'<p>А теперь секрет! 🔑 В русском слово меняется: три ябло<b>ка</b>, пять ябло<b>к</b>. А в казахском языке после числа слово <b>не меняется</b>:</p>'+E4('үш алма','три яблока 🍎🍎🍎')},
    {s:'wink',t:'<p>Помнишь хвостик «много»? <b>алмалар</b> — яблоки. Но когда считаешь, хвостик не нужен: <b>бес алма</b>, а не «бес алма<b>лар</b>».</p><p>Число уже сказало, что их много! Число и хвостик «много» вместе не ходят. ✋🍎</p>'},
    {s:'happy',t:'<p>Порядок как у признака: сначала <b>сколько</b>, потом <b>что</b>. Как ценник на прилавке: число впереди! 🏷️</p>'},
    {s:'wink',t:'<p>А это <b>овощи</b> — с ними то же правило:</p><p>🥕 '+kk('сәбіз')+' — морковь · 🥒 '+kk('қияр')+' — огурец · 🍅 '+kk('қызанақ')+' — помидор<br>🥔 '+kk('картоп')+' — картошка · 🧅 '+kk('пияз')+' — лук</p>'+E4('төрт картоп','четыре картофелины 🥔🥔🥔🥔')}],
@@ -3434,8 +3434,8 @@ function forgetBubbles(n){var w=document.getElementById('cworld');if(!w)return;v
     var b=document.createElement('span');b.className='cforg';b.textContent=FORG[(i+(SD().secN||0))%FORG.length];b.style.left=x+'px';b.style.top=(y-60)+'px';b.style.animationDelay=(i*.4)+'s';w.appendChild(b);i++})}
 function warmEntry(){stopTown&&stopTown();var n=absentDays(),nm=esc(st.name||T()),t,f;
   if(n<=0){f='wow';t='Сәлем, <b>'+nm+'</b>! ☁️ Ночью <b>облако забвения</b> подкралось к городу — и жители снова стали забывать слова! Скорее давай вместе повторим наш казахский язык — и спасём наш город!'}
-  else if(n===1){f='shy';t='Ой, <b>'+nm+'</b>, тебя вчера не было! ☁️ <b>Облако забвения</b> вернулось — жители начинают терять память и забывать слова. Давай вместе скорее повторим наш казахский — и спасём наш город!'}
-  else{f='sleepy';t='<b>'+nm+'</b>, тебя не было '+absentTxt(n)+'! 😟 <b>Облако забвения</b> накрыло город — жители почти всё забыли, и город снова заснул… Тебе нельзя надолго покидать наш город! Давай вместе повторим наш казахский — и спасём его!'}
+  else if(n===1){f='shy';t='Ой, <b>'+nm+'</b>, тебя вчера не было! ☁️ <b>Облако забвения</b> вернулось — жители начинают терять память и забывать слова. Давай вместе скорее повторим наш казахский язык — и спасём наш город!'}
+  else{f='sleepy';t='<b>'+nm+'</b>, тебя не было '+absentTxt(n)+'! 😟 <b>Облако забвения</b> накрыло город — жители почти всё забыли, и город снова заснул… Тебе нельзя надолго покидать наш город! Давай вместе повторим наш казахский язык — и спасём его!'}
   var cloud='<svg viewBox="0 0 220 90" width="190" aria-hidden="true" class="wcloud"><path d="M40 70 Q14 70 16 50 Q18 32 40 34 Q44 12 70 14 Q86 -2 110 10 Q134 0 148 20 Q176 14 182 38 Q206 40 204 58 Q202 72 180 70 Z" fill="#b9c6cc"/><path d="M52 60 Q40 58 44 48" stroke="#9fb1ba" stroke-width="4" fill="none" stroke-linecap="round"/>'+
     '<text x="60" y="88" font-family="Rubik,sans-serif" font-size="16" font-weight="800" fill="#9fb1ba" class="wl1">ә</text><text x="104" y="86" font-family="Rubik,sans-serif" font-size="14" font-weight="800" fill="#9fb1ba" class="wl2">қ?</text><text x="146" y="88" font-family="Rubik,sans-serif" font-size="16" font-weight="800" fill="#9fb1ba" class="wl3">ұ…</text></svg>';
   app.innerHTML='<section class="wentry"><div class="icard">'+cloud+'<div class="iav">'+AINA(f,100)+'</div><div class="ibub">'+t+'</div><button class="go" style="width:100%" data-a="warm">🧠 Спасти слова!</button></div></section>';
@@ -3759,7 +3759,7 @@ var LESSONS5=[
   intro:[{s:'happy',t:'<p>Вся семья «кто» — снова в деле! Хвостики знакомые! 👋</p>'},
    {s:'look',t:'<p>Вся семья — на одном действии:</p><div class="kfam2">'+z3row('Мен','я','бар','а','мын','я иду')+z3row('Сен','ты','бар','а','сың','ты идёшь')+z3row('Сіз','вы, вежливо','бар','а','сыз','вы идёте')+z3row('Ол','он, она','бар','а','ды','он идёт')+
      z3row('Біз','мы','бар','а','мыз','мы идём')+z3row('Сендер','вы','бар','а','сыңдар','вы идёте')+z3row('Сіздер','вы, вежливо','бар','а','сыздар','вы идёте')+z3row('Олар','они','бар','а','ды','они идут')+'</div>'},
-   {s:'wow',t:'<p><b>Олар барады</b> — как «ол». Не «барадылар»! Казахский опять экономит. 💰</p>'},
+   {s:'wow',t:'<p><b>Олар барады</b> — как «ол». Не «барадылар»! Казахский язык опять экономит. 💰</p>'},
    {s:'laugh',t:'<p><b>Балалар барады</b> — дети идут. В столовую. Все сразу. 🏃🏃🏃</p>'}],
   mix:function(){var I=this.intro;return [I[0],I[1],
    h1Pairs([['Біз жейміз','мы едим'],['Сендер ішесіңдер','вы пьёте'],['Олар жуынады','они умываются']],'Все пары на месте! 🎯 Хвостики — как в «Кто я?».'),
