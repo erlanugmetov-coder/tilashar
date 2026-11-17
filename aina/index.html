@@ -1289,7 +1289,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v152'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v153'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -1724,7 +1724,7 @@ var CTASK=[
  {id:'hosp',name:'Построить больницу',cost:2,x:660,y:385,req:'fence',b:'aurukhana'},
  {id:'park',name:'Разбить парк',cost:2,x:500,y:705,req:'house',b:'sayabaq'},
  {id:'stad',name:'Построить стадион',cost:2,x:230,y:700,req:'school',b:'stadion'},
- {id:'fount',name:'Поставить фонтан',cost:2,x:380,y:560,req:'park',b:'fontan'},
+ {id:'fount',name:'Поставить фонтан',cost:2,x:630,y:670,req:'park',b:'fontan'},
  {id:'bench',name:'Починить скамейки',cost:1,x:330,y:860,req:'stad',b:'bench',coins:6},
  {id:'studio',name:'Построить студию',cost:3,x:600,y:880,req:'park',b:'studia'},
  {id:'stage',name:'Построить сцену',cost:3,x:250,y:990,req:'bench',b:'sakhna'}
@@ -1813,8 +1813,8 @@ function worldSVG(){var c=cst(),s='<svg class="cworld" width="'+CW+'" height="'+
   s+='<rect x="0" y="540" width="'+CW+'" height="40" fill="#f0d9a8"/><rect x="0" y="540" width="'+CW+'" height="4" fill="#dcc08a"/><rect x="0" y="576" width="'+CW+'" height="4" fill="#dcc08a"/>';
   s+='<rect x="361" y="0" width="38" height="'+CH+'" fill="#f0d9a8"/><rect x="361" y="0" width="4" height="'+CH+'" fill="#dcc08a"/><rect x="395" y="0" width="4" height="'+CH+'" fill="#dcc08a"/>';
   s+='<rect x="0" y="790" width="'+CW+'" height="34" fill="#f0d9a8"/><rect x="0" y="790" width="'+CW+'" height="4" fill="#dcc08a"/>';
-  s+='<circle cx="380" cy="560" r="62" fill="#f0d9a8" stroke="#dcc08a" stroke-width="4"/>';
-  for(var k=0;k<19;k++)s+='<rect x="'+(10+k*40)+'" y="558" width="16" height="3" rx="1.5" fill="#fff6e6"/>';
+  s+='<rect x="365" y="544" width="30" height="32" fill="#f0d9a8"/>';
+  for(var k=0;k<19;k++)if(k!==9)s+='<rect x="'+(10+k*40)+'" y="558" width="16" height="3" rx="1.5" fill="#fff6e6"/>';
   [[60,300],[700,250],[90,460],[720,700],[60,1040],[700,1020],[430,1060],[140,260],[560,250]].forEach(function(p,i){s+=vtree(p[0],p[1],.9+(i%3)*.1)});
   if(c.up.flowers)[[300,600],[460,600],[300,520],[460,520]].forEach(function(p,i){s+=vbush(p[0],p[1],['#e05a9c','#ffd76a','#e2574c','#8e5bd6'][i])});
   if(c.up.lamps)[[120,532],[250,532],[520,532],[650,532],[352,300],[352,700],[352,950]].forEach(function(p){s+='<rect x="'+p[0]+'" y="'+(p[1]-46)+'" width="4" height="46" fill="#33505e"/><circle class="lampon" cx="'+(p[0]+2)+'" cy="'+(p[1]-50)+'" r="8" fill="#ffd76a"/>'});
@@ -2044,7 +2044,7 @@ function vsaplings(x,y,grown,apples){var s='';for(var i=0;i<5;i++){var px=x-80+i
 var _vbuild=vbuild,_vbefore=vbefore;
 vbuild=function(t){var x=t.x,y=t.y;switch(t.b){
   case 'mektep':return vhouse(x-70,y-55,140,110,'#2f6fd6','#1f4f9e',{rh:46,rows:2,cols:3});
-  case 'flag':return '<circle cx="'+x+'" cy="'+(y+4)+'" r="22" fill="#e8dcc4" stroke="#d4c3a2" stroke-width="2"/>'+sh(x,y+6,12,4)+'<rect x="'+(x-3)+'" y="'+(y-118)+'" width="5" height="120" rx="2" fill="#c9d3d6"/><circle cx="'+(x-.5)+'" cy="'+(y-120)+'" r="4" fill="#ffd200"/><g class="fraise">'+kzflag(x+2,y-116,60)+'</g>'+vbush(x-30,y+10,'#ffd200')+vbush(x+32,y+10,'#2f6fd6');
+  case 'flag':return '<circle cx="'+x+'" cy="'+(y+4)+'" r="22" fill="#e8dcc4" stroke="#d4c3a2" stroke-width="2"/>'+sh(x,y+6,12,4)+'<rect x="'+(x-3)+'" y="'+(y-118)+'" width="5" height="120" rx="2" fill="#c9d3d6"/><circle cx="'+(x-.5)+'" cy="'+(y-120)+'" r="4" fill="#ffd200"/><g class="fraise">'+kzflag(x+2,y-116,60)+'</g>'+vbush(x-30,y+10,'#ffd200')+vbush(x-62,y+10,'#2f6fd6');
   case 'pit':return '<ellipse cx="'+x+'" cy="'+y+'" rx="24" ry="9" fill="#e4cc98"/>';
   case 'lamp':return vlampP(x,y,1);
   case 'house2':return vhouse2(x,y,1);
@@ -2254,8 +2254,8 @@ function groundSVG(){var s='<svg class="cworld" width="'+CW+'" height="'+CH+'" v
   s+='<rect x="361" y="0" width="38" height="1340" fill="#f0d9a8"/><rect x="361" y="0" width="4" height="1340" fill="#dcc08a"/><rect x="395" y="0" width="4" height="1340" fill="#dcc08a"/>';
   s+='<rect x="0" y="790" width="'+CW+'" height="34" fill="#f0d9a8"/><rect x="0" y="790" width="'+CW+'" height="4" fill="#dcc08a"/>';
   s+='<rect x="760" y="0" width="38" height="1300" fill="#f0d9a8"/><rect x="760" y="0" width="4" height="1300" fill="#dcc08a"/><rect x="794" y="0" width="4" height="1300" fill="#dcc08a"/>';
-  s+='<circle cx="380" cy="560" r="62" fill="#f0d9a8" stroke="#dcc08a" stroke-width="4"/>';
-  for(var k=0;k<28;k++)s+='<rect x="'+(10+k*40)+'" y="558" width="16" height="3" rx="1.5" fill="#fff6e6"/>';
+  s+='<rect x="365" y="544" width="30" height="32" fill="#f0d9a8"/>';
+  for(var k=0;k<28;k++)if(k!==9)s+='<rect x="'+(10+k*40)+'" y="558" width="16" height="3" rx="1.5" fill="#fff6e6"/>';
   s+='<path d="M0 1340 Q200 1325 400 1345 T800 1340 T1150 1345 V1420 Q950 1430 760 1415 T380 1420 T0 1418Z" fill="#5fc3db"/><path d="M0 1340 Q200 1325 400 1345 T800 1340 T1150 1345" stroke="#c9b38a" stroke-width="6" fill="none"/><path d="M0 1418 Q380 1428 760 1415 T1150 1420" stroke="#c9b38a" stroke-width="6" fill="none"/>';
   for(var q=0;q<14;q++)s+='<path d="M'+(30+q*82)+' '+(1372+(q%3)*12)+' q8 -5 16 0 t16 0" stroke="#bfe9f2" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
   return s+'<rect x="0" y="1440" width="'+CW+'" height="60" fill="#82c45e"/></svg>'}
@@ -2967,11 +2967,11 @@ Object.assign(CMAN,{
 (function(){var _to=tOpen;tOpen=function(t){return _to(t)&&zTaskOpen(t)}})();
 (function(){var _cr=crevealPts;crevealPts=function(){var p=_cr();if(zArea()){p.push({x:380,y:2420,r:240});CTASK.forEach(function(t){if(t.zl!=null)p.push({x:t.x,y:t.y,r:160})})}var n=zNextLv();if(n!=null)CTASK.forEach(function(t){if(t.zl===n)p.push({x:t.x,y:t.y,r:150})});
   if(cst().zfest)[[200,2600],[600,2600],[950,2600],[200,2900],[600,2900],[950,2900],[200,3150],[600,3150],[950,3150]].forEach(function(q){p.push({x:q[0],y:q[1],r:330})});return p}})();
-BGTREES.push([60,2420,1],[700,2400,2],[1090,2450,3],[60,2760,5],[1100,2560,1],[400,3170,0],[800,3180,3],[1100,3180,1],[40,3050,2],[780,3060,0]);
+BGTREES.push([60,2420,1],[700,2400,2],[1090,2450,3],[60,2760,5],[1100,2560,1],[400,3170,0],[800,3180,3],[1100,3180,1],[40,3050,2]);
 (function(){var _g=groundSVG;groundSVG=function(){var s=_g(),g='<rect x="361" y="2280" width="38" height="880" fill="#f0d9a8"/><rect x="361" y="2280" width="4" height="880" fill="#dcc08a"/><rect x="395" y="2280" width="4" height="880" fill="#dcc08a"/>'+
-  '<rect x="60" y="2715" width="1000" height="30" fill="#f0d9a8"/><rect x="60" y="2885" width="1000" height="30" fill="#f0d9a8"/><rect x="60" y="3045" width="1000" height="26" fill="#f0d9a8"/>';
+  '<rect x="60" y="2715" width="770" height="30" fill="#f0d9a8"/><rect x="60" y="2885" width="770" height="30" fill="#f0d9a8"/><rect x="60" y="3045" width="770" height="26" fill="#f0d9a8"/>';
   return s.replace(/<\/svg>$/,g+'</svg>')}})();
-ROADS.push({x1:361,x2:399,y1:2280,y2:3160},{x1:60,x2:1060,y1:2715,y2:2745},{x1:60,x2:1060,y1:2885,y2:2915},{x1:60,x2:1060,y1:3045,y2:3071});
+ROADS.push({x1:361,x2:399,y1:2280,y2:3160},{x1:60,x2:830,y1:2715,y2:2745},{x1:60,x2:830,y1:2885,y2:2915},{x1:60,x2:830,y1:3045,y2:3071});
 /* рисунки: вольер + звери (по 2–3 — их же «много») */
 function zpen(x,y,ground){var s=sh(x,y+28,104,12)+'<ellipse cx="'+x+'" cy="'+(y-10)+'" rx="100" ry="44" fill="'+(ground||'#c9e39b')+'"/>';
   for(var i=0;i<=12;i++){var a=Math.PI*(i/12),px=x-100*Math.cos(a),py=y-10+44*Math.sin(a);s+='<rect x="'+(px-2.5)+'" y="'+(py-22)+'" width="5" height="24" rx="2" fill="#8a5a2b"/>'}
