@@ -241,6 +241,7 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .srow{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e6dfcf;border-radius:14px;padding:8px 10px;margin-bottom:7px;cursor:pointer}
 .srow.saying{border-color:#ffb36b;box-shadow:0 0 0 3px #ffe3cc}.srow .spk{flex:none}
 .srow b{display:block;font:800 16px var(--body)}.srow small{font:700 12px var(--body);color:#6b8291}
+.sumc{max-height:94vh;overflow-y:auto}.scomp .srow{padding:5px 9px;margin-bottom:4px;border-radius:12px}.scomp .srow b{font-size:15px}.scomp .srow small{font-size:11px}.scomp h3{font-size:19px}
 .ssec{margin:10px 0;background:#E6F1FB;border-radius:12px;padding:10px;font:700 13px var(--body);color:#0C447C;text-align:center;line-height:1.5}
 .ssec i{font-style:normal;color:#fff;border-radius:5px;padding:0 5px}
 .sbtns{display:flex;gap:8px}.sbtns button{flex:1;padding:12px 6px;border-radius:14px;font:800 15px var(--body)}
@@ -1289,7 +1290,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v156'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v157'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3950,7 +3951,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 /* v145: карточки «Что ты теперь умеешь» после проверки каждого модуля */
 var SUMD={
  0:{b:'🏆 Тема 1 пройдена · Чип «Кто я?»',sec:'Главный секрет: <b>слово + хвостик = фраза</b><br>оқушы<i style="background:#378ADD">мын</i> · биші<i style="background:#D4537E">мін</i> · дос<i style="background:#378ADD">пын</i><br>Ты освоил первый хвостик — «кто я». Впереди — новые! 🚀',
-  p:function(){var nm=st.name||'',my=null;if(nm){var f='Мен '+nm+tailOf(nm,'men');if(canSay(f))my=[f,'я '+nm+' — кто ты']}return [my||['Мен оқушымын','я ученик — кто ты'],['Сен аспазсың','ты повар — про друга'],['Сіз мұғалімсіз','вы учитель — вежливо взрослому'],['Біз жанкүйерміз','мы болельщики — про вас вместе'],['Сәлем! · Сау бол!','привет · пока']]}},
+  p:function(){var nm=st.name||'',my=null;if(nm){var f='Мен '+nm+tailOf(nm,'men');if(canSay(f))my=[f,'я '+nm+' — кто ты']}return [my||['Мен оқушымын','я ученик — кто ты'],['Сен аспазсың','ты повар — про друга'],['Сіз мұғалімсіз','вы учитель — вежливо взрослому'],['Ол ғалым','он учёный — про другого'],['Біз жанкүйерміз','мы болельщики — про вас вместе'],['Сендер ойыншысыңдар','вы игроки — про друзей'],['Сіздер ұстазсыздар','вы наставники — вежливо взрослым'],['Олар көрші','они соседи — без хвостика'],['Сәлем! · Сау бол!','привет · пока']]}},
  1:{b:'🎨 Тема 2 пройдена · Ярмарка',sec:'Главный секрет: <b>сначала какой — потом кто</b><br>күшті жігіт · Мен белсенді оқушы<i style="background:#378ADD">мын</i><br>Признак не меняется, хвостик — в самом конце. 🚂',
   p:function(){return [['Мен батылмын','я смелый — какой ты'],['Сен мейірімдісің','ты добрый — про друга'],['күшті жігіт','сильный парень — сначала какой'],['Мен белсенді оқушымын','я активный ученик — хвостик в конце'],['Қалайсың? · Жақсы, рахмет!','как дела? · хорошо, спасибо']]}},
  2:{b:'🦁 Тема 3 пройдена · Зоопарк',sec:'Главный секрет: <b>три якоря</b> ⚓<br>аю<i style="background:#378ADD">лар</i> · арыстан<i style="background:#378ADD">дар</i> · барыс<i style="background:#378ADD">тар</i><br>Сравни с якорем — и любой зверь станет «много»! 🐾',
@@ -3963,7 +3964,7 @@ function sumSay(list,i){if(i>=list.length)return;var rows=document.querySelector
 var SUMTH=0;
 function sumCard(fromMe,th){th=th||0;SUMTH=th;var o=document.getElementById('sumov');if(o)o.remove();var D=SUMD[th],P=D.p(),nm=st.name?esc(st.name):'';
   var d=document.createElement('div');d.className='sumov';d.id='sumov';
-  d.innerHTML='<div class="sumc"><span class="sbadge">'+D.b+'</span><h3>Что ты теперь умеешь</h3><p class="ssub">'+(nm?nm+', теперь ты можешь сказать по-казахски:':'Теперь ты можешь сказать по-казахски:')+'</p>'+
+  d.innerHTML='<div class="sumc'+(P.length>6?' scomp':'')+'"><span class="sbadge">'+D.b+'</span><h3>Что ты теперь умеешь</h3><p class="ssub">'+(nm?nm+', теперь ты можешь сказать по-казахски:':'Теперь ты можешь сказать по-казахски:')+'</p>'+
     P.map(function(p,i){return '<div class="srow" data-sumi="'+i+'"><span class="spk">🔊</span><div><b class="kk">'+p[0]+'</b><small>'+p[1]+'</small></div></div>'}).join('')+
     '<div class="ssec">'+D.sec+'</div>'+
     '<div class="sbtns"><button class="sl" data-a="sumplay">🔊 Послушать</button><button class="sg" data-a="'+(fromMe?'sumclose':'city')+'">'+(fromMe?'Понятно':'В город →')+'</button></div></div>';
