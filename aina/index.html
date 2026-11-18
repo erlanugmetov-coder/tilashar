@@ -801,7 +801,7 @@ function h1AskBuild(p0){var p=p0||b2one(['sen','sender']),q=p==='sen'?'Сен к
   return {task:'build',ru:q+' ('+(p==='sen'?'кто ты?':'кто вы все?')+') — ответь: '+PRU1[ap]+' '+h1ru(v[1],ap),c:[PRE[ap],v[0]+tailOf(v[0],ap)],x:[v[0]+tailOf(v[0],p),PRE[p]]}}
 /* ---------- 💬 Живые фразы (общая механика для всех тем) ---------- */
 var LIVE={aina:[['Сәлем!','Привет!','Встретил друга во дворе'],['Сәлеметсіз бе!','Здравствуйте!','Заходишь в класс, там учительница'],['Сау бол!','Пока!','Уходишь домой от друга'],
-  ['Менің атым Айдар.','Меня зовут Айдар.','Новенький спрашивает: «Сенің атың кім?»'],['Мен дайынмын!','Я готов(а)!','Тренер спрашивает: «Дайынсың ба?»']],
+  ['Менің атым Айдар.','Меня зовут Айдар.','Новенький спрашивает: «Сенің атың кім?»'],['Рахмет!','Спасибо!','Бабушка угостила тебя баурсаком 🥟']],
  boyau:[['Қалайсың?','Как дела?','Хочешь узнать, как дела у друга'],['Жақсы, рахмет.','Хорошо, спасибо.','Тебя спросили: «Қалайсың?»'],['Керемет!','Отлично!','Друг показал крутой рисунок'],
   ['Жарайсың!','Молодец!','Младший брат сам завязал шнурки'],['Мен қуаныштымын!','Я рад(а)!','Тебе подарили щенка']]};
 function liveWords(t){return t.replace(/[.!?,]/g,'').split(' ')}
@@ -1290,7 +1290,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v158'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v159'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
