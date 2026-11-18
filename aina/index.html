@@ -1290,7 +1290,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v157'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v158'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3929,6 +3929,12 @@ CHTXT[4]=['🌳','Облако заморозило парк — все заме
   if(curTheme()===4&&pArea()&&!inPark()){parkGo();ainaSay('Бежим в парк! 🌳',3000);var c=cst(),a=document.getElementById('caina');if(a){a.style.left=c.ax+'px';a.style.top=c.ay+'px';a.style.zIndex=Math.round(c.ay)}camTo(c.ax,c.ay-60,1500);
    var zb=document.querySelector('.czone');if(zb){zb.remove();yZoneBtn()}var n=document.querySelector('.cname');if(n)n.textContent=(st.city_name||'Мой город')+' · Саябақ';nbProgRefresh();return}_h()}})();
 (function(){var _nb=nbBuild;nbBuild=function(){_nb.apply(this,arguments);nbProgRefresh()}})();
+/* v158: здания, которые открывала Проверка, теперь открываются предпоследним уроком («Живые фразы») — район достраивается до Проверки,
+   а после Проверки игра сразу ведёт в новый район. Кто уже прошёл «Живые фразы», но не сдал Проверку, — один раз получает энергию за эти здания. */
+(function(){var F=['cl','lv','zl','bl','pl'],sv=THX,add=0;try{F.forEach(function(f,th){setTheme(th);var bi=NL-1,mv=0;
+  CTASK.forEach(function(t){if(t[f]===bi){t[f]=bi-1;mv+=t.cost||0}});
+  if(!st.m158&&mv&&isDone(bi-1)&&!isDone(BOSS))add+=mv});
+  if(!st.m158){st.m158=1;if(add){st.energy=(st.energy||0)+add}save()}}catch(e){}setTheme(sv)})();
 (function(){if(document.querySelector('.cityscr')){try{nbBuild();cnameFix();setTimeout(function(){try{coinHint(0)}catch(_){}},1800)}catch(e){showErr(e,'load')}}})();
 
 /* v130: молоток со счётчиком доступных строек */
