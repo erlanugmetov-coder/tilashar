@@ -50,6 +50,12 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .lesson{background:var(--card);color:var(--ink);border-radius:24px;padding:16px 14px 18px;display:flex;flex-direction:column;gap:12px;min-height:60vh}
 .bar{height:12px;border-radius:99px;background:#eadfc6;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--aina);border-radius:99px;transition:width .4s}
+.lesson>.bar.seg{position:sticky;top:0;z-index:6;height:auto;background:var(--card);border-radius:0;overflow:visible;display:flex;gap:4px;padding:8px 2px 6px;margin:-8px 0 0}
+.bar.seg b{flex:1;height:10px;border-radius:99px;background:#eadfc6;transition:background .3s}
+.bar.seg b.ok{background:#4caf50}.bar.seg b.now{background:#f5c79e;animation:segp 1.1s infinite}
+@keyframes segp{50%{opacity:.45}}
+.bar.seg.fin b{background:#4caf50;animation:segf .6s 2}
+@keyframes segf{50%{background:#ffd54a;transform:scaleY(1.4)}}
 .chat{display:flex;flex-direction:column;gap:12px}
 .say{display:flex;gap:10px;align-items:flex-end}
 .say .av{flex:none;width:58px}
@@ -1252,7 +1258,9 @@ function start(k,resume){CBUSY=false;stopTown();L=LESSONS[k];L.k=k;L.run=genRun(
 }
 function chat(){return document.getElementById('chat')}
 function ctl(){return document.getElementById('ctl')}
-function setBar(){var b=document.getElementById('bar');if(b&&L)b.style.width=Math.round(si/L.run.length*100)+'%'}
+function setBar(done){var b=document.getElementById('bar');if(!b||!L)return;var h=b.parentNode;h.classList.add('seg');var n=0,k=0;L.run.forEach(function(s,i){if(s&&s.task){n++;if(i<si)k++}});if(!n){h.style.display='none';return}
+ var cur=-1;for(var i=si;i<L.run.length;i++){if(L.run[i]&&L.run[i].task){cur=1;break}}if(done){k=n;h.classList.add('fin')}
+ var x='<i id="bar" style="display:none"></i>';for(var j=0;j<n;j++)x+='<b class="'+(j<k?'ok':(j===k&&cur>0&&!done&&si>0?'now':''))+'"></b>';h.innerHTML=x}
 /* прокрутка вниз: всегда видно последнее сообщение и кнопку «Дальше» */
 function bottom(){return Math.max(document.documentElement.scrollHeight,document.body.scrollHeight)-window.innerHeight}
 function scrollEnd(){var go=function(){window.scrollTo({top:bottom(),behavior:'smooth'})};requestAnimationFrame(go);setTimeout(go,260);setTimeout(go,600)}
@@ -1298,7 +1306,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v168'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v169'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -1421,7 +1429,7 @@ function finish(){
   ctl().innerHTML='<div class="final">'+AINA('laugh',110,true).replace('class="rbt','class="rbt dance')+
    '<h2 style="font-size:22px">'+(L.boss?thm().win:stars===3?'Мінсіз! Без ошибок':'Урок пройден!')+'</h2>'+(L.end?'<p class="endsay">'+L.end.replace('%T%',esc(T()))+'</p>':'')+'<div class="stars">'+[0,1,2].map(function(i){return i<stars?'<b>★</b>':'★'}).join('')+'</div><div class="reward"><i class="coin"></i> +'+gained+'</div>'+
    '<div class="egain">⚡ +'+CGAIN+' энергии Айне</div><button class="go" style="width:100%" data-a="city">🏙 В город — строить!</button>'+(L.boss?'<button class="ghost" data-a="themes">Все темы →</button>':last===FAST?'':'<button class="ghost" data-a="go" data-v="'+last+'">Сразу дальше: '+LESSONS[last].title+' →</button>')+(L.papa?'<div class="papa"><b>👨‍👩‍👧 Задание с семьёй <small>· по желанию</small></b><p>'+L.papa+'</p></div>':'')+'<button class="ghost" data-a="map">К урокам</button></div>';
-  setBar();document.getElementById('bar').style.width='100%';sWin();scrollEnd();
+  setBar(1);sWin();scrollEnd();
 }
 
 /* ===================== ⚡ Жылдам (без печати, мгновенные реакции) ===================== */
@@ -3370,7 +3378,7 @@ function startWarm(){if(!anyDone()){themesScreen();return}CBUSY=false;stopTown()
 function warmFinish(){CGAIN=0;var d=SD();d.woke=sleepLevel()>0;d.warm=TODAY();d.grew=markActive();d.party=TODAY();setTheme(WARM.th0||0);save();
   ctl().innerHTML='<div class="final">'+AINA('laugh',110,true).replace('class="rbt','class="rbt dance')+'<h2 style="font-size:22px">Облако забвения улетело! ☀️</h2><p class="endsay">Батарейка полная! 🔋✨ Теперь слова никуда не убегут. Уроки открыты — и в городе тебя ждут!</p>'+
    '<div class="egain">🔥 '+d.streak+' '+dword(d.streak)+' подряд</div><button class="go" style="width:100%" data-a="city">🎉 В город — праздник!</button><button class="ghost" data-a="themes">К урокам</button></div>';
-  setBar();document.getElementById('bar').style.width='100%';sWin();scrollEnd()}
+  setBar(1);sWin();scrollEnd()}
 var WSECRET=['Ой, подожди! Открою тебе свой секрет 🤫 Однажды я выучила кучу новых слов и не повторила их. Через неделю у меня в памяти остались только «сәлем» и звук пылесоса 🤖🌀 С тех пор я каждый день делаю разминку — и всё на месте. Давай вместе? Всего 3 задания!',
  'Мой процессор однажды перегрелся от новых слов, а повторение его охладило ❄️ Давай сначала разминку — всего 3 задания!',
  'Знаешь, почему я никогда не путаю хвостики? Потому что каждый день разминаюсь 😎 Давай вместе — 3 задания!',
