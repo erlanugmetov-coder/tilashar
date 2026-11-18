@@ -1071,7 +1071,7 @@ var LESSONS2=[
    I[4],
    {task:'tail',g:1,p:'men',r:'көңілді',ru:'я весёлый / весёлая',o:b2sh(['мін','мын']),why:'Слово мягкое → розовый хвостик: <b>Мен көңілдімін</b>.'},
    I[5],
-   pk('Найди лишнее: три слова отвечают на <b>Кім?</b>, а одно — на <b>Қандай?</b>','жас',['бала','дос','оқушы'],{say:'жас',yes:'<b>жас</b> — молодой. Это признак → <b>Қандай?</b> ✍️'}),
+   pk('Какое слово отвечает на вопрос <b>Қандай?</b> — какой?','жас',['бала','дос','оқушы'],{say:'жас',yes:'<b>жас</b> — молодой. Это признак → <b>Қандай?</b> ✍️'}),
    {task:'build',ru:'Я честный',c:['Мен','адал','+мын'],x:['+мін'],say:'Мен адалмын'},
    h1Pairs([['Мен жақсымын','я хороший / хорошая'],['Мен жылдаммын','я быстрый / быстрая'],['Мен ептімін','я ловкий / ловкая']],'Все пары на месте! 🎯 Хвостик — как в «Кто я?».')]}},
  {title:'Мен биікпін — шептуны на посту',sub:'шептун → -пын / -пін',end:'Шептуны на посту — хвостик шепчет! 🤫',papa:'Скажи по-казахски, какой ты: «Мен биікпін!» — а потом шёпотом: «Мен тентекпін…» 😏',
@@ -1298,7 +1298,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v161'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v162'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
