@@ -1298,7 +1298,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v166'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v167'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -3501,7 +3501,6 @@ var WENTRY=0;
 })();
 window.__c={st:function(){return st},showCity:showCity,doTask:doTask,CAM:CAM};
 window.__t2={get cmb(){return cmb},fitAll:fitAll};
-showCity();
 
 /* ===================== v96: облака — одна картинка (canvas) вместо сотен блоков: при масштабе не мигают ===================== */
 var CLP=[],CLSIG='';
@@ -3961,6 +3960,7 @@ themesScreen=function(){stopTown();L=null;busy=false;run++;clearTimeout(timer);C
        '<div class="thsoon" id="ts'+i+'"></div>'}).join('')+'</div>'+
    '<p class="note">Готовы Темы 1–5. Следующие Айна ещё готовит.</p>';
   window.scrollTo(0,0)};
+window.__c.showCity=showCity;showCity();
 (function(){if(document.querySelector('.cityscr')){try{nbBuild();cnameFix();setTimeout(function(){try{coinHint(0)}catch(_){}},1800)}catch(e){showErr(e,'load')}}})();
 
 /* v130: молоток со счётчиком доступных строек */
