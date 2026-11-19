@@ -1308,7 +1308,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v174'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v175'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -4313,6 +4313,29 @@ CHTXT[6]=['⚽','Облако спрятало стрелку «откуда» �
  var _h=homeAfterParty;homeAfterParty=function(){if(!document.querySelector('.cityscr')||CBUSY)return;if(arrivalPending()){showCity({});return}
   if(curTheme()===6&&kArea()&&!inShop()){shopGo();ainaSay('Бежим на стадион! ⚽',3000);var c=cst(),a=document.getElementById('caina');if(a){a.style.left=c.ax+'px';a.style.top=c.ay+'px';a.style.zIndex=Math.round(c.ay)}camTo(c.ax,c.ay-60,1500);
    var zb=document.querySelector('.czone');if(zb){zb.remove();yZoneBtn()}var n=document.querySelector('.cname');if(n)n.textContent=(st.city_name||'Мой город')+' · Стадион';nbProgRefresh();return}_h()}})();
+
+
+/* v175: подписи под кубиками — что значит каждая деталь (оқушы | мын → ученик | я) */
+var GLT={},GLR={};
+[['мын мін пын пін бын бін','я'],['сың сің','ты'],['сыз сіз','вы'],['мыз міз пыз піз быз біз','мы'],['сыңдар сіңдер','вы все'],['сыздар сіздер','вы (вежл.)'],
+ ['лар лер дар дер тар тер','много'],['ға ге қа ке','куда ➡️'],['да де та те','где 📍'],['дан ден тан тен нан нен','откуда ⬅️'],['а е й и','🔌'],['ды ді ты ті','он, они'],['ымыз','наш'],['бен мен пен','с']
+].forEach(function(r){r[0].split(' ').forEach(function(w){GLT[w]=r[1]})});
+[['дос','друг'],['Айдар','имя'],['Айгүл','имя'],['Айна','имя'],['Әсел','имя'],['бала','ребёнок'],['оқушы','ученик'],['суретші','художник'],['спортшы','спортсмен'],['үздік','отличник'],['қонақ','гость'],['қыз','девочка'],['жеңімпаз','победитель'],
+ ['аспаз','повар'],['ұшқыш','лётчик'],['мұғалім','учитель'],['дәрігер','врач'],['шаштараз','парикмахер'],['жанкүйер','болельщик'],['қазақ','казах'],['ойыншы','игрок'],['ұстаз','наставник'],['тәрбиеші','воспитатель'],['ғалым','учёный'],['көрші','сосед'],
+ ['ақылды','умный'],['биші','танцор'],['күшті','сильный'],['биік','высокий'],['мейірімді','добрый'],['жақсы','хороший'],['батыл','смелый'],['аю','медведь'],['түйе','верблюд'],['кірпі','ёж'],['арыстан','лев'],['піл','слон'],['қоян','заяц'],['бұлан','лось'],
+ ['барыс','барс'],['үйрек','утка'],['киік','антилопа'],['сусиыр','бегемот'],['түйеқұс','страус'],['ақбөкен','сайгак'],['керік','жираф'],['жаста','лет'],['екеу','двое'],['үшеу','трое'],['бар','идти'],['кел','приходить'],['ойна','играть'],['оқ','читать'],
+ ['үй','дом'],['қала','город'],['мектеп','школа'],['саябақ','парк'],['дүкен','магазин'],['бассейн','бассейн'],['Алматы','Алматы']].forEach(function(r){GLR[r[0]]=r[1]});
+function glossOf(c){var x=(c.textContent||'').trim();if(!x)return '';if(c.classList.contains('r'))return GLR[x]||'';return GLT[x]||''}
+function glossLego(l,tries){if(!l.isConnected)return;var pcs=[].slice.call(l.children),labs=pcs.map(glossOf),key=labs.join('|');if(!labs.some(function(x){return x}))return;
+  var w=l.parentNode&&l.parentNode.classList&&l.parentNode.classList.contains('lgwrap')?l.parentNode:null;if(w&&w.dataset.k===key&&w.dataset.w==String(l.offsetWidth))return;
+  if(!l.offsetWidth){if((tries||0)<20)setTimeout(function(){glossLego(l,(tries||0)+1)},150);return}
+  if(!w){w=document.createElement('span');w.className='lgwrap';l.parentNode.insertBefore(w,l);w.appendChild(l);l.style.position='relative'}
+  var row=w.querySelector('.lgrow');if(!row){row=document.createElement('span');row.className='lgrow';w.appendChild(row)}row.innerHTML='';row.style.width=l.offsetWidth+'px';
+  pcs.forEach(function(c,i){if(!labs[i])return;var s=document.createElement('span');s.className='lgl';s.textContent=labs[i];s.style.left=c.offsetLeft+'px';s.style.width=c.offsetWidth+'px';row.appendChild(s)});
+  w.dataset.k=key;w.dataset.w=String(l.offsetWidth)}
+(function(){var css=document.createElement('style');css.textContent='.lgwrap{display:inline-flex;flex-direction:column;vertical-align:top;margin:2px 0 4px}.lgwrap .lego{margin:0;position:relative}.lgrow{position:relative;display:block;height:15px;margin-top:3px}.lgl{position:absolute;top:0;text-align:center;font:700 11.5px/1.2 var(--body);color:#7a8a93;white-space:nowrap}';document.head.appendChild(css);
+  var pend=0;function scan(){pend=0;try{document.querySelectorAll('.lego').forEach(function(l){glossLego(l)})}catch(e){}}
+  try{new MutationObserver(function(ms){if(ms.every(function(m){return m.target.closest&&m.target.closest('.lgrow')}))return;clearTimeout(pend);pend=setTimeout(scan,250)}).observe(document.body,{childList:true,subtree:true,characterData:true})}catch(e){}})();
 
 /* v166: порядок тем по лесенке «от я»: Кто я → Какой я → Что я делаю (парк) → Много (зоопарк) → Сколько (базар).
    Внутренние номера тем (THX 0..4) и хранилища (done, d2, d3, d4, d5) не меняются — меняется только порядок прохождения ORD. */
