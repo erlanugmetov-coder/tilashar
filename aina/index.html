@@ -121,6 +121,8 @@ button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
 .cube{font-family:var(--display);font-weight:700;font-size:19px;padding:9px 13px;border-radius:12px;background:#efe6d2;color:var(--ink);box-shadow:0 4px 0 #d6c9ab}
 .cube.h{background:var(--hard);color:#fff;box-shadow:0 4px 0 #1f4f9e}
 .cube.s{background:var(--soft);color:#fff;box-shadow:0 4px 0 #a83a72}
+.cube.c{background:#ffd200;color:#5a4300;box-shadow:0 4px 0 #c9a200}
+.lego .t.c{background:#ffd200;color:#5a4300;margin:0 4px;border-radius:8px;padding-left:9px;padding-right:9px}
 .cube.used{visibility:hidden}
 .line .cube{font-size:17px;padding:6px 10px;box-shadow:0 3px 0 rgba(0,0,0,.12)}
 .grp{display:inline-flex;align-items:center;white-space:nowrap}
@@ -713,7 +715,7 @@ function tailOf(w,p){var soft=isSoft(w),e=w.toLowerCase().slice(-1),c=/[стқк
   return {men:c+(soft?'ін':'ын'),biz:c+(soft?'із':'ыз'),sen:soft?'сің':'сың',siz:soft?'сіз':'сыз',sender:soft?'сіңдер':'сыңдар',sizder:soft?'сіздер':'сыздар',ol:'',olar:''}[p]}
 var PRE={men:'Мен',sen:'Сен',siz:'Сіз',ol:'Ол',biz:'Біз',sender:'Сендер',sizder:'Сіздер',olar:'Олар'};
 var RUP={men:'я',sen:'ты',siz:'вы',ol:'он',biz:'мы',sender:'вы',sizder:'вы',olar:'они'};
-var kind=function(t){return /[әеиөүі]/.test(t)?'s':'h'};
+var kind=function(t){if(/^(а|е|й|и)$/.test(t))return 'c';return /[әеиөүі]/.test(t)?'s':'h'};
 function optsFor(w,p,force){var a=tailOf(w,p),soft=isSoft(w);
   if(p==='sen')return ['сың','сің'];if(p==='sizder')return ['сыздар','сіздер'];if(p==='siz')return ['сыз','сіз'];if(p==='sender')return ['сыңдар','сіңдер'];
   var v=p==='biz'?'ыз':'ын',sv=p==='biz'?'із':'ін',base=force||a[0]!=='м'||/[стқкпшзж]$/.test(w);
@@ -1306,7 +1308,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v173'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v174'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -4386,7 +4388,7 @@ function thDone(th){try{return themeDone(th)}catch(e){return false}}
 (function(){var _mp=mePanel;mePanel=function(){_mp.apply(this,arguments);try{var p=document.getElementById('cpanel');if(p&&p.dataset.me&&!p.querySelector('[data-a=summe]')){var l=p.querySelector('.melinks'),h='';
   ORD.forEach(function(th){if(st[sumKey(th)]||thDone(th))h+='<button class="fbbtn" data-a="summe" data-v="'+th+'" style="flex:1 1 45%;margin:0;padding:9px 4px;font-size:13px;background:#FAEEDA;color:#633806;box-shadow:0 4px 0 #e0c48f">🏆 Тема '+(ORD.indexOf(th)+1)+'</button>'});
   if(h&&l)l.insertAdjacentHTML('beforebegin','<p style="margin:0 0 6px;font:800 13px var(--body);color:#6b8291">Что я умею:</p><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+h+'</div>')}}catch(e){}}})();
-SUMD[4]={b:'🌳 Тема 3 пройдена · Парк',sec:'Главный секрет: <b>та же деталь «кто» + соединитель</b><br>бар<i style="background:#378ADD">а</i><i style="background:#378ADD">мын</i> · ойна<i style="background:#378ADD">й</i><i style="background:#378ADD">мын</i> · оқ<i style="background:#378ADD">и</i><i style="background:#378ADD">мын</i><br>А «ол» работает — получает деталь: Ол бара<i style="background:#378ADD">ды</i> 😅',
+SUMD[4]={b:'🌳 Тема 3 пройдена · Парк',sec:'Главный секрет: <b>та же деталь «кто» + соединитель</b><br>бар<i style="background:#ffd200;color:#5a4300;margin:0 3px">а</i><i style="background:#378ADD">мын</i> · ойна<i style="background:#ffd200;color:#5a4300;margin:0 3px">й</i><i style="background:#378ADD">мын</i> · оқ<i style="background:#ffd200;color:#5a4300;margin:0 3px">и</i><i style="background:#378ADD">мын</i><br>А «ол» работает — получает деталь: Ол бара<i style="background:#378ADD">ды</i> 😅',
  p:function(){return [['Мен барамын','я иду'],['Сен барасың','ты идёшь — про друга'],['Сіз барасыз','вы идёте — вежливо взрослому'],['Ол барады','он идёт — «ол» с деталью'],['Біз барамыз','мы идём — все вместе'],['Сендер барасыңдар','вы идёте — про друзей'],['Сіздер барасыздар','вы идёте — вежливо взрослым'],['Олар барады','они идут — не «барадылар»'],['Мен ойнаймын · Мен оқимын','я играю · я читаю — соединитель й и и'],['Мен доп ойнаймын · Мен кітап оқимын','играю в мяч · читаю книгу — предмет перед действием'],['Жүр! Тез! · Шаршадым','пошли! быстрее! · я устал — живые фразы']]}};
 SUMD[5]={b:'🏫 Тема 4 пройдена · Мектеп',sec:'Главный секрет: <b>хвостик-стрелка</b><br>➡️ үй<i style="background:#378ADD">ге</i> · мектеп<i style="background:#378ADD">ке</i> — куда? · 📍 үй<i style="background:#D4537E">де</i> · мектеп<i style="background:#D4537E">те</i> — где?<br>🏫 Школьный секрет: <b>Барыс</b> (бару — идти → куда?) и <b>Жатыс</b> (жату — лежать → где?)',
  p:function(){return [['Мен үйге барамын','я иду домой — куда? -ға / -ге'],['Мен мектепке барамын','я иду в школу — шептуны: -қа / -ке'],['Мен мектепте оқимын','я учусь в школе — где? -да / -де / -та / -те'],['Мен саябаққа барамын · Мен саябақта ойнаймын','саябаққа — идёшь туда, саябақта — ты уже там'],['Қайда барасың? · Қайдасың? · Жүр, үйге!','куда идёшь? · ты где? · пошли домой! — живые фразы']]}};
