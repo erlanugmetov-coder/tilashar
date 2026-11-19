@@ -1306,7 +1306,7 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v172'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v173'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
@@ -2921,7 +2921,7 @@ var LESSONS3=[
 LIVE.zoo=[['Қарашы!','Смотри!','Увидел жирафа и зовёшь друга'],['Мынау не?','Что это?','В вольере сидит странный зверь'],['Қандай әдемі!','Какой красивый!','Павлин раскрыл хвост'],['Абайла!','Осторожно!','Друг подошёл слишком близко к клетке'],['Маған ұнайды!','Мне нравится!','Тебя спросили: «Зоопарк ұнай ма?»']];
 
 LESSONS3.forEach(function(l){l.steps=l.intro});
-THM[2]={h:'Тема 5 · Көп — много',ok:'Тема пройдена! Айна снова видит, что всего много. 🐻🐻🐻',todo:'Облако стёрло у Айны слово «много». Верни его — и получи ⚡ для зоопарка.',boss:'Проверка: көп — много',bsub:'вернёт Айне слово «много»',
+THM[2]={h:'Тема 6 · Көп — много',ok:'Тема пройдена! Айна снова видит, что всего много. 🐻🐻🐻',todo:'Облако стёрло у Айны слово «много». Верни его — и получи ⚡ для зоопарка.',boss:'Проверка: көп — много',bsub:'вернёт Айне слово «много»',
  win:'«Много» вернулось! 🎉',winp:'Теперь я снова вижу всех зверей и всех друзей! И ты, %T%, — один такой. Спасибо! 😎',papa:'Расскажи семье по-казахски про зоопарк: кого там много!'};
 THEMES[2]=['Көп — много','-лар / -дар / -тар · Біз балалармыз','Хайуанаттар бағы'];
 /* v147: зоопарк 6→5 уроков: старые 1→0, 3→1, Проверка 5→4, BOSS 7→6 */
@@ -3215,7 +3215,7 @@ function boss4(){var r=function(a,b){return a+Math.floor(Math.random()*(b-a+1))}
   var n9=r(2,9),e9=g[5];ts.push(hearOr(b2cap(kz4(n9))+' '+e9[0],ruN4(n9,e9[1]),[ruN4(n9+1,e9[1]),ruN4(n9>2?n9-1:n9+2,e9[1])]));
   return ts}
 LESSONS4.forEach(function(l){l.steps=l.intro});
-THM[3]={h:'Тема 6 · Сандар — числа',ok:'Тема пройдена! Базар снова считает. 💰',todo:'Облако стёрло на базаре все числа. Верни их — и получи ⚡ для базара.',boss:'Проверка: сандар — числа',bsub:'вернёт базару все числа',
+THM[3]={h:'Тема 7 · Сандар — числа',ok:'Тема пройдена! Базар снова считает. 💰',todo:'Облако стёрло на базаре все числа. Верни их — и получи ⚡ для базара.',boss:'Проверка: сандар — числа',bsub:'вернёт базару все числа',
  win:'Числа вернулись! 🎉',winp:'Базар снова шумит: продавцы считают, покупатели торгуются. А ты, %T%, — лучший покупатель! 😎',papa:'Сходите вместе на базар или в магазин. Пусть ребёнок сам спросит по-казахски «Бұл қанша?» и назовёт цену!'};
 THEMES[3]=['Сандар — числа','1–10 · сколько? · цены','Базар'];
 (function(){
@@ -3226,7 +3226,7 @@ THEMES[3]=['Сандар — числа','1–10 · сколько? · цены'
   nextLessonIdx=function(){setTheme(!themeDone(0)?0:!themeDone(1)?1:!themeDone(2)?2:3);for(var k=0;k<NL;k++)if(!isDone(k))return k;return isDone(BOSS)?null:'boss'};
   var _ts=themesScreen;themesScreen=function(){_ts();var n=document.querySelector('.thlist+.note');if(n)n.textContent='Готовы Темы 1–4. Следующие Айна ещё готовит.'};
   var _ad=anyDone;anyDone=function(){return _ad()||(st.d4||[]).length>0};
-  doneList=function(th){var sv=THX;setTheme(th);var n=NL,src=th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[]);setTheme(sv);return src.filter(function(k){return k>=0&&k<n})};
+  doneList=function(th){var sv=THX;setTheme(th);var n=NL,src=th===6?(st.d7||[]):th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[]);setTheme(sv);return src.filter(function(k){return k>=0&&k<n})};
 })();
 /* ---------- район «Базар» (восточнее Центра) ---------- */
 CW=2150;var BX=1180;
@@ -3474,13 +3474,13 @@ function parentScreen(){var d=SD(),nm=esc(st.name||T()),h='';
   var SK=[[0,0,'Представиться','Мен '+(st.name||'Айдар')+(st.name?tailOf(String(st.name),'men'):'мын')],[0,1,'Сказать, кто он','Мен оқушымын'],[0,3,'Спросить друга, кто он','Сен кімсің?'],[0,4,'Вежливо обратиться ко взрослому','Сіз мұғалімсіз'],[0,6,'Говорить про всех: мы, вы, они','Біз жанкүйерміз · Олар көрші'],[0,7,'Поздороваться и попрощаться','Сәлем! · Сау бол!'],
     [1,1,'Описать человека','жақсы әке · қуанышты әже'],[1,2,'Сказать, какой он','Мен ақылдымын'],[1,3,'Сказать «я талантливый домбрист»','Мен өнерлі домбырашымын'],[1,4,'Ответить на «Какой ты?»','Сен қандайсың? — Мен көңілдімін!'],[1,5,'Спросить, как дела, и ответить','Қалайсың? — Жақсы, рахмет!'],
     [2,0,'Сказать «много»','аю → аюлар'],[3,1,'Считать до десяти','бір, екі, үш… он'],[3,2,'Сказать «три яблока»','үш алма'],[3,3,'Спросить цену','Бұл қанша? — Жүз теңге'],[3,4,'Сказать, сколько ему лет','Мен он жастамын'],[3,5,'Сказать, сколько нас','Біз бесеуміз'],[2,3,'Выбрать любой хвостик «много»','аюлар · арыстандар · барыстар'],[2,4,'Описать много зверей','ақ аюлар']];
-  SK=SK.concat([[5,0,'Сказать, куда идёт','Мен үйге барамын'],[5,1,'Сказать «иду в школу»','Мен мектепке барамын'],[5,2,'Сказать, где он','Мен үйде отырмын'],[5,4,'Спросить «ты где?» и ответить','Қайдасың? — Үйдемін!']]);
-  var skd=function(th,k){return (th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[])).indexOf(k)>=0},skn=0;
+  SK=SK.concat([[5,0,'Сказать, куда идёт','Мен үйге барамын'],[5,1,'Сказать «иду в школу»','Мен мектепке барамын'],[5,2,'Сказать, где он','Мен үйде отырмын'],[5,4,'Спросить «ты где?» и ответить','Қайдасың? — Үйдемін!'],[6,0,'Сказать, откуда идёт','Мен үйден келемін'],[6,1,'Сказать «из магазина»','Мен дүкеннен келемін'],[6,3,'Сказать, откуда он','Мен Алматыданмын']]);
+  var skd=function(th,k){return (th===6?(st.d7||[]):th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[])).indexOf(k)>=0},skn=0;
   var skh=SK.map(function(x){var ok=skd(x[0],x[1]);if(ok)skn++;return '<li class="'+(ok?'ok':'')+'"><span>'+(ok?'✓':'○')+'</span><b>'+x[2]+'</b><small>'+esc(x[3])+'</small></li>'}).join('');
   h+='<div class="pcard"><h3>🗣 Что '+nm+' уже умеет сказать</h3><p><b>'+skn+' из '+SK.length+'</b></p><ul class="plist">'+skh+'</ul><small>Попросите ребёнка сказать это вслух — так слова переходят из игры в живую речь.</small></div>';
   /* прогресс по темам */
   var prog='',hard=[],fam=[],sv=THX;
-  [0,1,4,5,2,3].forEach(function(th){setTheme(th);var dn=th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[]),cnt=0,rows='';
+  [0,1,4,5,6,2,3].forEach(function(th){setTheme(th);var dn=th===6?(st.d7||[]):th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[]),cnt=0,rows='';
     LESSONS.forEach(function(L0,k){var ok=dn.indexOf(k)>=0;if(ok)cnt++;rows+='<li class="'+(ok?'ok':'')+'"><span>'+(ok?'✓':'○')+'</span><b>'+esc(String(L0.title).replace(/<[^>]+>/g,''))+'</b>'+(L0.sub?'<small>'+esc(String(L0.sub).replace(/<[^>]+>/g,''))+'</small>':'')+'</li>';
       var ec=(d.ec||{})[th+':'+k]||0;if(ec)hard.push({n:ec,t:L0.title,s:L0.sub,th:th});if(ok&&L0.papa)fam.push({th:th,k:k,p:L0.papa,t:L0.title})});
     prog+='<details'+(th===(sv||0)?' open':'')+'><summary>'+esc(THM[th].h)+' — <b>'+cnt+' из '+LESSONS.length+'</b></summary><ul class="plist">'+rows+'</ul></details>'});
@@ -3823,7 +3823,7 @@ THEMES[4]=['Не істеймін? — что я делаю','действие �
   nextLessonIdx=function(){setTheme(!themeDone(0)?0:!themeDone(1)?1:!themeDone(2)?2:!themeDone(3)?3:4);for(var k=0;k<NL;k++)if(!isDone(k))return k;return isDone(BOSS)?null:'boss'};
   var _ts=themesScreen;themesScreen=function(){_ts();var n=document.querySelector('.thlist+.note');if(n)n.textContent='Готовы Темы 1–5. Следующие Айна ещё готовит.'};
   var _ad=anyDone;anyDone=function(){return _ad()||(st.d5||[]).length>0};
-  doneList=function(th){var sv=THX;setTheme(th);var n=NL,src=th===4?(st.d5||[]):th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[]);setTheme(sv);return src.filter(function(k){return k>=0&&k<n})};
+  doneList=function(th){var sv=THX;setTheme(th);var n=NL,src=th===4?(st.d5||[]):th===6?(st.d7||[]):th===5?(st.d6||[]):th===4?(st.d5||[]):th===3?(st.d4||[]):th===2?(st.d3||[]):th===1?(st.d2||[]):(st.done||[]);setTheme(sv);return src.filter(function(k){return k>=0&&k<n})};
   curTheme=function(){return !themeDone(0)?0:!themeDone(1)?1:!themeDone(2)?2:!themeDone(3)?3:4};
 })();
 /* ---------- район «Саябақ» ---------- */
@@ -4007,7 +4007,10 @@ var LESSONS6=[
    pk('📖 Как сказать «Я читаю в библиотеке»?','Мен кітапханада оқимын',['Мен кітапханаға оқимын','Мен кітапхана оқимын'],{say:'Мен кітапханада оқимын',yes:'<b>Мен кітапханада оқимын</b> — оқимын → где? 📍 кітапханада.'}),
    pk('⚠️ Найди ошибку! Какая фраза неправильная?','Мен мектепте барамын',['Мен үйге келемін','Мен саябақта ойнаймын'],{kk:1,yes:'Верно! <b>Мен мектепте барамын</b> — ошибка. Барамын → куда: <b>Мен мектепке барамын</b>. 😎'}),
    {task:'build',ru:'🪑 Я сижу в классе',c:['Мен','сынып','+та','отырмын'],x:['+қа'],say:'Мен сыныпта отырмын'},
+   {s:'happy',t:'<p>А если идёшь не один, а с друзьями? 👫 Стрелка <b>не меняется</b>! Меняется только хвостик действия, а его ты уже знаешь:</p>'+ex('<span class="kk">Мен мектеп<b>ке</b> бара<b>мын</b></span>','я иду в школу','Мен мектепке барамын')+ex('<span class="kk">Біз мектеп<b>ке</b> бара<b>мыз</b></span>','мы идём в школу','Біз мектепке барамыз')},
+   {s:'laugh',t:'<p>Видишь? мектеп<b>ке</b> — тот же. Стрелке всё равно, кто идёт! 😄</p>'},
    hearOr('Біз мектепке барамыз','Мы идём в школу',['Мы сидим в школе','Я иду в школу']),
+   {s:'star',t:'<p>🏫 Школьный секрет: в учебнике стрелки называют так — <b>Барыс</b> ← бару (идти) → куда? ➡️ и <b>Жатыс</b> ← жату (лежать) → где? 📍 Название само подсказывает! 😎</p>'},
    h1Pairs([['Мен мектепке барамын','я иду в школу'],['Мен мектепте оқимын','я учусь в школе'],['Мен саябақта ойнаймын','я играю в парке']],'Все пары на месте! 🎯 Действие подсказывает стрелку.')]}},
  {title:'💬 Живые фразы школы',sub:'Қайда барасың? Қайдасың?',end:'Скамейки на месте — можно присесть и поболтать! 🪑💬',papa:'Звоните друг другу и спрашивайте: «Қайдасың?» — «Үйдемін!» 📱',
   intro:[{s:'wink',t:'<p>У школы не только учатся — тут ещё и <b>болтают</b>! 💬</p><p>Не знаешь ответ? Нажимай на фразы — увидишь перевод. Подсматривать можно, это не списывание. 😉</p>'}],
@@ -4076,7 +4079,7 @@ Object.assign(CMAN,{
 (function(){var _dt=doTask;doTask=function(id){var t=CTASK.filter(function(x){return x.id===id})[0];if(t&&t.ml!=null&&!cdone(id)&&!lessonOpen(t)){lockCard(t,'ml');return}_dt(id)}})();
 function mTasks(){return CTASK.filter(function(t){return t.ml!=null})}
 function mAllDone(){return mTasks().every(function(t){return cdone(t.id)})}
-(function(){var _d=cityDoneMsg;cityDoneMsg=function(){if(mArea()){if(mAllDone()&&!zArea())return 'Район Мектеп готов! 🎉 Скоро откроем следующий район.';if(!anyAvail()){var m=waitMsgFor('ml');if(m)return m}}
+(function(){var _d=cityDoneMsg;cityDoneMsg=function(){if(mArea()){if(mAllDone()&&!kArea())return 'Район Мектеп готов! 🎉 Скоро откроем следующий район — Стадион.';if(!anyAvail()){var m=waitMsgFor('ml');if(m)return m}}
    return _d()};
  var _h=cityHint;cityHint=function(){if(mArea()&&!anyAvail()){var m=waitMsgFor('ml');if(m)return m}return _h()}})();
 BGTREES.push([1230,2660,1],[2120,2680,2],[1240,3150,0],[2110,3160,3],[1560,2420,2],[2120,2420,1]);
@@ -4113,9 +4116,9 @@ function inSchool(){var c=cst();return (c.ax||0)>BX&&(c.ay||0)>ZTOP}
 function schoolGo(){var c=cst(),s=freeSpot(1500,2480);c.ax=s.x;c.ay=s.y;save()}
 (function(){var _iz=inZoo;inZoo=function(){return !inSchool()&&_iz()};var _zn=zoneName;zoneName=function(){return inSchool()?'Мектеп':_zn()}})();
 (function(){var _yz=yZoneBtn;yZoneBtn=function(){_yz();try{var b=document.querySelector('.czone');if(!b||!mArea())return;var nb=b.cloneNode(false);b.replaceWith(nb);b=nb;
-  var zones=[['c','🏠 Айнаның үйі'],['y','🎪 Жәрмеңке']];if(pArea())zones.push(['p','🌳 Саябақ']);zones.push(['m','🏫 Мектеп']);if(zArea())zones.push(['z','🦁 Зоопарк']);if(bArea())zones.push(['b','🍎 Базар']);
-  var cur=function(){return inSchool()?'m':inPark()?'p':inBaz()?'b':inZoo()?'z':inYarm()?'y':'c'},set=function(){var nx=zones[(zones.map(function(z){return z[0]}).indexOf(cur())+1)%zones.length];b.innerHTML=nx[1];b.dataset.to=nx[0];var n=document.querySelector('.cname');if(n)n.textContent=(st.city_name||'Мой город')+' · '+zoneName()};set();
-  b.addEventListener('click',function(e){e.stopPropagation();if(CBUSY)return;sTap();var to=b.dataset.to;if(to==='c')centrGo();else if(to==='y')yarmGo();else if(to==='z')zooGo();else if(to==='p')parkGo();else if(to==='m')schoolGo();else bazGo();var c=cst(),a=document.getElementById('caina');
+  var zones=[['c','🏠 Айнаның үйі'],['y','🎪 Жәрмеңке']];if(pArea())zones.push(['p','🌳 Саябақ']);zones.push(['m','🏫 Мектеп']);if(kArea())zones.push(['k','⚽ Стадион']);if(zArea())zones.push(['z','🦁 Зоопарк']);if(bArea())zones.push(['b','🍎 Базар']);
+  var cur=function(){return inShop()?'k':inSchool()?'m':inPark()?'p':inBaz()?'b':inZoo()?'z':inYarm()?'y':'c'},set=function(){var nx=zones[(zones.map(function(z){return z[0]}).indexOf(cur())+1)%zones.length];b.innerHTML=nx[1];b.dataset.to=nx[0];var n=document.querySelector('.cname');if(n)n.textContent=(st.city_name||'Мой город')+' · '+zoneName()};set();
+  b.addEventListener('click',function(e){e.stopPropagation();if(CBUSY)return;sTap();var to=b.dataset.to;if(to==='c')centrGo();else if(to==='y')yarmGo();else if(to==='z')zooGo();else if(to==='p')parkGo();else if(to==='m')schoolGo();else if(to==='k')shopGo();else bazGo();var c=cst(),a=document.getElementById('caina');
     if(a){a.style.left=c.ax+'px';a.style.top=c.ay+'px';a.style.zIndex=Math.round(c.ay)}camTo(c.ax,c.ay-60,700);set();try{nbProgRefresh()}catch(_){}})}catch(e){}}})();
 (function(){var _nz=nbZone;nbZone=function(){try{if(inSchool())return [5,'ml','🏫']}catch(e){}return _nz()};var _nc=nbZonesCount;nbZonesCount=function(){var n=_nc();try{if(mArea())n++}catch(e){}return n}})();
 function mFest(){var c=cst(),w=document.getElementById('cworld');if(!w)return;c.mfest=1;save();CBUSY=true;YARRIVING=1;camTo(1700,2800,1200);
@@ -4142,14 +4145,181 @@ CHTXT[5]=['🏫','Облако стёрло все стрелки — никто
    var zb=document.querySelector('.czone');if(zb){zb.remove();yZoneBtn()}var n=document.querySelector('.cname');if(n)n.textContent=(st.city_name||'Мой город')+' · Мектеп';nbProgRefresh();return}_h()}})();
 
 
+/* ===================== v173: Тема 5 «Қайдан?» — откуда · район «Стадион» (низ карты) =====================
+   THX=6, прогресс st.d7, постройки — поле kl. Идёт после Темы 4 «Қайда?» (ORD). */
+var LESSONS7=[
+ {title:'Үйден келемін — откуда?',sub:'стрелка развернулась ⬅️ -дан / -ден / -тан / -тен',end:'Магазин и пекарня открылись! 🛒🥖',papa:'Когда ребёнок приходит из школы, спросите: «Қайдан?» — пусть ответит: «Мектептен!»',
+  intro:[{s:'happy',t:'<p>Мен мектепке барамын ➡️… Мен мектепте отырмын 📍… Дзынь! 🔔 Уроки кончились!</p>'},
+   {s:'look',t:'<p>Теперь иду обратно. Как сказать «<b>из</b> школы»? 🤔</p>'},
+   {s:'wow',t:'<p>Стрелка развернулась! ⬅️</p>'+ex(csx('мектеп','тен'),'мектептен — из школы','мектептен')+ex(csx('үй','ден'),'үйден — из дома','үйден')},
+   {s:'wink',t:'<p>Твёрдое — <b>-дан</b>, мягкое — <b>-ден</b>, а шептуны шепчут: <b>-тан / -тен</b>. Всё как раньше! 😎</p>'},
+   {s:'laugh',t:'<p>Мен мектептен келемін — я иду из школы. Быстро. Очень быстро! 🚀 Обратно всегда быстрее. 😄</p>'},
+   {s:'look',t:'<p>Тебя спросят: '+kk('Қайдан?')+' — Откуда? 🧭</p>'}],
+  mix:function(){var I=this.intro;return [I[0],I[1],I[2],I[3],
+   pk('🏠 Как сказать «Я прихожу из дома»?','Мен үйден келемін',['Мен үйге келемін','Мен үйдан келемін'],{say:'Мен үйден келемін',yes:'<b>Мен үйден келемін</b> — үй мягкое → -ден. ⬅️🏠'}),
+   I[4],
+   pk('🌳 Из парка: <span class="kk">саябақ + ?</span>','саябақтан',['саябақдан','саябаққа'],{say:'Мен саябақтан келемін',yes:'<b>саябақтан</b> — «қ» шептун → -тан. Мен саябақтан келемін! 🌳'}),
+   I[5],
+   {task:'build',ru:'🏙️ Я прихожу из города',c:['Мен','қала','+дан','келемін'],x:['+ға'],say:'Мен қаладан келемін'},
+   hearOr('Мен мектептен келемін','Я иду из школы',['Я иду в школу','Я сижу в школе']),
+   h1Pairs([['үйден','из дома'],['саябақтан','из парка'],['қаладан','из города']],'Все пары на месте! 🎯 Стрелка ⬅️ — хвостик «откуда».')]}},
+ {title:'Дүкеннен — ловушка',sub:'после м, н, ң → -нан / -нен',end:'Стадион и фонтан готовы! ⚽⛲',papa:'Сходите вместе в магазин, а на обратном пути скажите: «Біз дүкеннен келеміз!» 🛒',
+  intro:[{s:'happy',t:'<p>Купила мороженое 🍦. Иду из магазина: дүкен… дүкен<b>ден</b>?…</p>'},
+   {s:'dizzy',t:'<p>Ой! Мороженое растаяло, пока я думала! 😅🫠</p>'},
+   {s:'look',t:'<p>⚠️ Секрет-ловушка: после <b>м, н, ң</b> стрелка «откуда» особая — <b>-нан / -нен</b>:</p>'+ex(csx('дүкен','нен'),'дүкеннен — из магазина','дүкеннен')+ex(csx('бассейн','нен'),'бассейннен — из бассейна','бассейннен')},
+   {s:'wink',t:'<p>Только «откуда»! «Куда» и «где» после н — обычные: дүкен<b>ге</b>, дүкен<b>де</b>. 😉</p>'},
+   {s:'laugh',t:'<p>Мен бассейннен келемін — я иду из бассейна. Мокрая. Очень мокрая. 💦🤖 Роботам плавать опасно!</p>'}],
+  mix:function(){var I=this.intro;return [I[0],I[1],I[2],
+   pk('🛒 Как сказать «Я иду из магазина»?','Мен дүкеннен келемін',['Мен дүкенден келемін','Мен дүкенге келемін'],{say:'Мен дүкеннен келемін',yes:'<b>Мен дүкеннен келемін</b> — «н» на конце → -нен. Не попался! 😎'}),
+   I[3],
+   pk('🏊 Из бассейна: <span class="kk">бассейн + ?</span>','бассейннен',['бассейнден','бассейнге'],{say:'Мен бассейннен келемін',yes:'<b>бассейннен</b> — после «н» → -нен. 🏊'}),
+   I[4],
+   pk('⚠️ Ловушка наоборот! Из дома: <span class="kk">үй + ?</span>','үйден',['үйнен','үйтен'],{say:'Мен үйден келемін',yes:'<b>үйден</b> — «й» не м, н, ң, поэтому обычная стрелка -ден. Хитро! 🦊'}),
+   {s:'wink',t:'<p>🔁 А теперь вспомним прошлую тему — стрелку «где» 📍:</p>'},
+   hearOr('Мен үйде отырмын','Я сижу дома',['Я иду домой','Я иду из дома']),
+   h1Pairs([['дүкеннен','из магазина'],['бассейннен','из бассейна'],['мектептен','из школы']],'Все пары на месте! 🎯 После м, н, ң — -нан / -нен.')]}},
+ {title:'Три стрелки — мой путь',sub:'➡️ куда · 📍 где · ⬅️ откуда',end:'Такси и спортплощадка готовы! Район ожил! 🚕🏀',papa:'Расскажите вместе маленький путь: «Мен мектептен үйге келемін. Үйде отырмын.» 🗺️',
+  intro:[{s:'star',t:'<p>Теперь у меня <b>три стрелки</b>! Как у настоящего штурмана 🧭</p>'+ex(csx('үй','ге'),'үйге ➡️ — домой','үйге')+ex(csx('үй','де'),'үйде 📍 — дома','үйде')+ex(csx('үй','ден'),'үйден ⬅️ — из дома','үйден')},
+   {s:'look',t:'<p>Секрет: <b>хвостик места всё рассказывает</b>! 👀 -ге — идёшь туда, -де — ты там, -ден — ты оттуда.</p>'},
+   {s:'wink',t:'<p>А '+kk('келемін')+' дружит с двумя стрелками: үйге келемін — прихожу домой, мектептен келемін — прихожу из школы. 🤝</p>'},
+   {s:'laugh',t:'<p>Мен мектептен үйге келемін. Үйде тамақ жасаймын. А потом… сплю! Шучу — сначала уроки! 📚😅</p>'}],
+  mix:function(){var I=this.intro;return [I[0],I[1],
+   pk('🧭 Какое слово значит «из дома»?','үйден',['үйге','үйде'],{say:'Мен үйден келемін',yes:'<b>үйден</b> ⬅️ — из дома. А үйге ➡️ — домой, үйде 📍 — дома.'}),
+   I[2],
+   pk('🌳 Как сказать «Я иду из парка»?','Мен саябақтан келемін',['Мен саябаққа келемін','Мен саябақта келемін'],{say:'Мен саябақтан келемін',yes:'<b>Мен саябақтан келемін</b> — откуда? ⬅️ саябақтан.'}),
+   I[3],
+   {task:'build',ru:'🏫➡️🏠 Я иду из школы домой',c:['Мен','мектеп','+тен','үй','+ге','келемін'],x:['+де'],say:'Мен мектептен үйге келемін'},
+   {s:'happy',t:'<p>А ещё можно сказать, <b>откуда ты сам</b>! Хвостик «я» садится в самый конец, как последний вагон 🚂:</p>'+ex('<span class="lego"><span class="r">Алматы</span>'+z3t('дан')+z3t('мын')+'</span>','Мен Алматыданмын — я из Алматы','Мен Алматыданмын')},
+   hearOr('Мен Алматыданмын','Я из Алматы',['Я в Алматы','Я еду в Алматы']),
+   {s:'star',t:'<p>🏫 Школьный секрет: стрелку «откуда» в учебнике зовут <b>Шығыс</b> ← шығу (выходить) → откуда? ⬅️ Теперь ты знаешь все три: Барыс, Жатыс, Шығыс! 🏆</p>'},
+   h1Pairs([['үйге','домой'],['үйде','дома'],['үйден','из дома']],'Все пары на месте! 🎯 Три стрелки на одном слове.')]}},
+ {title:'💬 Живые фразы стадиона',sub:'Сен қайдансың? Мен Алматыданмын!',end:'Скамейки и флаг на месте! 🪑🚩',papa:'Познакомьтесь «как новенькие»: «Сен қайдансың?» — «Мен Алматыданмын!» 🤝',
+  intro:[{s:'wink',t:'<p>На стадионе не только бегают — тут ещё и <b>знакомятся</b>! 💬</p><p>Не знаешь ответ? Нажимай на фразы — увидишь перевод. Подсматривать можно, это не списывание. 😉</p>'}],
+  gen:function(){return liveLesson('stad',1)}},
+ {title:'Проверка: откуда',sub:'оживит весь район',boss:1,end:'Все стрелки на месте! 🎉 ➡️ 📍 ⬅️ Теперь ты знаешь, куда, где и откуда!',
+  papa:'Спросите ребёнка: «Қайдан келесің?» — пусть ответит со стрелкой «откуда»!',
+  intro:[{s:'star',t:'🏆 <b>Проверка!</b> Все три стрелки — вперемешку. Ошибёшься — не страшно! 💪'},{s:'laugh',t:'Я тоже готовлюсь: «Мен Проверкадан шығамын…» Стоп, я ещё не начала! 😄 Начнём с пар. 🎯'}],
+  gen:function(){var pr=pairsLesson('stad')[0];pr.ps=pr.ps.slice(0,4);pr.round=0;pr.yes='Все пары на месте! 🎯 А теперь — на слух!';var pa=pairsAudio('stad',pr);if(pa)pa.ps=pa.ps.slice(0,3);else pr.yes='Все пары на месте! 🎯 Дальше — задания.';
+    var f=b2one([['Мен мектептен келемін','Я иду из школы 🏫',['Мен мектепке келемін','Мен мектептан келемін']],['Мен қаладан келемін','Я прихожу из города 🏙️',['Мен қалаға келемін','Мен қалатан келемін']]]);
+    return [pr].concat(pa?[pa]:[]).concat(b2sh([
+     pk('Как сказать «'+f[1]+'»?',f[0],f[2],{say:f[0],yes:'<b>'+f[0]+'</b> — откуда? ⬅️'}),
+     pk('⚠️ Ловушка! Из магазина: <span class="kk">дүкен + ?</span>','дүкеннен',['дүкенден','дүкентен'],{say:'Мен дүкеннен келемін',yes:'<b>дүкеннен</b> — после «н» → -нен. 😎'}),
+     {task:'build',ru:'🏫➡️🏠 Я иду из школы домой',c:['Мен','мектеп','+тен','үй','+ге','келемін'],x:['+те'],say:'Мен мектептен үйге келемін'},
+     pk('🏫 Школьный секрет! Стрелку «откуда» в школе зовут… (подсказка: <b>шығ</b>у — выходить)','Шығыс',['Барыс','Жатыс'],{kk:1,yes:'<b>Шығыс</b> ← шығу — выходить → откуда? Теперь ты знаешь все три: Барыс, Жатыс, Шығыс! 🏆'})]))}}
+];
+LESSONS7.forEach(function(l){l.steps=l.intro});
+LIVE.stad=[['Сен қайдансың?','Ты откуда?','В класс пришёл новенький 🧒'],['Мен Алматыданмын!','Я из Алматы!','Новенький спрашивает, откуда ты 🤝'],['Мектептен келемін!','Иду из школы!','Мама звонит: «Қайдасың?» 📱'],['Қайдан?','Откуда?','Друг принёс огромный арбуз 🍉'],['Жүр, саябаққа!','Пошли в парк!','Уроки сделаны, на улице солнце ☀️']];
+PAIRS1.stad=[['үйден','из дома'],['мектептен','из школы'],['саябақтан','из парка'],['қаладан','из города'],['дүкеннен','из магазина'],['бассейннен','из бассейна'],['Мен үйден келемін','я прихожу из дома'],['Мен мектептен келемін','я иду из школы'],['Мен Алматыданмын','я из Алматы'],['Сен қайдансың?','ты откуда?'],['Қайдан?','откуда?']];
+THM[6]={h:'Тема 5 · Қайдан? — откуда',ok:'Тема пройдена! Все три стрелки на месте. 🧭',todo:'Облако спрятало стрелку «откуда»: никто не может вернуться домой! Верни хвостик -дан / -ден — и получи ⚡ для нового района.',boss:'Проверка: все три стрелки вперемешку.',
+ win:'Район ожил! 🎉',winp:'Все возвращаются домой из школы, из магазина, со стадиона. А ты, %T%, — главный штурман города! 🧭',papa:'Спросите ребёнка: «Қайдан келесің?» — и пусть ответит со стрелкой!'};
+THEMES[6]=['Қайдан? — откуда','үйден · дүкеннен · три стрелки','Стадион'];
+(function(){
+  var _st=setTheme;setTheme=function(n){if(!TL||TL.length<6)_st(5);if(TL.length<7)TL.push(LESSONS7);_st(n)};
+  var _dn=DN;DN=function(){if(THX===6){st.d7=st.d7||[];return st.d7}return _dn()};
+  var _ad=anyDone;anyDone=function(){return _ad()||(st.d7||[]).length>0};
+  doneList=function(th){var sv=THX;setTheme(th);var n=NL,src=[st.done,st.d2,st.d3,st.d4,st.d5,st.d6,st.d7][th]||[];setTheme(sv);return src.filter(function(k){return k>=0&&k<n})};
+  var _to=themeOpen;themeOpen=function(i){var s=themeState(i);if(i===6&&s!=='lock'){setTheme(6);map();return}_to(i)};
+})();
+lessonGain=function(th,k){var f=['cl','lv','zl','bl','pl','ml','kl'][th]||'cl',g=0;CTASK.forEach(function(t){if(t[f]===k||(k===0&&t[f]===-1))g+=t.cost||0});if(th===0&&k===0)g-=1;return Math.max(1,g)};
+/* ---------- район «Стадион» — новая полоса внизу карты ---------- */
+CH=3720;var KTOP=3230;
+function d7(){return st.d7||[]}
+function kDone(k){return d7().indexOf(k)>=0}
+function kArea(){return d7().indexOf(0)>=0||themeDone(5)}
+CTASK.push(
+ {id:'kclear',name:'Расчистить дорогу вниз',cost:2,x:1500,y:3300,b:'kclear',kl:-1,coins:5},
+ {id:'kroad',name:'Проложить улицу',cost:3,x:1150,y:3330,b:'kroad',kl:-1},
+ {id:'kshop',name:'Магазин',cost:4,x:520,y:3440,b:'kshop',kl:0},
+ {id:'kbakery',name:'Пекарня',cost:4,x:820,y:3440,b:'kbakery',kl:0},
+ {id:'kstad',name:'Стадион',cost:5,x:1250,y:3500,b:'kstad',kl:1},
+ {id:'kfount',name:'Фонтан',cost:3,x:950,y:3620,b:'kfount',kl:1},
+ {id:'ktaxi',name:'Стоянка такси',cost:3,x:1700,y:3420,b:'ktaxi',kl:2},
+ {id:'kgym',name:'Спортплощадка',cost:4,x:1880,y:3600,b:'kgym',kl:2},
+ {id:'kbench',name:'Скамейки',cost:3,x:560,y:3640,b:'kbench',kl:3},
+ {id:'kflag',name:'Флаг района',cost:3,x:1560,y:3640,b:'kflag',kl:3}
+);
+Object.assign(OBOX,{kclear:[50,50,20,20],kroad:[120,120,20,15],kshop:[70,70,90,50],kbakery:[80,80,130,15],kstad:[150,150,90,30],kfount:[30,30,60,10],ktaxi:[70,70,60,15],kgym:[80,80,110,15],kbench:[80,80,40,15],kflag:[30,30,130,10]});
+Object.assign(RESULT,{kclear:'Дорога вниз свободна! 🛣️',kroad:'Новая улица! 🛣️',kshop:'Магазин! Мен дүкеннен келемін 🛒',kbakery:'Пекарня! Пахнет хлебом 🥖',kstad:'Стадион! Мен стадионға барамын ⚽',kfount:'Фонтан! ⛲',ktaxi:'Такси! Қайдан? Қайда? 🚕',kgym:'Спортплощадка! 🏀',kbench:'Скамейки! 🪑',kflag:'Флаг района поднят! 🚩'});
+Object.assign(SIGNS,{kshop:['ДҮКЕН','Дүкен','магазин'],kbakery:['НАН','Нан','хлеб'],kstad:['СТАДИОН','Стадион','стадион'],ktaxi:['ТАКСИ','Такси','такси']});
+Object.assign(CMAN,{
+ kshop:{nm:'Сатушы',th:7,girl:1,lines:[['Сәлем!','привет',-1],['Мен дүкеннен келемін!','я иду из магазина',1]],shirt:'#3fae4a',dx:100,dy:20,v:'w'},
+ kbakery:{nm:'Нан ата',th:7,hat:'taqiya',lines:[['Сәлем, балам!','привет, балам — так ласково говорят детям',-1],['Қайдан?','откуда?',0]],shirt:'#a0703c',dx:-100,dy:20,v:'a'},
+ kstad:{nm:'Арман',th:7,hat:'cap',lines:[['Сәлем!','привет',-1],['Мен мектептен келемін!','я иду из школы',0]],shirt:'#ff8a3d',dx:170,dy:30,v:'kb'},
+ ktaxi:{nm:'Таксист',th:7,hat:'cap',lines:[['Сәлем!','привет',-1],['Сен қайдансың?','ты откуда?',3]],shirt:'#ffd200',dx:-100,dy:20,v:'m'},
+ kgym:{nm:'Аружан',th:7,girl:1,hat:'bow',lines:[['Сәлем!','привет',-1],['Мен Алматыданмын!','я из Алматы',3]],shirt:'#e2574c',dx:-120,dy:20,v:'kg'}
+});
+(function(){var _r=rlines;rlines=function(m){if(m.th===7)return m.lines.filter(function(l){return l[2]<0||kDone(l[2])});return _r(m)}})();
+(function(){var _lo=lessonOpen;lessonOpen=function(t){if(t.kl!=null)return kArea()&&(t.kl<0||kDone(t.kl));return _lo(t)}})();
+(function(){var _cn=cNextLv;cNextLv=function(f){if(f==='kl'&&!kArea())return null;return _cn(f)}})();
+(function(){var _lt=lockTitle;lockTitle=function(f,k){if(f==='kl'){var tt=LESSONS7[k]?LESSONS7[k].title:'следующий урок';return tt.split(' — ')[0]}return _lt(f,k)}})();
+(function(){var _cr=crevealPts;crevealPts=function(){var p=_cr();if(kArea()){p.push({x:1400,y:3320,r:240});CTASK.forEach(function(t){if(t.kl!=null)p.push({x:t.x,y:t.y,r:170})})}
+  if(cst().kfest)[[500,3480],[900,3480],[1300,3480],[1700,3480],[700,3640],[1300,3640],[1850,3640]].forEach(function(q){p.push({x:q[0],y:q[1],r:300})});return p}})();
+(function(){var _b=bubblesHTML;bubblesHTML=function(){var h=_b(),n=cNextLv('kl');if(n==null)return h;CTASK.forEach(function(t){if(t.kl!==n||cdone(t.id)||!cvisible(t.x,t.y,40))return;
+  h+='<button class="cbub lock" data-a="ctask" data-v="'+t.id+'" style="left:'+t.x+'px;top:'+(t.y-48)+'px">🔒 Урок '+(n+1)+'<small>'+t.name+'</small></button>'});return h}})();
+(function(){var _dt=doTask;doTask=function(id){var t=CTASK.filter(function(x){return x.id===id})[0];if(t&&t.kl!=null&&!cdone(id)&&!lessonOpen(t)){lockCard(t,'kl');return}_dt(id)}})();
+function kTasks(){return CTASK.filter(function(t){return t.kl!=null})}
+function kAllDone(){return kTasks().every(function(t){return cdone(t.id)})}
+(function(){var _d=cityDoneMsg;cityDoneMsg=function(){if(kArea()){if(kAllDone()&&!zArea())return 'Район Стадион готов! 🎉 Скоро откроем следующий район — Зоопарк.';if(!anyAvail()){var m=waitMsgFor('kl');if(m)return m}}
+   return _d()};
+ var _h=cityHint;cityHint=function(){if(kArea()&&!anyAvail()){var m=waitMsgFor('kl');if(m)return m}return _h()}})();
+BGTREES.push([260,3300,1],[2080,3300,2],[260,3660,0],[2100,3680,3],[1060,3300,2],[700,3300,1]);
+/* рисунки района */
+function kroadf(x,y){return '<rect x="'+(x-240)+'" y="'+(y-14)+'" width="480" height="28" rx="14" fill="#c9b38a"/><path d="M'+(x-220)+' '+y+' h440" stroke="#fff" stroke-width="3" stroke-dasharray="16 12"/>'}
+function kbakeryf(x,y){var s=vhouse(x-75,y-60,150,110,'#c98a4b','#8a5a2b',{rh:38,rows:1,cols:3});
+  [[-34,22],[0,26],[34,22]].forEach(function(p){s+='<ellipse cx="'+(x+p[0])+'" cy="'+(y-6)+'" rx="'+p[1]/2+'" ry="7" fill="#e9b76a" stroke="#c98a4b" stroke-width="2"/>'});return s+vsign(x,y-120,'kbakery','#8a5a2b')}
+function kstadf(x,y){var s=sh(x,y+10,150,18)+'<rect x="'+(x-150)+'" y="'+(y-80)+'" width="300" height="100" rx="16" fill="#e2774c"/><rect x="'+(x-130)+'" y="'+(y-66)+'" width="260" height="72" rx="8" fill="#5fbf5a"/>';
+  s+='<path d="M'+x+' '+(y-66)+' v72" stroke="#fff" stroke-width="3"/><circle cx="'+x+'" cy="'+(y-30)+'" r="16" fill="none" stroke="#fff" stroke-width="3"/><rect x="'+(x-130)+'" y="'+(y-46)+'" width="24" height="32" fill="none" stroke="#fff" stroke-width="3"/><rect x="'+(x+106)+'" y="'+(y-46)+'" width="24" height="32" fill="none" stroke="#fff" stroke-width="3"/>';
+  for(var i=0;i<5;i++)s+='<rect x="'+(x-140+i*58)+'" y="'+(y-104)+'" width="50" height="16" rx="4" fill="'+['#2f6fd6','#ffd200','#e2574c','#3fae4a','#8e5bd6'][i]+'"/>';return s+vsign(x,y-128,'kstad','#2f8a3a')}
+function ktaxif(x,y){var s=sh(x,y+6,64,8)+'<rect x="'+(x-56)+'" y="'+(y-34)+'" width="112" height="30" rx="10" fill="#ffd200"/><path d="M'+(x-34)+' '+(y-34)+' l12 -20 h44 l12 20z" fill="#ffd200"/><rect x="'+(x-24)+'" y="'+(y-50)+'" width="20" height="14" fill="#9fe0ef"/><rect x="'+(x+4)+'" y="'+(y-50)+'" width="20" height="14" fill="#9fe0ef"/>';
+  s+='<circle cx="'+(x-32)+'" cy="'+(y-4)+'" r="10" fill="#14222c"/><circle cx="'+(x+32)+'" cy="'+(y-4)+'" r="10" fill="#14222c"/><rect x="'+(x-14)+'" y="'+(y-64)+'" width="28" height="10" rx="3" fill="#14222c"/>';
+  for(var i=0;i<6;i++)s+='<rect x="'+(x-48+i*16)+'" y="'+(y-24)+'" width="8" height="8" fill="'+(i%2?'#14222c':'#fff')+'"/>';return s+vsign(x,y-90,'ktaxi','#c9a200')}
+function kgymf(x,y){var s=sh(x,y+8,90,12)+'<rect x="'+(x-90)+'" y="'+(y-40)+'" width="180" height="48" rx="8" fill="#e2774c"/><path d="M'+x+' '+(y-40)+' v48 M'+(x-90)+' '+(y-16)+' h180" stroke="#fff" stroke-width="2"/>';
+  s+='<rect x="'+(x+70)+'" y="'+(y-110)+'" width="6" height="74" fill="#5d6d74"/><rect x="'+(x+48)+'" y="'+(y-118)+'" width="34" height="24" fill="#fff" stroke="#5d6d74" stroke-width="2"/><ellipse cx="'+(x+58)+'" cy="'+(y-92)+'" rx="12" ry="4" fill="none" stroke="#e2574c" stroke-width="3"/>';
+  return s+'<circle cx="'+(x-40)+'" cy="'+(y-50)+'" r="12" fill="#ff8a3d" stroke="#a8352d" stroke-width="2"/>'}
+function kflagf(x,y){return sh(x,y+4,20,5)+'<rect x="'+(x-3)+'" y="'+(y-130)+'" width="6" height="132" fill="#5d6d74"/><path class="flag" d="M'+(x+3)+' '+(y-128)+' q22 -8 42 0 v28 q-20 8 -42 0z" fill="#00afca"/><circle cx="'+(x+24)+'" cy="'+(y-114)+'" r="6" fill="#ffd200"/>'}
+(function(){var _vb=vbuild;vbuild=function(t){var x=t.x,y=t.y;switch(t.b){
+  case 'kclear':return vbush(x-34,y+8,'#3fae4a')+vbush(x+36,y+4,'#ffd76a');case 'kroad':return kroadf(x,y);case 'kshop':return vduken(x,y)+vsign(x,y-70,'kshop','#3fae4a');case 'kbakery':return kbakeryf(x,y);
+  case 'kstad':return kstadf(x,y);case 'kfount':return pfountf(x,y);case 'ktaxi':return ktaxif(x,y);case 'kgym':return kgymf(x,y);case 'kbench':return vbench(x-50,y)+vbench(x+50,y);case 'kflag':return kflagf(x,y)}return _vb(t)};
+ var _vf=vbefore;vbefore=function(t){var x=t.x,y=t.y;switch(t.b){
+  case 'kclear':return vdebris(x-24,y)+vdebris(x+26,y+6);case 'kroad':return vweeds(x-200,y-30,400,50);case 'kstad':return vweeds(x-150,y-90,300,110);
+  case 'kshop':case 'kbakery':case 'kfount':case 'ktaxi':case 'kgym':case 'kbench':case 'kflag':return vweeds(x-75,y-60,150,80)}return _vf(t)};
+})();
+/* зона: всё, что ниже KTOP */
+function inShop(){return (cst().ay||0)>KTOP}
+function shopGo(){var c=cst(),s=freeSpot(1400,3380);c.ax=s.x;c.ay=s.y;save()}
+(function(){var _is=inSchool;inSchool=function(){return !inShop()&&_is()};var _iz=inZoo;inZoo=function(){return !inShop()&&_iz()};var _zn=zoneName;zoneName=function(){return inShop()?'Стадион':_zn()}})();
+(function(){var _nz=nbZone;nbZone=function(){try{if(inShop())return [6,'kl','⚽']}catch(e){}return _nz()};var _nc=nbZonesCount;nbZonesCount=function(){var n=_nc();try{if(kArea())n++}catch(e){}return n}})();
+function kFest(){var c=cst(),w=document.getElementById('cworld');if(!w)return;c.kfest=1;save();CBUSY=true;YARRIVING=1;camTo(1200,3480,1200);
+  setTimeout(function(){cityRender();updateClouds(true);sWinBig();yBalloons(w);[[520,3440],[900,3440],[1250,3480],[1700,3440],[1880,3600]].forEach(function(p,i){setTimeout(function(){fxBurst(p[0],p[1],16,pick(['🎆','🎇','✨','🎉']))},i*350)});
+    ainaMood('laugh');ainaSay('<b>Стадион ашылды!</b> 🎉 Все снова возвращаются домой: мектептен, дүкеннен, стадионнан! ⬅️🏠',8000)},1300);setTimeout(function(){CBUSY=false;YARRIVING=0},9000)}
+(function(){var _dt=doTask;doTask=function(id){var t=CTASK.filter(function(x){return x.id===id})[0];_dt(id);if(t&&t.kl!=null)setTimeout(function(){if(cdone(id)&&kAllDone()&&!cst().kfest)kFest()},3600)}})();
+function stadArrive(g){var w=document.getElementById('cworld');if(!w)return;CBUSY=true;YARRIVING=1;
+  var cov=document.createElement('div');cov.className='ycov';var h='';[[400,3300],[700,3300],[1000,3300],[1300,3300],[1600,3300],[1900,3300],[500,3500],[800,3500],[1100,3500],[1400,3500],[1700,3500],[2000,3500],[600,3660],[1000,3660],[1400,3660],[1800,3660]].forEach(function(p,i){h+='<i class="'+(p[0]<1100?'l':'r')+'" style="left:'+(p[0]-120)+'px;top:'+(p[1]-90)+'px;animation-delay:'+(i%5)*.05+'s"></i>'});
+  cov.innerHTML=h;w.appendChild(cov);schoolGo();var c0=cst(),a0=document.getElementById('caina');if(a0){a0.style.left=c0.ax+'px';a0.style.top=c0.ay+'px';a0.style.zIndex=Math.round(c0.ay)}camTo(c0.ax,c0.ay-60,600);
+  setTimeout(function(){ainaMood('wow');ainaSay('Слышишь? ⚽ Ниже школы кто-то кричит: «Гол!» Но все потерялись и не могут вернуться домой… 🤔',3000)},500);
+  setTimeout(function(){camTo(1300,3380,1900)},2600);
+  setTimeout(function(){sWhoosh();cov.classList.add('part');setTimeout(function(){cov.remove()},1500)},4600);
+  setTimeout(function(){shopGo();var c=cst(),a=document.getElementById('caina');if(a){a.style.left=c.ax+'px';a.style.top=c.ay+'px';a.style.zIndex=Math.round(c.ay)}
+    sWinBig();yBalloons(w);fxBurst(1500,3300,18,'🎉');fxBurst(c.ax,c.ay-30,10,'✨');if(g)fxText(c.ax,c.ay-90,'+'+g+' ⚡');var zb=document.querySelector('.czone');if(zb)zb.remove();yZoneBtn();nbProgRefresh()},5200);
+  setTimeout(function(){ainaMood('laugh');ainaSay('<b>Стадион</b> и магазины! ⚽🛒 Облако спрятало стрелку «откуда» — никто не может вернуться домой. Расчистим? Жми на задания ⚡',7000)},6100);
+  setTimeout(function(){CBUSY=false;YARRIVING=0;try{nextTarget()}catch(e){}chapterCard(6)},9300)}
+(function(){var _sc=showCity;showCity=function(o){o=o||{};var c=cst(),first=kArea()&&!c.karr&&!window.NOARRIVE&&c.marr;
+  if(first){c.karr=1;save();var g=o.gain;_sc({});if(document.querySelector('.cityscr'))stadArrive(g);return}
+  if(kArea()&&o.gain&&THX===6)shopGo();_sc(o)}})();
+CHTXT[6]=['⚽','Облако спрятало стрелку «откуда» — никто не может вернуться домой! Вернём хвостик -дан / -ден: үйден, мектептен, дүкеннен.','Сначала расчисти дорогу и проложи улицу, а потом — урок!'];
+(function(){var _ap=arrivalPending;arrivalPending=function(){return _ap()||(kArea()&&!cst().karr&&!!cst().marr)};
+ var _h=homeAfterParty;homeAfterParty=function(){if(!document.querySelector('.cityscr')||CBUSY)return;if(arrivalPending()){showCity({});return}
+  if(curTheme()===6&&kArea()&&!inShop()){shopGo();ainaSay('Бежим на стадион! ⚽',3000);var c=cst(),a=document.getElementById('caina');if(a){a.style.left=c.ax+'px';a.style.top=c.ay+'px';a.style.zIndex=Math.round(c.ay)}camTo(c.ax,c.ay-60,1500);
+   var zb=document.querySelector('.czone');if(zb){zb.remove();yZoneBtn()}var n=document.querySelector('.cname');if(n)n.textContent=(st.city_name||'Мой город')+' · Стадион';nbProgRefresh();return}_h()}})();
+
 /* v166: порядок тем по лесенке «от я»: Кто я → Какой я → Что я делаю (парк) → Много (зоопарк) → Сколько (базар).
    Внутренние номера тем (THX 0..4) и хранилища (done, d2, d3, d4, d5) не меняются — меняется только порядок прохождения ORD. */
-var ORD=[0,1,4,5,2,3];
-function thStarted(i){return ([st.done,st.d2,st.d3,st.d4,st.d5,st.d6][i]||[]).length>0}
-themeState=function(i){if(i>=6)return themeDone(ORD[ORD.length-1])?'next':'lock';if(themeDone(i))return 'done';var p=ORD.indexOf(i);if(p<=0)return 'open';return (themeDone(ORD[p-1])||thStarted(i))?'open':'lock'};
+var ORD=[0,1,4,5,6,2,3];
+function thStarted(i){return ([st.done,st.d2,st.d3,st.d4,st.d5,st.d6,st.d7][i]||[]).length>0}
+themeState=function(i){if(i>=7)return themeDone(ORD[ORD.length-1])?'next':'lock';if(themeDone(i))return 'done';var p=ORD.indexOf(i);if(p<=0)return 'open';return (themeDone(ORD[p-1])||thStarted(i))?'open':'lock'};
 curTheme=function(){var j,n=ORD.length;for(j=0;j<n;j++)if(!themeDone(ORD[j])&&thStarted(ORD[j])&&themeState(ORD[j])!=='lock')return ORD[j];for(j=0;j<n;j++)if(!themeDone(ORD[j]))return ORD[j];return ORD[n-1]};
 nextLessonIdx=function(){setTheme(curTheme());for(var k=0;k<NL;k++)if(!isDone(k))return k;return isDone(BOSS)?null:'boss'};
-zArea=function(){return (st.d3||[]).indexOf(0)>=0||themeDone(5)};
+zArea=function(){return (st.d3||[]).indexOf(0)>=0||themeDone(6)};
 pArea=function(){return d5().indexOf(0)>=0||themeDone(1)};
 themesScreen=function(){stopTown();L=null;busy=false;run++;clearTimeout(timer);CHIP=chipOn();
   var nd=THEMES.filter(function(_,i){return themeState(i)==='done'}).length;
@@ -4160,7 +4330,7 @@ themesScreen=function(){stopTown();L=null;busy=false;run++;clearTimeout(timer);C
      return '<button class="thc '+s+'" data-a="theme" data-v="'+i+'"><span class="thn">'+(s==='done'?'✓':s==='lock'?'🔒':n+1)+'</span><span class="tht"><b>Тема '+(n+1)+' · '+t[0]+'</b><small>'+t[1]+'</small>'+
        (t[2]?'<em>'+(s==='lock'?'район «'+t[2]+'»':'🏙 район «'+t[2]+'»')+'</em>':'')+'</span><span class="ths">'+(s==='done'?'пройдена':s==='open'?'▶ учим':s==='next'?'▶ дальше':'скоро')+'</span></button>'+
        '<div class="thsoon" id="ts'+i+'"></div>'}).join('')+'</div>'+
-   '<p class="note">Готовы Темы 1–6. Следующие Айна ещё готовит.</p>';
+   '<p class="note">Готовы Темы 1–7. Следующие Айна ещё готовит.</p>';
   window.scrollTo(0,0)};
 window.__c.showCity=showCity;showCity();
 (function(){if(document.querySelector('.cityscr')){try{nbBuild();cnameFix();setTimeout(function(){try{coinHint(0)}catch(_){}},1800)}catch(e){showErr(e,'load')}}})();
@@ -4188,9 +4358,9 @@ var SUMD={
   p:function(){var nm=st.name||'',my=null;if(nm){var f='Мен '+nm+tailOf(nm,'men');if(canSay(f))my=[f,'я '+nm+' — кто ты']}return [my||['Мен оқушымын','я ученик — кто ты'],['Сен аспазсың','ты повар — про друга'],['Сіз мұғалімсіз','вы учитель — вежливо взрослому'],['Ол ғалым','он учёный — про другого'],['Біз жанкүйерміз','мы болельщики — про вас вместе'],['Сендер ойыншысыңдар','вы игроки — про друзей'],['Сіздер ұстазсыздар','вы наставники — вежливо взрослым'],['Олар көрші','они соседи — без хвостика'],['Сәлем! · Сау бол!','привет · пока']]}},
  1:{b:'🎨 Тема 2 пройдена · Ярмарка',sec:'Главный секрет: <b>Кім? и Қандай? — хвостик один и тот же</b><br>бала<i style="background:#378ADD">мын</i> · батыл<i style="background:#378ADD">мын</i> · жақсы бала<i style="background:#378ADD">мын</i><br>Признак стоит перед словом и не меняется — как скала 🗿. Хвостик всегда в самом конце 🚂',
   p:function(){return [['Мен батылмын','я смелый — какой я: хвостик тот же, что в «Кто я?»'],['Мен биікпін','я высокий — шептун на конце → -пын / -пін'],['Мен жақсы баламын','я хороший ребёнок — признак перед словом, хвостик в конце'],['Сен батылсың · Ол жақсы әке','ты смелый · он хороший папа — «Ол» без хвостика'],['Біз көңілдіміз','мы весёлые — вся семья: Сен, Сіз, Біз, Сендер, Сіздер, Олар'],['Қалайсың? · Жақсы, рахмет!','как дела? · хорошо, спасибо — живые фразы']]}},
- 2:{b:'🦁 Тема 5 пройдена · Зоопарк',sec:'Главный секрет: <b>три якоря</b> ⚓<br>аю<i style="background:#378ADD">лар</i> · арыстан<i style="background:#378ADD">дар</i> · барыс<i style="background:#378ADD">тар</i><br>Сравни с якорем — и любой зверь станет «много»! 🐾',
+ 2:{b:'🦁 Тема 6 пройдена · Зоопарк',sec:'Главный секрет: <b>три якоря</b> ⚓<br>аю<i style="background:#378ADD">лар</i> · арыстан<i style="background:#378ADD">дар</i> · барыс<i style="background:#378ADD">тар</i><br>Сравни с якорем — и любой зверь станет «много»! 🐾',
   p:function(){return [['аюлар','медведи — после гласной -лар'],['арыстандар','львы — после «н» -дар'],['барыстар','барсы — после шептуна -тар'],['Біз балалармыз','мы дети — «много» + «мы»']]}},
- 3:{b:'🍎 Тема 6 пройдена · Базар',sec:'Главный секрет: <b>после числа «много» не нужно</b><br>бес алма, а не «бес алма<i style="background:#D4537E">лар</i>»<br>Число уже сказало, что их много! ✋',
+ 3:{b:'🍎 Тема 7 пройдена · Базар',sec:'Главный секрет: <b>после числа «много» не нужно</b><br>бес алма, а не «бес алма<i style="background:#D4537E">лар</i>»<br>Число уже сказало, что их много! ✋',
   p:function(){return [['бір, екі, үш','1, 2, 3 — считаешь до десяти'],['Бұл қанша?','сколько стоит? — на базаре'],['бес алма','пять яблок — без «много»'],['Мен он жастамын','мне 10 лет'],['Біз үшеуміз','нас трое — считаем людей']]}}};
 function sumPhrases(th){return SUMD[th||0].p()}
 function sumSay(list,i){if(i>=list.length)return;var rows=document.querySelectorAll('.srow');var r=rows[i];if(!r)return;r.classList.add('saying');var t=list[i][0].split(' · ');
@@ -4220,6 +4390,8 @@ SUMD[4]={b:'🌳 Тема 3 пройдена · Парк',sec:'Главный с
  p:function(){return [['Мен барамын','я иду'],['Сен барасың','ты идёшь — про друга'],['Сіз барасыз','вы идёте — вежливо взрослому'],['Ол барады','он идёт — «ол» с деталью'],['Біз барамыз','мы идём — все вместе'],['Сендер барасыңдар','вы идёте — про друзей'],['Сіздер барасыздар','вы идёте — вежливо взрослым'],['Олар барады','они идут — не «барадылар»'],['Мен ойнаймын · Мен оқимын','я играю · я читаю — соединитель й и и'],['Мен доп ойнаймын · Мен кітап оқимын','играю в мяч · читаю книгу — предмет перед действием'],['Жүр! Тез! · Шаршадым','пошли! быстрее! · я устал — живые фразы']]}};
 SUMD[5]={b:'🏫 Тема 4 пройдена · Мектеп',sec:'Главный секрет: <b>хвостик-стрелка</b><br>➡️ үй<i style="background:#378ADD">ге</i> · мектеп<i style="background:#378ADD">ке</i> — куда? · 📍 үй<i style="background:#D4537E">де</i> · мектеп<i style="background:#D4537E">те</i> — где?<br>🏫 Школьный секрет: <b>Барыс</b> (бару — идти → куда?) и <b>Жатыс</b> (жату — лежать → где?)',
  p:function(){return [['Мен үйге барамын','я иду домой — куда? -ға / -ге'],['Мен мектепке барамын','я иду в школу — шептуны: -қа / -ке'],['Мен мектепте оқимын','я учусь в школе — где? -да / -де / -та / -те'],['Мен саябаққа барамын · Мен саябақта ойнаймын','саябаққа — идёшь туда, саябақта — ты уже там'],['Қайда барасың? · Қайдасың? · Жүр, үйге!','куда идёшь? · ты где? · пошли домой! — живые фразы']]}};
+SUMD[6]={b:'⚽ Тема 5 пройдена · Стадион',sec:'Главный секрет: <b>три стрелки</b><br>➡️ үй<i style="background:#378ADD">ге</i> · 📍 үй<i style="background:#378ADD">де</i> · ⬅️ үй<i style="background:#378ADD">ден</i><br>⚠️ После м, н, ң: дүкен<i style="background:#D4537E">нен</i><br>🏫 Школьный секрет: <b>Барыс</b> (куда?), <b>Жатыс</b> (где?), <b>Шығыс</b> (шығу — выходить → откуда?)',
+ p:function(){return [['Мен үйден келемін','я прихожу из дома — откуда? -дан / -ден / -тан / -тен'],['Мен дүкеннен келемін','я иду из магазина — ловушка: после м, н, ң → -нан / -нен'],['Мен мектептен үйге келемін','я иду из школы домой — три стрелки'],['Сен қайдансың? · Мен Алматыданмын!','ты откуда? · я из Алматы! — живые фразы']]}};
 </script>
 
 </body></html>
