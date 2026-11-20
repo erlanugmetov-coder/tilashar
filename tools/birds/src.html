@@ -10,6 +10,7 @@
    LAYOUT: шапка, пузырь Айны, ветки одна под другой, кнопки внизу */
 :root{color-scheme:light;--ink:#14222c;--muted:#5d7483;--hard:#2f6fd6;--soft:#e05a9c;--aina:#ff8a3d;--bark:#7a4a2a;--bark2:#5e3820}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html{overflow-x:clip}
 body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#bfe6ff 0%,#e6f6ff 45%,#fff6e3 100%);min-height:100vh;overflow-x:clip;user-select:none}
 .wrap{max-width:520px;margin:0 auto;padding:12px 10px 120px}
 .top{display:flex;align-items:center;gap:10px}
@@ -35,19 +36,41 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .slots{position:absolute;bottom:38px;display:flex;gap:3px;width:calc(98% - 6px)}
 .br.L .slots{left:4px;flex-direction:row}.br.R .slots{right:4px;flex-direction:row-reverse}
 .bird{position:relative;width:calc((100% - 6px)/3);max-width:96px;display:flex;flex-direction:column;align-items:center;transition:transform .25s}
-.bird svg{width:46px;height:41px;display:block}
-.br.R .bird svg{transform:scaleX(-1)}
-.bird.edge svg{border-radius:50%;background:radial-gradient(circle at 50% 55%,#ffffffb0 0 55%,transparent 57%)}
-.bird.up{transform:translateY(-20px)}
+.bird svg{width:48px;height:42px;display:block;overflow:visible}
+.face{display:block;transform-origin:50% 90%}
+.br.R .face,.flyer .face.fl{transform:scaleX(-1)}
+.bsv{transform-origin:50% 90%;animation:breathe 2.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.035,.965)}}
+.bsv .tuck{display:none}.flyer .bsv .legs{display:none}.flyer .bsv .tuck{display:block}.flyer.landing .bsv .legs{display:block}.flyer.landing .bsv .tuck{display:none}
+.bsv .wgf,.bsv .wgb{transform-box:fill-box;transform-origin:18% 85%}
+.flyer .bsv{animation:none}.flyer .wgf{animation:flapF .12s infinite alternate ease-in-out}.flyer .wgb{animation:flapB .12s infinite alternate ease-in-out}.flyer .shd{display:none}
+@keyframes flapF{from{transform:rotate(22deg)}to{transform:rotate(-75deg)}}
+@keyframes flapB{from{transform:rotate(34deg)}to{transform:rotate(-55deg)}}
+.bird.edge .face{filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 2px #fff)}
+.bird.up .face{translate:0 -16px;transition:translate .2s}
+.bird.say .face{filter:drop-shadow(0 0 7px #ffb15c)}
 .bird.shake{animation:sh .4s}
-.bird.say svg{filter:drop-shadow(0 0 6px #ffc58f)}
 @keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-.bird.land{animation:land .35s}
-@keyframes land{0%{transform:translateY(-40px) scale(.9)}100%{transform:none}}
-.bird.fly{animation:fly 1.1s ease-in forwards}
-@keyframes fly{0%{transform:none;opacity:1}30%{transform:translateY(-14px) rotate(-6deg)}100%{transform:translate(40px,-260px) rotate(-20deg) scale(.6);opacity:0}}
-.br.R .bird.fly{animation-name:flyR}
-@keyframes flyR{0%{transform:none;opacity:1}30%{transform:translateY(-14px) rotate(6deg)}100%{transform:translate(-40px,-260px) rotate(20deg) scale(.6);opacity:0}}
+.bird .eye{transform-box:fill-box;transform-origin:center}
+.bird.blink .eye{animation:blink .22s}
+@keyframes blink{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.1)}}
+.bird.hop .face{animation:hop .38s ease-out}
+@keyframes hop{0%,100%{translate:0 0}40%{translate:0 -11px}}
+.bird.squash .face{animation:squash .42s ease-out}
+@keyframes squash{0%{scale:1.16 .8}45%{scale:.93 1.1}75%{scale:1.03 .97}100%{scale:1 1}}
+.bird.crouch .face{scale:1.12 .84;transition:scale .12s}
+#sky{position:fixed;inset:0;pointer-events:none;z-index:7;overflow:hidden}
+.flyer{position:fixed;left:0;top:0;display:flex;flex-direction:column;align-items:center;will-change:transform}
+.flyer .cube{transform:scale(.92)}
+.leaf{position:fixed;pointer-events:none;font-size:16px;z-index:8;animation:leaf 1.4s ease-out forwards}
+@keyframes leaf{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.clouds{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.clouds i{position:absolute;display:block;width:150px;height:44px;border-radius:44px;background:#fff;opacity:.75;animation:cloud linear infinite}
+.clouds i:before,.clouds i:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.clouds i:before{width:60px;height:60px;left:22px;top:-28px}.clouds i:after{width:46px;height:46px;left:72px;top:-18px}
+.clouds i:nth-child(1){top:12%;animation-duration:70s;animation-delay:-20s}.clouds i:nth-child(2){top:38%;transform:scale(.7);animation-duration:95s;animation-delay:-60s;opacity:.55}.clouds i:nth-child(3){top:66%;transform:scale(.85);animation-duration:85s;animation-delay:-5s;opacity:.5}
+@keyframes cloud{from{left:-180px}to{left:105%}}
+.wrap,.bar{position:relative;z-index:1}.bar{position:fixed}
 .cube{display:inline-flex;flex-direction:column;align-items:stretch;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);margin-top:-5px;max-width:100%}
 .cube span{display:block;text-align:center;padding:1px 4px;font:800 12px/1.15 "Rubik",Arial;white-space:nowrap}
 .cube .r{background:#efe6d2}.cube .h{background:var(--hard);color:#fff;font-size:13px}.cube .s{background:var(--soft);color:#fff;font-size:13px}
@@ -66,23 +89,12 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .card .go{width:100%;border:0;border-radius:16px;padding:14px;background:#2fb37a;color:#fff;font:800 17px "Nunito";box-shadow:0 4px 0 #1f8a5b;cursor:pointer}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
 
-.bird .wg{transform-box:fill-box;transform-origin:20% 80%}
-.bird.flying .wg{animation:flap .11s infinite alternate}
-@keyframes flap{0%{transform:rotate(0)}100%{transform:rotate(-55deg)}}
-.bird.flying .shd{opacity:0}
-.bird.flying{z-index:5}
-.bird.hop svg{animation:hop .35s}
-@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}}
-.br.R .bird.hop svg{animation-name:hopR}
-@keyframes hopR{0%,100%{transform:scaleX(-1) translateY(0)}40%{transform:scaleX(-1) translateY(-10px)}}
-.bird .eye{transform-box:fill-box;transform-origin:center}
-.bird.blink .eye{animation:blink .25s}
-@keyframes blink{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.1)}}
 .feather{position:fixed;pointer-events:none;font-size:18px;z-index:8;animation:fth 1.2s ease-out forwards}
 @keyframes fth{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
 @media (max-width:360px){.wrap{padding-left:6px;padding-right:6px}.tree{column-gap:8px}.slots{gap:1px;width:calc(100% - 2px)}.bird{width:calc((100% - 2px)/3)}.cube span{padding:1px 2px}.bird svg{width:40px;height:36px}}
-@media (prefers-reduced-motion:reduce){.bird,.bird.land,.card,.bird.flying .wg,.bird.hop svg,.feather{animation:none!important;transition:none}}
+@media (prefers-reduced-motion:reduce){.bird,.card,.bsv,.face,.feather,.leaf,.clouds i{animation:none!important;transition:none!important}}
 </style></head><body>
+<div class="clouds"><i></i><i></i><i></i></div><div id="sky"></div>
 <div class="wrap">
   <div class="top"><div class="lvl"><b id="lt">Уровень 1</b><small id="ls">куда и где</small></div><div class="pill">👣 <span id="mv">0</span></div></div>
   <div class="tabs" id="tabs"></div>
@@ -124,7 +136,7 @@ const LV = [
 ];
 const BIRDC=['#ffb43a','#7ad1ff','#ff8fb1','#9be37a','#c9a2ff','#ffd96a','#ff9d6b','#7fe0c8'];
 const JOKES=['Ой, бзз… тут сидят другие хвостики 🌀','Птичка говорит: «Это не мои!» 🐦','Чик-чирик… не та ветка! 🌀','Хвостик не подходит — послушай его 👂'];
-let L=0,state,moves,undoLeft,addLeft,mixLeft,hist,sel=-1,birds,cap,spareN,doneSay={},busy=false;
+let HIDE=new Set();let L=0,state,moves,undoLeft,addLeft,mixLeft,hist,sel=-1,birds,cap,spareN,doneSay={},busy=false;
 const $=id=>document.getElementById(id);
 /* ---------- звук ---------- */
 let AC=null,BUF=null,loading=null,qid=0,SAIDN=0;
@@ -140,18 +152,55 @@ function noise(dur,vol,f,delay){if(!AC)return;try{const t=AC.currentTime+(delay|
  const src=AC.createBufferSource(),bp=AC.createBiquadFilter(),g=AC.createGain();src.buffer=n;bp.type='bandpass';bp.frequency.value=f||1200;g.gain.value=vol||.06;src.connect(bp);bp.connect(g);g.connect(AC.destination);src.start(t)}catch(e){}}
 const SFX={chirp:()=>{tone(2300,3400,.07,'sine',.05);tone(2600,3800,.07,'sine',.05,.09)},flap:(d)=>{for(let i=0;i<3;i++)noise(.05,.05,900,(d||0)+i*.07)},
  buzz:()=>{tone(190,150,.18,'square',.035);tone(200,160,.12,'square',.03,.2)},poof:(d)=>{noise(.35,.07,600,d||0);tone(900,300,.3,'triangle',.03,d||0)},
- win:()=>{[523,659,784,1046].forEach((f,i)=>tone(f,f,.22,'triangle',.07,i*.13));tone(1318,1318,.5,'triangle',.06,.55)}};
+ tick:()=>{tone(1400,900,.05,'triangle',.035)},win:()=>{[523,659,784,1046].forEach((f,i)=>tone(f,f,.22,'triangle',.07,i*.13));tone(1318,1318,.5,'triangle',.06,.55)}};
 function feathers(el,n){if(RM||!el)return;const r=el.getBoundingClientRect();for(let i=0;i<n;i++){const f=document.createElement('div');f.className='feather';f.textContent=['🪶','✨','🪶'][i%3];f.style.left=(r.left+r.width/2)+'px';f.style.top=(r.top+20)+'px';
  f.style.setProperty('--dx',(Math.random()*120-60)+'px');f.style.setProperty('--dy',(-40-Math.random()*90)+'px');f.style.setProperty('--r',(Math.random()*240-120)+'deg');document.body.appendChild(f);setTimeout(()=>f.remove(),1300)}}
-function flyFLIP(ids,before){if(RM)return 0;let last=0;ids.forEach((id,k)=>{const el=birdEl(id),r0=before[id];if(!el||!r0)return;const r1=el.getBoundingClientRect();const dx=r0.left-r1.left,dy=r0.top-r1.top;
- const lift=-Math.max(50,Math.abs(dx)*.35)-20,delay=k*90;el.classList.add('flying');
- const a=el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:`translate(${dx*.5}px,${dy*.5+lift}px)`,offset:.5},{transform:'translate(0,0)'}],{duration:520,delay,easing:'cubic-bezier(.45,.05,.35,1)',fill:'backwards'});
- a.onfinish=()=>{el.classList.remove('flying');el.classList.add('hop');setTimeout(()=>el.classList.remove('hop'),360)};SFX.flap(delay/1000);last=Math.max(last,delay+520)});return last}
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+function q2(p0,p1,p2,t){const u=1-t;return [u*u*p0[0]+2*u*t*p1[0]+t*t*p2[0],u*u*p0[1]+2*u*t*p1[1]+t*t*p2[1]]}
+function cr(P,t){const n=P.length-1,seg=Math.min(n-1,Math.floor(t*n)),lt=t*n-seg;const p0=P[Math.max(0,seg-1)],p1=P[seg],p2=P[seg+1],p3=P[Math.min(n,seg+2)];const tt=lt*lt,ttt=tt*lt;
+ return [0,1].map(k=>.5*((2*p1[k])+(-p0[k]+p2[k])*lt+(2*p0[k]-5*p1[k]+4*p2[k]-p3[k])*tt+(-p0[k]+3*p1[k]-3*p2[k]+p3[k])*ttt))}
+function makeFlyer(el){const r=el.getBoundingClientRect(),f=document.createElement('div');f.className='flyer';f.style.width=r.width+'px';
+ f.innerHTML=`<div class="face">${el.querySelector('.face').innerHTML}</div>`+el.querySelector('.cube').outerHTML;$('sky').appendChild(f);return {f,r}}
+function animFlyer(F,pathFn,dur,opts){opts=opts||{};return new Promise(res=>{const f=F.f,face=f.querySelector('.face');let t0=null,prev=pathFn(0),faceL=null;
+ function step(ts){if(t0===null)t0=ts;let t=Math.min(1,(ts-t0)/dur);const e=opts.linear?t:ease(t);const p=pathFn(e),dx=p[0]-prev[0],dy=p[1]-prev[1];
+  if(Math.abs(dx)>.3){const L=dx<0;if(L!==faceL){faceL=L;face.classList.toggle('fl',L)}}
+  let ang=Math.atan2(dy,Math.abs(dx)+.001)*57.3*.45;ang=Math.max(-28,Math.min(28,ang));if(faceL)ang=-ang;
+  const bob=Math.sin(t*Math.PI*7)*2.5*(1-t),sc=opts.scale?opts.scale(t):1;
+  f.style.transform=`translate(${p[0]}px,${p[1]+bob}px) rotate(${ang}deg) scale(${sc})`;if(opts.fade)f.style.opacity=String(opts.fade(t));
+  if(opts.land&&t>.82)f.classList.add('landing');prev=p;if(t<1)requestAnimationFrame(step);else res()}
+ requestAnimationFrame(step)})}
+function swayBranch(i,amp){if(RM)return;const br=$('tree').querySelectorAll('.br')[i];if(!br)return;const L=br.classList.contains('L'),o=L?'0% 100%':'100% 100%',s=L?1:-1;
+ [br.querySelector('.wood'),br.querySelector('.slots')].forEach(el=>{if(!el)return;el.style.transformOrigin=o;el.animate([{transform:'rotate(0)'},{transform:`rotate(${s*amp}deg)`},{transform:`rotate(${-s*amp*.55}deg)`},{transform:`rotate(${s*amp*.25}deg)`},{transform:'rotate(0)'}],{duration:700,easing:'ease-out'})})}
+function leaves(i,n){if(RM)return;const br=$('tree').querySelectorAll('.br')[i];if(!br)return;const r=br.querySelector('.wood').getBoundingClientRect();
+ for(let k=0;k<n;k++){const e=document.createElement('div');e.className='leaf';e.textContent=k%3?'🍃':'🌿';e.style.left=(r.left+Math.random()*r.width)+'px';e.style.top=(r.top-6)+'px';
+  e.style.setProperty('--dx',(Math.random()*80-40)+'px');e.style.setProperty('--dy',(30+Math.random()*90)+'px');e.style.setProperty('--r',(Math.random()*300-150)+'deg');document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}}
+async function flyMove(ids,before,to){ /* перелёт с ветки на ветку */
+ const tasks=ids.map((id,k)=>new Promise(async res=>{const el=birdEl(id),r0=before[id];if(!el||!r0||RM){HIDE.delete(id);if(el)el.style.visibility='';res();return}
+  await new Promise(r=>setTimeout(r,k*120));const r1=el.getBoundingClientRect();const F=makeFlyer(el);F.f.style.width=r0.width+'px';
+  const P0=[r0.left,r0.top],P2=[r1.left,r1.top],P1=[(P0[0]+P2[0])/2,Math.min(P0[1],P2[1])-70-Math.abs(P2[0]-P0[0])*.22-k*12];
+  const dist=Math.hypot(P2[0]-P0[0],P2[1]-P0[1]),dur=Math.min(900,480+dist*.45);
+  F.f.style.transform=`translate(${P0[0]}px,${P0[1]}px)`;F.f.querySelector('.face').style.scale='1.12 .84';await new Promise(r=>setTimeout(r,90));F.f.querySelector('.face').style.scale='';
+  SFX.flap(0);await animFlyer(F,t=>q2(P0,P1,P2,t),dur,{land:true});F.f.remove();HIDE.delete(id);const e2=birdEl(id);if(e2){e2.style.visibility='';e2.classList.add('squash');setTimeout(()=>e2.classList.remove('squash'),450)}
+  SFX.tick();if(k===ids.length-1||true){swayBranch(to,2.4)}
+  $('tree').querySelectorAll('.br')[to]?.querySelectorAll('.bird').forEach(b=>{if(+b.dataset.b!==id&&!HIDE.has(+b.dataset.b)){b.classList.add('hop');setTimeout(()=>b.classList.remove('hop'),380)}});res()}));
+ await Promise.all(tasks)}
+async function flyAway(i,grp){ /* стайка улетает: взлёт, круг над деревом, за край экрана */
+ const els=grp.map(x=>birdEl(x.id)).filter(Boolean);els.forEach(e=>e.classList.add('crouch'));await new Promise(r=>setTimeout(r,180));
+ leaves(i,6);swayBranch(i,4);SFX.poof(0);
+ const W=innerWidth,first=els[0]?els[0].getBoundingClientRect():{left:W/2},dir=first.left<W/2?1:-1,cx=W/2,top=Math.max(70,$('tree').getBoundingClientRect().top-30);
+ const ps=els.map((el,k)=>new Promise(async res=>{if(RM){el.style.visibility='hidden';res();return}await new Promise(r=>setTimeout(r,k*130));
+  const F=makeFlyer(el);const r0=el.getBoundingClientRect();el.style.visibility='hidden';const x0=r0.left,y0=r0.top,o=k*22;
+  const P=[[x0,y0],[x0+dir*30,y0-95-o*.5],[cx-dir*(70-o),top+50+o*.6],[cx+dir*(10+o),top-10],[cx+dir*(110+o),top+30],[dir>0?W+120:-160,-120-o]];
+  SFX.flap(0);SFX.flap(.25);feathers(el,2);await animFlyer(F,t=>cr(P,t),1800,{linear:true,scale:t=>1+Math.sin(t*Math.PI)*.18-t*.25});F.f.remove();res()}));
+ await Promise.all(ps)}
+
+
 setInterval(()=>{if(RM||document.hidden)return;const bs=$('tree').querySelectorAll('.bird:not(.flying)');if(!bs.length)return;const b=bs[Math.random()*bs.length|0];const c=Math.random()<.6?'blink':'hop';b.classList.add(c);setTimeout(()=>b.classList.remove(c),400)},1600);
 /* ---------- уровень ---------- */
 function wordOf(b){return b.w[0]+b.w[1]}
 function hard(w){return !/[әеіөү]/i.test(w)}
-function birdSVG(c){return `<svg viewBox="0 0 58 52"><ellipse class="shd" cx="30" cy="49" rx="16" ry="3" fill="#0002"/><path d="M10 30 Q2 22 6 14 Q14 20 16 26Z" fill="${c}" opacity=".8"/><ellipse cx="30" cy="30" rx="19" ry="17" fill="${c}"/><ellipse cx="33" cy="34" rx="10" ry="9" fill="#fff" opacity=".55"/><path class="wg" d="M18 28 Q24 14 36 22 Q30 34 18 28Z" fill="${c}" stroke="#0002" stroke-width="1.5"/><g class="eye"><circle cx="38" cy="22" r="6" fill="#fff"/><circle cx="39.5" cy="22.5" r="3" fill="#14222c"/></g><path d="M47 25 L56 28 L47 31Z" fill="#ff8a3d"/><path d="M24 46 v4 M33 46 v4" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/></svg>`}
+function shade(h,p){const n=parseInt(h.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;r=Math.max(0,Math.min(255,r+p));g=Math.max(0,Math.min(255,g+p));b=Math.max(0,Math.min(255,b+p));return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
+function birdSVG(c){const d=shade(c,-34);return `<svg viewBox="0 0 64 56" class="bsv"><ellipse class="shd" cx="32" cy="53" rx="16" ry="3" fill="#0002"/><path class="tail" d="M14 33 Q2 28 3 16 Q12 21 19 28Z" fill="${d}"/><path class="wgb" d="M22 27 Q29 7 43 17 Q35 30 22 27Z" fill="${d}"/><ellipse cx="32" cy="32" rx="19" ry="17" fill="${c}"/><ellipse cx="35" cy="37" rx="11" ry="9" fill="#fff" opacity=".55"/><path class="wgf" d="M19 31 Q25 12 40 22 Q32 37 19 31Z" fill="${c}" stroke="${d}" stroke-width="1.6"/><g class="eye"><circle cx="41" cy="24" r="6.2" fill="#fff"/><circle cx="42.6" cy="24.6" r="3.1" fill="#14222c"/><circle cx="43.7" cy="23.3" r="1" fill="#fff"/></g><path d="M49 27 L58.5 30 L49 33Z" fill="#ff8a3d"/><circle cx="36" cy="31" r="2.6" fill="#ff8fb1" opacity=".55"/><g class="legs"><path d="M26 48 v5 M35 48 v5" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/></g><g class="tuck"><path d="M23 45 q4 4 8 1 M32 45 q4 4 8 1" stroke="#ff8a3d" stroke-width="3" fill="none" stroke-linecap="round"/></g></svg>`}
 function full1(br){return br.length===cap&&br.every(b=>b.c===br[0].c)}
 function topGroup(br){let n=0;const c=br.length?br[br.length-1].c:-1;for(let i=br.length-1;i>=0&&br[i].c===c;i--)n++;return n}
 function canMove(s,f,t){if(f===t)return 0;const a=s[f],b=s[t];if(!a.length||b.length>=cap)return 0;if(b.length&&b[b.length-1].c!==a[a.length-1].c)return 0;return Math.min(topGroup(a),cap-b.length)}
@@ -168,7 +217,7 @@ function gen(){const lv=LV[L];cap=lv.cap;spareN=lv.spare;let id=0;birds=[];
  for(let tries=0;tries<300;tries++){const all=shuffled(birds);const s=lv.cats.map((c,i)=>all.slice(i*cap,i*cap+cap));for(let i=0;i<spareN;i++)s.push([]);
   if(s.some(full1))continue;const n=minMoves(s);if(n<0)continue;if(n>bestN){bestN=n;best=s}if(n>=lv.need){lv.bestN=n;return s}}
  lv.bestN=bestN;return best}
-function start(n){L=n;const lv=LV[L];state=gen();moves=0;undoLeft=3;addLeft=1;mixLeft=2;hist=[];sel=-1;doneSay={};
+function start(n){HIDE.clear();busy=false;$('sky').innerHTML='';L=n;const lv=LV[L];state=gen();moves=0;undoLeft=3;addLeft=1;mixLeft=2;hist=[];sel=-1;doneSay={};
  $('lt').textContent=lv.t;$('ls').textContent=lv.s;aina(lv.hello);renderTabs();render();$('win').classList.remove('on')}
 function renderTabs(){$('tabs').innerHTML=LV.map((l,i)=>`<button class="tab ${i===L?'on':''}" data-l="${i}">${i+1}. ${l.s.split(':')[0].replace('Мастер','🏆 Мастер')}</button>`).join('');
  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{initAudio();start(+b.dataset.l)})}
@@ -176,7 +225,7 @@ function aina(h){$('bub').innerHTML=h}
 function render(land){$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;$('mix').disabled=!mixLeft;
  $('tree').innerHTML=state.map((br,i)=>{const side=i%2?'R':'L',tg=sel===i?topGroup(br):0;
   return `<div class="br ${side} ${i===sel?'sel':''}" data-i="${i}"><div class="wood"></div><div class="tag">${br.length?'':'пусто'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
-   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}">${birdSVG(b.col)}<div class="cube"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
+   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}" style="${HIDE.has(b.id)?'visibility:hidden':''}"><div class="face" style="--d:-${(b.id*0.37)%2.6}s">${birdSVG(b.col)}</div><div class="cube"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
  $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i));fitWords()}
 function fitWords(){$('tree').querySelectorAll('.bird').forEach(b=>{const max=b.clientWidth;b.querySelectorAll('.cube span').forEach(sp=>{let f=parseFloat(getComputedStyle(sp).fontSize);while(sp.scrollWidth>max&&f>9){f-=.5;sp.style.fontSize=f+'px'}})})}
 addEventListener('resize',()=>{try{fitWords()}catch(e){}});
@@ -187,19 +236,18 @@ function tap(i){initAudio();if(busy)return;const br=state[i];
  if(sel===i){sel=-1;render();return}
  const n=canMove(state,sel,i);
  if(n){hist.push(state.map(x=>x.slice()));const f=sel;sel=-1;const mv=state[f].slice(state[f].length-n).reverse(),before={};mv.forEach(x=>{const e=birdEl(x.id);if(e)before[x.id]=e.getBoundingClientRect()});
-  for(let k=0;k<n;k++)state[i].push(state[f].pop());moves++;render();const tFly=flyFLIP(mv.map(x=>x.id),before);
-  if(full1(state[i])){busy=true;const lv=LV[L],grp=state[i].slice(),c=lv.cats[grp[0].c];
-   setTimeout(async()=>{aina(c.say+' <span class="kk">'+grp.map(wordOf).join(', ')+'</span> 🐦💨');SFX.chirp();await sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));
-    grp.forEach((x,k)=>{const e=birdEl(x.id);setTimeout(()=>{if(e){e.classList.add('flying','fly');feathers(e,3)}SFX.flap(0);if(k===0)SFX.poof(.1)},k*140)});
-    setTimeout(()=>{state[i]=[];busy=false;render();checkWin()},1100+grp.length*140)},tFly+150)}
-  else if(n>1)aina('Стайка из '+n+' полетела вместе! 🐦🐦');}
+  for(let k=0;k<n;k++)state[i].push(state[f].pop());moves++;mv.forEach(x=>HIDE.add(x.id));busy=true;render();
+  (async()=>{await flyMove(mv.map(x=>x.id),before,i);
+   if(full1(state[i])){const lv=LV[L],grp=state[i].slice(),c=lv.cats[grp[0].c];aina(c.say+' <span class="kk">'+grp.map(wordOf).join(', ')+'</span> 🐦💨');SFX.chirp();
+    await sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));await flyAway(i,grp);state[i]=[];busy=false;render();checkWin()}
+   else{busy=false;if(n>1)aina('Стайка из '+n+' полетела вместе! 🐦🐦')}})();}
  else{const from=state[sel],b=from[from.length-1],el=birdEl(b.id);if(el){el.classList.remove('up');el.classList.add('shake')}SFX.buzz();
   const why=state[i].length>=cap?'На этой ветке нет места 🙈':JOKES[Math.random()*JOKES.length|0];aina(why);setTimeout(()=>{sel=-1;render()},420)}}
 function checkWin(){if(state.some(b=>b.length))return;const lv=LV[L];
  const best=lv.bestN||lv.cats.length*2;const st=moves<=best+1?3:moves<=best+4?2:1;
  setTimeout(()=>{SFX.win();$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички улетели домой! 🐦💨 Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
   $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},400)}
-$('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;state=hist.pop();undoLeft--;sel=-1;render();aina('Вернула птичек назад ↩️')};
+$('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;HIDE.clear();state=hist.pop();undoLeft--;sel=-1;render();aina('Вернула птичек назад ↩️')};
 $('add').onclick=()=>{if(busy||!addLeft)return;addLeft--;state.push([]);sel=-1;render();aina('Новая ветка выросла! 🌿 Используй с умом.')};
 $('mix').onclick=()=>{if(busy||!mixLeft)return;const sizes=state.map(b=>b.length),all=[].concat(...state);
  for(let t=0;t<200;t++){const sh=shuffled(all);let k=0;const ns=sizes.map(n=>{const r=sh.slice(k,k+n);k+=n;return r});if(ns.some(full1))continue;if(minMoves(ns)>=0){hist.push(state.map(x=>x.slice()));state=ns;mixLeft--;sel=-1;render();aina('Перемешала птичек! 🔀 Попробуй ещё раз.');return}}
