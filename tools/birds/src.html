@@ -119,22 +119,47 @@ body.playing #game{display:flex}body.playing #intro{display:none}
 @keyframes fth{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
 @media (max-width:360px){.wrap{padding-left:6px;padding-right:6px}.tree{column-gap:8px}.slots{gap:1px;width:calc(100% - 2px)}.bird{width:calc((100% - 2px)/3)}.cube span{padding:1px 2px}.bird svg{width:40px;height:36px}}
 @media (prefers-reduced-motion:reduce){.bird,.card,.bsv,.face,.feather,.leaf,.clouds i{animation:none!important;transition:none!important}}
+
+/* --- v6: настоящие ветки, колонки, пёрышки --- */
+.tree{align-items:stretch}
+.col{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.col.R{padding-top:calc(var(--bh,112px)/2)}.col.L{padding-bottom:calc(var(--bh,112px)/2)}
+.br{margin:1px 0}
+.br .wood{background:none!important;box-shadow:none!important;border-radius:0!important;bottom:22px;height:34px}
+.br .wood:after{display:none!important}
+.br.L .wood{left:-10px;right:0}.br.R .wood{right:-10px;left:0}
+.br .wood svg{display:block;width:100%;height:100%;overflow:visible}
+.br.grow .wood{animation:grow .55s cubic-bezier(.3,1.4,.5,1)}.br.L.grow .wood{transform-origin:0 50%}.br.R.grow .wood{transform-origin:100% 50%}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.piece{position:fixed;pointer-events:none;z-index:8}.piece svg{display:block;width:100%;height:100%;overflow:visible}
+.cpop{position:fixed;z-index:8;pointer-events:none;margin:0;animation:cpop .5s ease-out forwards}
+@keyframes cpop{0%{transform:scale(1)}35%{transform:scale(1.35)}100%{transform:scale(.1);opacity:0}}
+.tg{flex:none;border:0;width:36px;height:36px;border-radius:50%;background:#fff;font-size:17px;box-shadow:0 2px 0 #d9c9a5;cursor:pointer;padding:0}
+.tg.off{opacity:.45}
+.gtop .lvl small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gtop .pill{padding:6px 9px}
+.gb small.cost{min-width:0;width:auto;padding:0 5px;right:-10px;background:#8a5cf6}
+.gb.need{opacity:.55}
+.gain{display:inline-block;margin-top:8px;background:#f3ecff;color:#6a3fd1;border-radius:99px;padding:3px 12px;font-weight:800}
+.hero .fea{display:inline-block;margin-top:6px;background:#fff;border-radius:99px;padding:3px 12px;font-weight:800;box-shadow:0 2px 0 #d9c9a5}
+.gmid{justify-content:flex-start!important}.tree{margin:auto 0}
+@media (max-width:370px){.gtop{gap:5px;padding-left:6px;padding-right:6px}.gtop .lvl b{font-size:15px;white-space:nowrap}.gtop .lvl small{font-size:11px}.tg{width:32px;height:32px;font-size:15px}.gtop .pill{padding:5px 7px;font-size:13px}.back{width:34px;height:34px;font-size:17px}}
 </style></head><body>
 <div class="clouds"><i></i><i></i><i></i></div><div id="sky"></div>
 <div class="wrap" id="intro">
-  <div class="hero"><h1>🐦 Рассади птичек</h1><p>Собери одинаковые хвостики — и стайка улетит</p></div>
+  <div class="hero"><h1>🐦 Рассади птичек</h1><p>Собери одинаковые хвостики — птички улетят, а ветка сломается</p><div class="fea">🪶 <span id="ifea">0</span> · ветка 🌿 = 5 🪶</div></div>
   <div class="lvcards" id="lvcards"></div>
   <div class="say"><div class="av">🤖</div><div class="bub" id="ibub"></div></div>
   <div class="chips" id="chips"></div>
   <button class="play" id="play">Играть ▶</button>
-  <div class="note">Тест мини-игры · нажми на хвостик, чтобы услышать 🔊</div>
+  <div class="note">Тест мини-игры v6 · нажми на хвостик, чтобы услышать 🔊</div>
 </div>
 <div id="game">
-  <div class="gtop"><button class="back" id="back" aria-label="Назад к уровням">←</button><div class="lvl"><b id="lt">Уровень 1</b><small id="ls"></small></div><div class="pill">👣 <span id="mv">0</span></div></div>
+  <div class="gtop"><button class="back" id="back" aria-label="Назад к уровням">←</button><div class="lvl"><b id="lt">Уровень 1</b><small id="ls"></small></div><div class="pill">👣 <span id="mv">0</span></div><div class="pill">🪶 <span id="fe">0</span></div><button class="tg" id="tmus" aria-label="Музыка">🎵</button><button class="tg" id="tvoi" aria-label="Голос">🗣️</button></div>
   <div class="gmid" id="gmid"><div class="tree" id="tree"></div></div>
   <div class="gbar">
     <button class="gb" id="undo" aria-label="Назад">↩️<small id="un">3</small></button>
-    <button class="gb" id="add" aria-label="Ветка">🌿<small id="ad">1</small></button>
+    <button class="gb" id="add" aria-label="Ветка за 5 пёрышек">🌿<small class="cost">5🪶</small></button>
     <button class="gb" id="mix" aria-label="Смешать">🔀<small id="mx">2</small></button>
     <button class="gb" id="again" aria-label="Заново">🔄</button>
   </div>
@@ -144,63 +169,72 @@ body.playing #game{display:flex}body.playing #intro{display:none}
 <script>
 {
 const SND = __SND__;
-const LV = [
- {t:'Уровень 1',s:'➡️ куда · 📍 где',cap:3,spare:1,need:4,
-  hello:'Птички перепутались! 🐦 Двигать можно только крайнюю птичку — у свободного конца ветки. Собери на ветке одинаковые хвостики — и стайка улетит домой! 🐦💨',
-  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['қала','ға'],['мектеп','ке']]},
-        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['қала','да'],['мектеп','те']]}]},
- {t:'Уровень 2',s:'➡️ куда · 📍 где · ⬅️ откуда',cap:3,spare:1,need:7,
-  hello:'Три стрелки! ➡️ куда, 📍 где, ⬅️ откуда. Слушай хвостик — он подскажет 👂',
-  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['саябақ','қа'],['дүкен','ге']]},
-        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['саябақ','та'],['дүкен','де']]},
-        {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]}]},
- {t:'Уровень 3',s:'Связи: чей? · что? · с кем?',cap:3,spare:1,need:8,
-  hello:'Связи! 🔗 чей? (-ның), 🔍 что? (-ны), 🤝 с кем? (-мен). Запасная ветка всего одна — думай! 🧠',
-  cats:[{k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['Алтай','дың'],['дос','тың']]},
-        {k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды']]},
-        {k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен']]}]},
- {t:'Уровень 4',s:'Мастер: 4 группы',cap:3,spare:2,need:12,
-  hello:'Мастер-уровень! 🏆 Четыре стайки: ➡️ куда, 📍 где, ⬅️ откуда и 🔗 чей. Слушай хвостики 👂',
-  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['мектеп','ке'],['саябақ','қа']]},
-        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['мектеп','те'],['қала','да']]},
-        {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]},
-        {k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]}]},
- {t:'Уровень 5',s:'🌳 Большое дерево: 6 стаек',cap:3,spare:2,need:14,
-  hello:'Большое дерево! 🌳 Шесть стаек: ➡️ куда, 📍 где, ⬅️ откуда, 🔗 чей, 🔍 что и 🤝 с кем. Слушай хвостики 👂',
-  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['мектеп','ке'],['саябақ','қа']]},
-        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['мектеп','те'],['қала','да']]},
-        {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]},
-        {k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]},
-        {k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды']]},
-        {k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен']]}]}
+/* ---------- стайки (хвостики) ---------- */
+const C={
+ kuda:{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['мектеп','ке'],['саябақ','қа']]},
+ gde:{k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['мектеп','те'],['қала','да']]},
+ otk:{k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]},
+ chey:{k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]},
+ chto:{k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды']]},
+ skem:{k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен']]},
+ moy:{k:'💛 мой',say:'Это всё МОЁ! 💛',w:[['ана','м'],['дос','ым'],['үй','ім']]},
+ tvoy:{k:'👉 твой',say:'Это всё ТВОЁ! 👉',w:[['ана','ң'],['дос','ың'],['әке','ң']]},
+ ego:{k:'👤 его',say:'Это всё ЕГО! 👤',w:[['ана','сы'],['дос','ы'],['әже','сі']]},
+ mnogo:{k:'🐦🐦 много',say:'Их МНОГО! 🐦🐦',w:[['бала','лар'],['дос','тар'],['ит','тер']]}
+};
+const LV=[
+ {t:'Уровень 1',s:'➡️ куда · 📍 где',c:['kuda','gde'],spare:2,need:4,
+  hello:'2 стайки: ➡️ куда и 📍 где. Слушай хвостик 👂 Пустых веток — 2, не бойся!'},
+ {t:'Уровень 2',s:'+ ⬅️ откуда',c:['kuda','gde','otk'],spare:2,need:7,
+  hello:'3 стрелки! ➡️ куда, 📍 где, ⬅️ откуда. Хвостик подскажет 👂'},
+ {t:'Уровень 3',s:'+ 🔗 чей?',c:['kuda','gde','otk','chey'],spare:2,need:10,
+  hello:'Новая стайка: 🔗 чей? <span class="kk">Айнаның</span> — Айны 😎 Собрал стайку — ветка ломается, птички улетают!'},
+ {t:'Уровень 4',s:'Связи: 6 стаек',c:['kuda','gde','otk','chey','chto','skem'],spare:2,
+  hello:'Связи! 6 стаек: куда, где, откуда, 🔗 чей, 🔍 что, 🤝 с кем. Дерево растёт 🌳'},
+ {t:'Уровень 5',s:'Мой · твой · его: 8 стаек',c:['moy','tvoy','ego','mnogo','chey','kuda','gde','otk'],spare:2,
+  hello:'Тема «Менің»! 💛 мой (<span class="kk">анам</span>), 👉 твой (<span class="kk">анаң</span>), 👤 его (<span class="kk">анасы</span>), 🐦🐦 много (<span class="kk">балалар</span>). Хитрость: <span class="kk">Айнаның</span> — это «чей» 😉'},
+ {t:'Уровень 6',s:'🌳 Большое дерево: 10 стаек',c:['kuda','gde','otk','chey','chto','skem','moy','tvoy','ego','mnogo'],spare:2,
+  hello:'Большое дерево! 🌳 10 стаек, 30 птичек. Все хвостики вместе — ты справишься 💪'}
 ];
 const BIRDC=['#ffb43a','#7ad1ff','#ff8fb1','#9be37a','#c9a2ff','#ffd96a','#ff9d6b','#7fe0c8'];
 const JOKES=['Ой, бзз… тут сидят другие хвостики 🌀','Птичка говорит: «Это не мои!» 🐦','Чик-чирик… не та ветка! 🌀','Хвостик не подходит — послушай его 👂'];
-let HIDE=new Set();let L=0,state,moves,undoLeft,addLeft,mixLeft,hist,sel=-1,birds,cap,spareN,doneSay={},busy=false;
+let HIDE=new Set();let L=0,state,meta,KEY=0,moves,undoLeft,mixLeft,hist,sel=-1,birds,cap=3,doneSay={},busy=false,cats;
 const $=id=>document.getElementById(id);
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+/* ---------- хранилище ---------- */
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,String(v))}catch(e){}}
+const FK='tilashar-birds-feathers',BRANCH_COST=5;
+let FEA=parseInt(lsGet(FK,''),10);if(isNaN(FEA)){FEA=5;lsSet(FK,5)}
+let VOICE=lsGet('tilashar-birds-voice','1')==='1',MUSICON=lsGet('tilashar-birds-music','1')==='1';
 /* ---------- звук ---------- */
-let AC=null,BUF=null,loading=null,qid=0,SAIDN=0;
-function initAudio(){if(AC)return loading;try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}
+let AC=null,BUF=null,loading=null,qid=0,SAIDN=0,MUS=null,speaking=0;
+function initAudio(){startMusic();if(AC)return loading;try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}
  loading=fetch('kk22.mp3').then(r=>r.arrayBuffer()).then(b=>new Promise((res,rej)=>AC.decodeAudioData(b,res,rej))).then(b=>{BUF=b}).catch(()=>{});return loading}
-function playOne(w){return new Promise(res=>{const p=SND[w.toLowerCase()];if(!AC||!BUF||!p){setTimeout(res,350);return}
- try{SAIDN++;const s=AC.createBufferSource();s.buffer=BUF;s.connect(AC.destination);s.start(0,p[0],p[1]);s.onended=res;setTimeout(res,p[1]*1000+400)}catch(e){res()}})}
-async function sayList(list,els){const my=++qid;if(loading)await loading;for(let i=0;i<list.length;i++){if(my!==qid)return;if(els&&els[i])els[i].classList.add('say');await playOne(list[i]);if(els&&els[i])els[i].classList.remove('say');await new Promise(r=>setTimeout(r,120))}}
+function startMusic(){if(!MUSICON)return;try{if(!MUS){MUS=new Audio('music4.mp3');MUS.loop=true;MUS.volume=.16}if(MUS.paused)MUS.play().catch(()=>{})}catch(e){}}
+function duck(on){speaking+=on?1:-1;if(speaking<0)speaking=0;if(MUS)try{MUS.volume=speaking?.05:.16}catch(e){}}
+function playOne(w){return new Promise(res=>{const p=SND[w.toLowerCase()];if(!VOICE){res();return}if(!AC||!BUF||!p){setTimeout(res,300);return}
+ let done=false;const fin=()=>{if(done)return;done=true;duck(false);res()};
+ try{SAIDN++;duck(true);const s=AC.createBufferSource();s.buffer=BUF;s.connect(AC.destination);s.start(0,p[0],p[1]);s.onended=fin;setTimeout(fin,p[1]*1000+400)}catch(e){fin()}})}
+async function sayList(list,gap){const my=++qid;if(loading)await loading;for(let i=0;i<list.length;i++){if(my!==qid)return;await playOne(list[i]);await wait(gap||100)}}
 /* ---------- звуки игры (синтез, тише голоса) ---------- */
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function tone(f1,f2,dur,type,vol,delay){if(!AC)return;try{const t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.08,t+.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+.02)}catch(e){}}
 function noise(dur,vol,f,delay){if(!AC)return;try{const t=AC.currentTime+(delay||0),n=AC.createBuffer(1,AC.sampleRate*dur|0,AC.sampleRate),d=n.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
  const src=AC.createBufferSource(),bp=AC.createBiquadFilter(),g=AC.createGain();src.buffer=n;bp.type='bandpass';bp.frequency.value=f||1200;g.gain.value=vol||.06;src.connect(bp);bp.connect(g);g.connect(AC.destination);src.start(t)}catch(e){}}
 const SFX={chirp:()=>{tone(2300,3400,.07,'sine',.05);tone(2600,3800,.07,'sine',.05,.09)},flap:(d)=>{for(let i=0;i<3;i++)noise(.05,.05,900,(d||0)+i*.07)},
- buzz:()=>{tone(190,150,.18,'square',.035);tone(200,160,.12,'square',.03,.2)},poof:(d)=>{noise(.35,.07,600,d||0);tone(900,300,.3,'triangle',.03,d||0)},
+ buzz:()=>{tone(190,150,.18,'square',.035);tone(200,160,.12,'square',.03,.2)},poof:(d)=>{noise(.3,.06,600,d||0);tone(900,300,.25,'triangle',.03,d||0)},
+ pop:(d)=>{tone(700,1500,.08,'triangle',.05,d||0);noise(.08,.04,3000,d||0)},
+ crack:()=>{noise(.09,.12,1800);noise(.14,.1,500,.06);tone(160,70,.25,'triangle',.06,.04)},
  tick:()=>{tone(1400,900,.05,'triangle',.035)},win:()=>{[523,659,784,1046].forEach((f,i)=>tone(f,f,.22,'triangle',.07,i*.13));tone(1318,1318,.5,'triangle',.06,.55)}};
-function feathers(el,n){if(RM||!el)return;const r=el.getBoundingClientRect();for(let i=0;i<n;i++){const f=document.createElement('div');f.className='feather';f.textContent=['🪶','✨','🪶'][i%3];f.style.left=(r.left+r.width/2)+'px';f.style.top=(r.top+20)+'px';
- f.style.setProperty('--dx',(Math.random()*120-60)+'px');f.style.setProperty('--dy',(-40-Math.random()*90)+'px');f.style.setProperty('--r',(Math.random()*240-120)+'deg');document.body.appendChild(f);setTimeout(()=>f.remove(),1300)}}
+function sparks(r,n,chars){if(RM)return;for(let i=0;i<n;i++){const f=document.createElement('div');f.className='feather';f.textContent=chars[i%chars.length];f.style.left=(r.left+r.width/2-8)+'px';f.style.top=(r.top+r.height/2-10)+'px';
+ f.style.setProperty('--dx',(Math.random()*110-55)+'px');f.style.setProperty('--dy',(-30-Math.random()*70)+'px');f.style.setProperty('--r',(Math.random()*240-120)+'deg');document.body.appendChild(f);setTimeout(()=>f.remove(),1300)}}
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
 function q2(p0,p1,p2,t){const u=1-t;return [u*u*p0[0]+2*u*t*p1[0]+t*t*p2[0],u*u*p0[1]+2*u*t*p1[1]+t*t*p2[1]]}
 function cr(P,t){const n=P.length-1,seg=Math.min(n-1,Math.floor(t*n)),lt=t*n-seg;const p0=P[Math.max(0,seg-1)],p1=P[seg],p2=P[seg+1],p3=P[Math.min(n,seg+2)];const tt=lt*lt,ttt=tt*lt;
  return [0,1].map(k=>.5*((2*p1[k])+(-p0[k]+p2[k])*lt+(2*p0[k]-5*p1[k]+4*p2[k]-p3[k])*tt+(-p0[k]+3*p1[k]-3*p2[k]+p3[k])*ttt))}
-function makeFlyer(el){const r=el.getBoundingClientRect(),f=document.createElement('div');f.className='flyer';f.style.width=r.width+'px';
- f.innerHTML=`<div class="face">${el.querySelector('.face').innerHTML}</div>`+el.querySelector('.cube').outerHTML;$('sky').appendChild(f);return {f,r}}
+function makeFlyer(el,noCube){const r=el.getBoundingClientRect(),f=document.createElement('div');f.className='flyer';f.style.width=r.width+'px';
+ f.innerHTML=`<div class="face">${el.querySelector('.face').innerHTML}</div>`+(noCube?'':el.querySelector('.cube').outerHTML);$('sky').appendChild(f);return {f,r}}
 function animFlyer(F,pathFn,dur,opts){opts=opts||{};return new Promise(res=>{const f=F.f,face=f.querySelector('.face');let t0=null,prev=pathFn(0),faceL=null;
  function step(ts){if(t0===null)t0=ts;let t=Math.min(1,(ts-t0)/dur);const e=opts.linear?t:ease(t);const p=pathFn(e),dx=p[0]-prev[0],dy=p[1]-prev[1];
   if(Math.abs(dx)>.3){const L=dx<0;if(L!==faceL){faceL=L;face.classList.toggle('fl',L)}}
@@ -209,34 +243,50 @@ function animFlyer(F,pathFn,dur,opts){opts=opts||{};return new Promise(res=>{con
   f.style.transform=`translate(${p[0]}px,${p[1]+bob}px) rotate(${ang}deg) scale(${sc})`;if(opts.fade)f.style.opacity=String(opts.fade(t));
   if(opts.land&&t>.82)f.classList.add('landing');prev=p;if(t<1)requestAnimationFrame(step);else res()}
  requestAnimationFrame(step)})}
-function swayBranch(i,amp){if(RM)return;const br=$('tree').querySelectorAll('.br')[i];if(!br)return;const L=br.classList.contains('L'),o=L?'0% 100%':'100% 100%',s=L?1:-1;
+function brEl(i){return $('tree').querySelector(`.br[data-i="${i}"]`)}
+function swayBranch(i,amp){if(RM)return;const br=brEl(i);if(!br)return;const L=br.classList.contains('L'),o=L?'0% 100%':'100% 100%',s=L?1:-1;
  [br.querySelector('.wood'),br.querySelector('.slots')].forEach(el=>{if(!el)return;el.style.transformOrigin=o;el.animate([{transform:'rotate(0)'},{transform:`rotate(${s*amp}deg)`},{transform:`rotate(${-s*amp*.55}deg)`},{transform:`rotate(${s*amp*.25}deg)`},{transform:'rotate(0)'}],{duration:700,easing:'ease-out'})})}
-function leaves(i,n){if(RM)return;const br=$('tree').querySelectorAll('.br')[i];if(!br)return;const r=br.querySelector('.wood').getBoundingClientRect();
- for(let k=0;k<n;k++){const e=document.createElement('div');e.className='leaf';e.textContent=k%3?'🍃':'🌿';e.style.left=(r.left+Math.random()*r.width)+'px';e.style.top=(r.top-6)+'px';
+function leaves(i,n){if(RM)return;const br=brEl(i);if(!br)return;const r=br.querySelector('.wood').getBoundingClientRect();
+ for(let k=0;k<n;k++){const e=document.createElement('div');e.className='leaf';e.textContent=k%3?'🍃':'🌿';e.style.left=(r.left+Math.random()*r.width)+'px';e.style.top=(r.top+4)+'px';
   e.style.setProperty('--dx',(Math.random()*80-40)+'px');e.style.setProperty('--dy',(30+Math.random()*90)+'px');e.style.setProperty('--r',(Math.random()*300-150)+'deg');document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}}
 async function flyMove(ids,before,to){ /* перелёт с ветки на ветку */
  const tasks=ids.map((id,k)=>new Promise(async res=>{const el=birdEl(id),r0=before[id];if(!el||!r0||RM){HIDE.delete(id);if(el)el.style.visibility='';res();return}
-  await new Promise(r=>setTimeout(r,k*120));const r1=el.getBoundingClientRect();const F=makeFlyer(el);F.f.style.width=r0.width+'px';
-  const P0=[r0.left,r0.top],P2=[r1.left,r1.top],P1=[(P0[0]+P2[0])/2,Math.min(P0[1],P2[1])-70-Math.abs(P2[0]-P0[0])*.22-k*12];
-  const dist=Math.hypot(P2[0]-P0[0],P2[1]-P0[1]),dur=Math.min(900,480+dist*.45);
-  F.f.style.transform=`translate(${P0[0]}px,${P0[1]}px)`;F.f.querySelector('.face').style.scale='1.12 .84';await new Promise(r=>setTimeout(r,90));F.f.querySelector('.face').style.scale='';
+  await wait(k*110);const r1=el.getBoundingClientRect();const F=makeFlyer(el);F.f.style.width=r0.width+'px';
+  const P0=[r0.left,r0.top],P2=[r1.left,r1.top],P1=[(P0[0]+P2[0])/2,Math.min(P0[1],P2[1])-60-Math.abs(P2[0]-P0[0])*.2-k*10];
+  const dist=Math.hypot(P2[0]-P0[0],P2[1]-P0[1]),dur=Math.min(750,420+dist*.4);
+  F.f.style.transform=`translate(${P0[0]}px,${P0[1]}px)`;F.f.querySelector('.face').style.scale='1.12 .84';await wait(70);F.f.querySelector('.face').style.scale='';
   SFX.flap(0);await animFlyer(F,t=>q2(P0,P1,P2,t),dur,{land:true});F.f.remove();HIDE.delete(id);const e2=birdEl(id);if(e2){e2.style.visibility='';e2.classList.add('squash');setTimeout(()=>e2.classList.remove('squash'),450)}
-  SFX.tick();if(k===ids.length-1||true){swayBranch(to,2.4)}
-  $('tree').querySelectorAll('.br')[to]?.querySelectorAll('.bird').forEach(b=>{if(+b.dataset.b!==id&&!HIDE.has(+b.dataset.b)){b.classList.add('hop');setTimeout(()=>b.classList.remove('hop'),380)}});res()}));
+  SFX.tick();swayBranch(to,2.4);
+  brEl(to)?.querySelectorAll('.bird').forEach(b=>{if(+b.dataset.b!==id&&!HIDE.has(+b.dataset.b)){b.classList.add('hop');setTimeout(()=>b.classList.remove('hop'),380)}});res()}));
  await Promise.all(tasks)}
-async function flyAway(i,grp){ /* стайка улетает: взлёт, круг над деревом, за край экрана */
- const els=grp.map(x=>birdEl(x.id)).filter(Boolean);els.forEach(e=>e.classList.add('crouch'));await new Promise(r=>setTimeout(r,180));
- leaves(i,6);swayBranch(i,4);SFX.poof(0);
- const W=innerWidth,first=els[0]?els[0].getBoundingClientRect():{left:W/2},dir=first.left<W/2?1:-1,cx=W/2,top=Math.max(70,$('tree').getBoundingClientRect().top-30);
- const ps=els.map((el,k)=>new Promise(async res=>{if(RM){el.style.visibility='hidden';res();return}await new Promise(r=>setTimeout(r,k*130));
-  const F=makeFlyer(el);const r0=el.getBoundingClientRect();el.style.visibility='hidden';const x0=r0.left,y0=r0.top,o=k*22;
-  const P=[[x0,y0],[x0+dir*30,y0-95-o*.5],[cx-dir*(70-o),top+50+o*.6],[cx+dir*(10+o),top-10],[cx+dir*(110+o),top+30],[dir>0?W+120:-160,-120-o]];
-  SFX.flap(0);SFX.flap(.25);feathers(el,2);await animFlyer(F,t=>cr(P,t),1800,{linear:true,scale:t=>1+Math.sin(t*Math.PI)*.18-t*.25});F.f.remove();res()}));
+function popCube(el,k){const c=el.querySelector('.cube');if(!c)return;const r=c.getBoundingClientRect();
+ if(!RM){const p=c.cloneNode(true);p.classList.add('cpop');p.style.left=r.left+'px';p.style.top=r.top+'px';p.style.width=r.width+'px';document.body.appendChild(p);setTimeout(()=>p.remove(),600)}
+ c.style.visibility='hidden';SFX.pop(0);sparks(r,5,['✨','⭐','✨'])}
+async function flyAway(i,grp){ /* кубики лопаются, птички улетают */
+ const els=grp.map(x=>birdEl(x.id)).filter(Boolean);const br=brEl(i),isL=br&&br.classList.contains('L');
+ els.forEach((el,k)=>setTimeout(()=>popCube(el,k),k*120));
+ els.forEach(e=>e.classList.add('crouch'));await wait(150+els.length*120);
+ leaves(i,5);swayBranch(i,4);SFX.poof(0);
+ const W=innerWidth,dir=isL?1:-1;
+ const ps=els.map((el,k)=>new Promise(async res=>{if(RM){el.style.visibility='hidden';res();return}await wait(k*80);
+  const F=makeFlyer(el,true);const r0=el.getBoundingClientRect();el.style.visibility='hidden';const x0=r0.left,y0=r0.top,o=k*26;
+  const P=[[x0,y0],[x0+dir*30,y0-70-o*.4],[x0+dir*W*.3,y0-150-o],[W/2+dir*(W*.25),Math.max(-40,y0-260-o)],[dir>0?W+140:-180,-160-o]];
+  SFX.flap(0);SFX.flap(.22);await animFlyer(F,t=>cr(P,t),1050,{linear:true,scale:t=>1+Math.sin(t*Math.PI)*.15-t*.2});F.f.remove();res()}));
  await Promise.all(ps)}
+async function breakBranch(i){ /* ветка ломается на 2 обломка и падает */
+ const br=brEl(i);if(!br)return;const w=br.querySelector('.wood'),r=w.getBoundingClientRect(),isL=br.classList.contains('L');SFX.crack();
+ br.style.visibility='hidden';if(RM)return;
+ const mk=(clip)=>{const p=document.createElement('div');p.className='piece';p.style.left=r.left+'px';p.style.top=r.top+'px';p.style.width=r.width+'px';p.style.height=r.height+'px';p.innerHTML=w.innerHTML;p.style.clipPath=clip;document.body.appendChild(p);return p};
+ const base=mk(isL?'inset(-20px 52% -20px 0)':'inset(-20px 0 -20px 52%)'),tip=mk(isL?'inset(-20px 0 -20px 46%)':'inset(-20px 46% -20px 0)'),s=isL?1:-1;
+ base.style.transformOrigin=isL?'0 50%':'100% 50%';tip.style.transformOrigin='50% 50%';
+ const a1=base.animate([{transform:'none',opacity:1},{transform:`rotate(${s*14}deg)`,opacity:1,offset:.35},{transform:`translateY(${innerHeight}px) rotate(${s*40}deg)`,opacity:.9}],{duration:900,easing:'ease-in',fill:'forwards'});
+ const a2=tip.animate([{transform:'none'},{transform:`translate(${s*10}px,8px) rotate(${s*22}deg)`,offset:.2},{transform:`translate(${s*50}px,${innerHeight}px) rotate(${s*120}deg)`}],{duration:850,easing:'ease-in',fill:'forwards'});
+ leaves(i,4);await wait(380);setTimeout(()=>{base.remove();tip.remove()},950)}
+function flipRender(change){const old={};$('tree').querySelectorAll('.br').forEach(b=>{old[b.dataset.k]=b.getBoundingClientRect().top});change();render();
+ if(RM)return;$('tree').querySelectorAll('.br').forEach(b=>{const o=old[b.dataset.k];if(o===undefined)return;const dy=o-b.getBoundingClientRect().top;if(Math.abs(dy)>1)b.animate([{transform:`translateY(${dy}px)`},{transform:'none'}],{duration:420,easing:'cubic-bezier(.3,1.3,.5,1)'})})}
 
-
-setInterval(()=>{if(RM||document.hidden)return;const bs=$('tree').querySelectorAll('.bird:not(.flying)');if(!bs.length)return;const b=bs[Math.random()*bs.length|0];const c=Math.random()<.6?'blink':'hop';b.classList.add(c);setTimeout(()=>b.classList.remove(c),400)},1600);
-/* ---------- уровень ---------- */
+setInterval(()=>{if(RM||document.hidden)return;const bs=$('tree').querySelectorAll('.bird');if(!bs.length)return;const b=bs[Math.random()*bs.length|0];const c=Math.random()<.6?'blink':'hop';b.classList.add(c);setTimeout(()=>b.classList.remove(c),400)},1600);
+/* ---------- правила и решатель ---------- */
 function wordOf(b){return b.w[0]+b.w[1]}
 function hard(w){return !/[әеіөү]/i.test(w)}
 function shade(h,p){const n=parseInt(h.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;r=Math.max(0,Math.min(255,r+p));g=Math.max(0,Math.min(255,g+p));b=Math.max(0,Math.min(255,b+p));return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
@@ -244,66 +294,114 @@ function birdSVG(c){const d=shade(c,-34);return `<svg viewBox="0 0 64 56" class=
 function full1(br){return br.length===cap&&br.every(b=>b.c===br[0].c)}
 function topGroup(br){let n=0;const c=br.length?br[br.length-1].c:-1;for(let i=br.length-1;i>=0&&br[i].c===c;i--)n++;return n}
 function canMove(s,f,t){if(f===t)return 0;const a=s[f],b=s[t];if(!a.length||b.length>=cap)return 0;if(b.length&&b[b.length-1].c!==a[a.length-1].c)return 0;return Math.min(topGroup(a),cap-b.length)}
-function doMove(s,f,t){const n=canMove(s,f,t);for(let i=0;i<n;i++)s[t].push(s[f].pop());let cleared=false;if(full1(s[t])){cleared=s[t].slice();s[t].length=0}return {n,cleared}}
-function keyOf(s){return s.map(b=>b.map(x=>x.c).join('')).sort().join('|')}
-function minMoves(s0){const seen=new Set([keyOf(s0)]);let q=[s0],d=0;
- while(q.length&&seen.size<40000){const nq=[];for(const s of q){if(s.every(b=>!b.length))return d;
-  for(let f=0;f<s.length;f++)for(let t=0;t<s.length;t++){if(!canMove(s,f,t))continue;const m=s.map(x=>x.slice());doMove(m,f,t);const k=keyOf(m);if(!seen.has(k)){seen.add(k);nq.push(m)}}}q=nq;d++}
+/* быстрые версии на номерах цветов; собранная ветка ломается (удаляется) */
+const ints=s=>s.map(b=>b.map(x=>x.c));
+function keyI(s){return s.map(b=>b.join(',')).sort().join('|')}
+function moveI(s,f,t){const a=s[f],b=s[t],c=a[a.length-1];let g=0;for(let i=a.length-1;i>=0&&a[i]===c;i--)g++;const n=Math.min(g,cap-b.length);for(let i=0;i<n;i++)b.push(a.pop());
+ if(b.length===cap&&b.every(x=>x===c))s.splice(t,1)}
+function movesI(s){const out=[];let emptyT=-1;for(let t=0;t<s.length;t++)if(!s[t].length){emptyT=t;break}
+ for(let f=0;f<s.length;f++){const a=s[f];if(!a.length)continue;const c=a[a.length-1];let g=0;for(let i=a.length-1;i>=0&&a[i]===c;i--)g++;
+  for(let t=0;t<s.length;t++){if(t===f)continue;const b=s[t];if(!b.length||b.length>=cap||b[b.length-1]!==c)continue;out.push([f,t,b.length+g>=cap?0:1])}
+  if(emptyT>=0&&g<a.length)out.push([f,emptyT,2])}
+ out.sort((x,y)=>x[2]-y[2]);return out}
+function minMoves(s0,limit){let q=[ints(s0)];const seen=new Set([keyI(q[0])]);let d=0;
+ while(q.length){const nq=[];for(const s of q){if(s.every(b=>!b.length))return d;
+  for(const [f,t] of movesI(s)){const m=s.map(x=>x.slice());moveI(m,f,t);const k=keyI(m);if(!seen.has(k)){seen.add(k);nq.push(m);if(seen.size>(limit||60000))return -2}}}q=nq;d++}
  return -1}
+function solvePath(s0,limit){const seen=new Set();let nodes=0;const path=[];limit=limit||40000;
+ function rec(s){if(s.every(b=>!b.length))return true;if(++nodes>limit)return false;const k=keyI(s);if(seen.has(k))return false;seen.add(k);
+  for(const [f,t] of movesI(s)){const m=s.map(b=>b.slice());moveI(m,f,t);path.push([f,t]);if(rec(m))return true;path.pop();if(nodes>limit)return false}return false}
+ return rec(ints(s0))?path:null}
 function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
-function gen(){const lv=LV[L];cap=lv.cap;spareN=lv.spare;let id=0;birds=[];
- lv.cats.forEach((c,ci)=>c.w.forEach(w=>{birds.push({id:id++,c:ci,w,col:BIRDC[(id*3+ci)%BIRDC.length]})}));
- let best=null,bestN=-1;
- for(let tries=0;tries<300;tries++){const all=shuffled(birds);const s=lv.cats.map((c,i)=>all.slice(i*cap,i*cap+cap));for(let i=0;i<spareN;i++)s.push([]);
-  if(s.some(full1))continue;const n=minMoves(s);if(n<0)continue;if(n>bestN){bestN=n;best=s}if(n>=lv.need){lv.bestN=n;return s}}
+function pairs(s){let n=0;s.forEach(b=>{for(let i=1;i<b.length;i++)if(b[i].c===b[i-1].c)n++});return n}
+function gen(){const lv=LV[L];cats=lv.c.map(k=>C[k]);let id=0;birds=[];
+ cats.forEach((c,ci)=>c.w.forEach(w=>{birds.push({id:id++,c:ci,w,col:BIRDC[(id*3+ci)%BIRDC.length]})}));
+ const small=cats.length<=4;let best=null,bestN=-1;
+ for(let tries=0;tries<400;tries++){const all=shuffled(birds);const s=cats.map((c,i)=>all.slice(i*cap,i*cap+cap));for(let i=0;i<lv.spare;i++)s.push([]);
+  if(s.some(full1)||pairs(s)>Math.ceil(cats.length/2))continue;
+  if(small){const n=minMoves(s);if(n<0)continue;if(n>bestN){bestN=n;best=s}if(n>=lv.need){lv.bestN=n;return s}}
+  else{const p=solvePath(s);if(!p)continue;lv.bestN=p.length;return s}}
  lv.bestN=bestN;return best}
-function start(n){HIDE.clear();busy=false;$('sky').innerHTML='';L=n;const lv=LV[L];state=gen();moves=0;undoLeft=3;addLeft=1;mixLeft=2;hist=[];sel=-1;doneSay={};
+/* ---------- уровень ---------- */
+function newMeta(n){meta=[];for(let i=0;i<n;i++)meta.push({k:++KEY,s:i%2?'R':'L'})}
+function snap(){return {s:state.map(x=>x.slice()),m:meta.map(x=>({...x}))}}
+function start(n){HIDE.clear();busy=false;$('sky').innerHTML='';L=n;const lv=LV[L];state=gen();newMeta(state.length);moves=0;undoLeft=3;mixLeft=2;hist=[];sel=-1;doneSay={};
  document.body.classList.add('playing');$('lt').textContent=lv.t;$('ls').textContent=lv.s;$('win').classList.remove('on');render();aina('Поехали! 🐦 Нажми на ветку — потом на другую ветку.')}
 function showIntro(n){HIDE.clear();busy=false;$('sky').innerHTML='';L=n;const lv=LV[L];document.body.classList.remove('playing');$('win').classList.remove('on');$('toast').classList.remove('on');
  $('lvcards').innerHTML=LV.map((l,i)=>`<button class="lvc ${i===L?'on':''}" data-l="${i}"><span class="n">${i+1}</span><span><b>${l.t}</b><small>${l.s}</small></span></button>`).join('');
  $('lvcards').querySelectorAll('.lvc').forEach(x=>x.onclick=()=>{initAudio();showIntro(+x.dataset.l)});
- $('ibub').innerHTML=lv.hello;
- $('chips').innerHTML=lv.cats.map(c=>{const w=c.w[0];return `<button class="chip" data-w="${w[0]+w[1]}">${c.k} — <span class="kk">${w[0]}<span class="t ${hard(w[1])?'h':'s'}">${w[1]}</span></span> 🔊</button>`}).join('');
+ $('ibub').innerHTML=lv.hello;$('ifea').textContent=FEA;
+ $('chips').innerHTML=lv.c.map(k=>{const c=C[k],w=c.w[0];return `<button class="chip" data-w="${w[0]+w[1]}">${c.k} — <span class="kk">${w[0]}<span class="t ${hard(w[0]+w[1])?'h':'s'}">${w[1]}</span></span> 🔊</button>`}).join('');
  $('chips').querySelectorAll('.chip').forEach(x=>x.onclick=()=>{initAudio();sayList([x.dataset.w])});scrollTo(0,0)}
 let toastT=0;
 function aina(h){$('bub').innerHTML=h;const t=$('toast');t.classList.add('on');clearTimeout(toastT);const len=h.replace(/<[^>]+>/g,'').length;toastT=setTimeout(()=>t.classList.remove('on'),Math.min(5000,1800+len*35))}
-function sizeTree(){const rows=Math.ceil(state.length/2),h=$('gmid').clientHeight;const bh=Math.max(104,Math.min(128,Math.floor(h/rows)-8));$('tree').style.setProperty('--bh',bh+'px')}
-function render(land){$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;$('mix').disabled=!mixLeft;
- sizeTree();$('tree').innerHTML=state.map((br,i)=>{const side=i%2?'R':'L',tg=sel===i?topGroup(br):0;
-  return `<div class="br ${side} ${i===sel?'sel':''}" data-i="${i}"><div class="wood"></div><div class="tag">${br.length?'':'пусто'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
-   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}" style="${HIDE.has(b.id)?'visibility:hidden':''}"><div class="face" style="--d:-${(b.id*0.37)%2.6}s">${birdSVG(b.col)}</div><div class="cube"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
- $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i));fitWords()}
+function colCount(){let l=0,r=0;meta.forEach(m=>m.s==='L'?l++:r++);return [l,r]}
+function sizeTree(){const [l,r]=colCount(),rows=Math.max(l,r,1)+.5,h=$('gmid').clientHeight;const bh=Math.max(100,Math.min(122,Math.floor(h/rows)-4));$('tree').style.setProperty('--bh',bh+'px')}
+/* ---------- настоящая ветка (SVG) ---------- */
+function rnd(seed){let x=seed*9301+49297;return ()=>{x=(x*9301+49297)%233280;return x/233280}}
+function woodSVG(w,side,key){const h=34,R=rnd(key),tip=w-4,cy=x=>18-2.5*Math.sin(Math.PI*x/w)+1.5*(x/w),th=x=>15-11.5*(x/w);
+ let top='',bot='';const N=14;for(let i=0;i<=N;i++){const x=tip*i/N;top+=`${i?'L':'M'}${x.toFixed(1)} ${(cy(x)-th(x)/2).toFixed(1)} `}
+ for(let i=N;i>=0;i--){const x=tip*i/N;bot+=`L${x.toFixed(1)} ${(cy(x)+th(x)/2).toFixed(1)} `}
+ const fx=w*(.62+R()*.1),fy=cy(fx)+th(fx)*.2,fx2=Math.min(w-2,fx+w*.2),fy2=31;
+ const ux=w*(.3+R()*.12),uy=cy(ux)-th(ux)*.3;
+ const bark=[.35,.6].map((o,j)=>{let d='';for(let i=0;i<=8;i++){const x=w*.04+(tip*.75)*i/8;d+=`${i?'L':'M'}${x.toFixed(1)} ${(cy(x)-th(x)/2+th(x)*o+Math.sin(i*1.7+j)*.8).toFixed(1)} `}return `<path d="${d}" stroke="${j?'#4e2e18':'#a06a3e'}" stroke-width="1.1" fill="none" opacity=".55" stroke-linecap="round"/>`}).join('');
+ const kx=w*(.16+R()*.1),lf=(x,y,a,s)=>`<path d="M0 0 Q${5*s} ${-6*s} ${12*s} 0 Q${5*s} ${4*s} 0 0Z" fill="#5fb84a" stroke="#3f8a33" stroke-width=".8" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${a})"/>`;
+ const g=`<path d="${top}${bot}Z" fill="#3d241455" transform="translate(0 3)"/>
+ <path d="${top}${bot}Z" fill="url(#bk${key})"/>
+ <path d="M${fx.toFixed(1)} ${(fy-2).toFixed(1)} Q${(fx+(fx2-fx)*.5).toFixed(1)} ${(fy+2).toFixed(1)} ${fx2.toFixed(1)} ${fy2} L${(fx2-2).toFixed(1)} ${fy2+1.5} Q${(fx+(fx2-fx)*.45).toFixed(1)} ${(fy+5).toFixed(1)} ${(fx-5).toFixed(1)} ${(fy+1.5).toFixed(1)}Z" fill="#5e3820"/>
+ <path d="M${ux.toFixed(1)} ${(uy+2).toFixed(1)} Q${(ux+8).toFixed(1)} ${(uy-5).toFixed(1)} ${(ux+16).toFixed(1)} ${(uy-9).toFixed(1)} L${(ux+15).toFixed(1)} ${(uy-7).toFixed(1)} Q${(ux+8).toFixed(1)} ${(uy-2).toFixed(1)} ${(ux+5).toFixed(1)} ${(uy+3).toFixed(1)}Z" fill="#6b4226"/>
+ ${bark}<ellipse cx="${kx.toFixed(1)}" cy="${cy(kx).toFixed(1)}" rx="3.2" ry="2.2" fill="#4a2a15"/><ellipse cx="${kx.toFixed(1)}" cy="${(cy(kx)-.4).toFixed(1)}" rx="1.6" ry="1" fill="#8d5a35"/>
+ ${lf(ux+15,uy-8,-40-R()*20,1)}${lf(tip-2,cy(tip)-1,-15+R()*20,.9)}${lf(fx2-1,fy2,40+R()*20,.8)}`;
+ return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="bk${key}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6538"/><stop offset=".5" stop-color="#7a4a2a"/><stop offset="1" stop-color="#55331c"/></linearGradient></defs>${side==='R'?`<g transform="translate(${w} 0) scale(-1 1)">${g}</g>`:g}</svg>`}
+function brHTML(i){const br=state[i],m=meta[i],tg=sel===i?topGroup(br):0;
+ return `<div class="br ${m.s} ${i===sel?'sel':''} ${m.grow?'grow':''}" data-i="${i}" data-k="${m.k}"><div class="wood"></div><div class="tag">${br.length?'':'пусто'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[0]+w[1])?'h':'s';
+   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''}" data-b="${b.id}" style="${HIDE.has(b.id)?'visibility:hidden':''}"><div class="face" style="--d:-${(b.id*0.37)%2.6}s">${birdSVG(b.col)}</div><div class="cube"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}
+function render(){$('mv').textContent=moves;$('fe').textContent=FEA;$('un').textContent=undoLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('mix').disabled=!mixLeft;
+ $('add').classList.toggle('need',FEA<BRANCH_COST);
+ sizeTree();const cols={L:[],R:[]};state.forEach((b,i)=>cols[meta[i].s].push(i));
+ $('tree').innerHTML=['L','R'].map(sd=>`<div class="col ${sd}">${cols[sd].map(brHTML).join('')}</div>`).join('');
+ meta.forEach(m=>{delete m.grow});
+ $('tree').querySelectorAll('.br').forEach(el=>{el.onclick=()=>tap(+el.dataset.i);const wd=el.querySelector('.wood');wd.innerHTML=woodSVG(Math.max(60,Math.round(wd.clientWidth)),el.classList.contains('L')?'L':'R',+el.dataset.k)});fitWords()}
 function fitWords(){$('tree').querySelectorAll('.bird').forEach(b=>{const max=b.clientWidth;b.querySelectorAll('.cube span').forEach(sp=>{let f=parseFloat(getComputedStyle(sp).fontSize);while(sp.scrollWidth>max&&f>9){f-=.5;sp.style.fontSize=f+'px'}})})}
-addEventListener('resize',()=>{try{if(state&&document.body.classList.contains('playing'))render()}catch(e){}});
+addEventListener('resize',()=>{try{if(state&&document.body.classList.contains('playing')&&!busy)render()}catch(e){}});
 function birdEl(id){return $('tree').querySelector(`[data-b="${id}"]`)}
 function tap(i){initAudio();if(busy)return;const br=state[i];
  if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}
-  sel=i;render();SFX.chirp();const g=topGroup(br),grp=br.slice(br.length-g);grp.forEach(x=>{const e=birdEl(x.id);if(e){e.classList.add('hop');setTimeout(()=>e.classList.remove('hop'),360)}});sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));return}
+  sel=i;render();SFX.chirp();const g=topGroup(br),grp=br.slice(br.length-g);grp.forEach(x=>{const e=birdEl(x.id);if(e){e.classList.add('hop');setTimeout(()=>e.classList.remove('hop'),360)}});
+  const top=br[br.length-1],te=birdEl(top.id);if(te){te.classList.add('say');setTimeout(()=>te&&te.classList.remove('say'),700)}sayList([wordOf(top)]);return}
  if(sel===i){sel=-1;render();return}
  const n=canMove(state,sel,i);
- if(n){hist.push(state.map(x=>x.slice()));const f=sel;sel=-1;const mv=state[f].slice(state[f].length-n).reverse(),before={};mv.forEach(x=>{const e=birdEl(x.id);if(e)before[x.id]=e.getBoundingClientRect()});
+ if(n){hist.push(snap());const f=sel;sel=-1;const mv=state[f].slice(state[f].length-n).reverse(),before={};mv.forEach(x=>{const e=birdEl(x.id);if(e)before[x.id]=e.getBoundingClientRect()});
   for(let k=0;k<n;k++)state[i].push(state[f].pop());moves++;mv.forEach(x=>HIDE.add(x.id));busy=true;render();
   (async()=>{await flyMove(mv.map(x=>x.id),before,i);
-   if(full1(state[i])){const lv=LV[L],grp=state[i].slice(),c=lv.cats[grp[0].c];aina(c.say+' <span class="kk">'+grp.map(wordOf).join(', ')+'</span> 🐦💨');SFX.chirp();
-    await sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));await flyAway(i,grp);state[i]=[];busy=false;render();checkWin()}
+   if(full1(state[i])){const grp=state[i].slice(),c=cats[grp[0].c],words=grp.map(wordOf);aina(c.say+' <span class="kk">'+words.join(', ')+'</span> 🐦💨');SFX.chirp();
+    sayList(words,60);await flyAway(i,grp);await breakBranch(i);const key=meta[i].k;flipRender(()=>{const j=meta.findIndex(m=>m.k===key);state.splice(j,1);meta.splice(j,1)});busy=false;checkWin()}
    else{busy=false;if(n>1)aina('Стайка из '+n+' полетела вместе! 🐦🐦')}})();}
  else{const from=state[sel],b=from[from.length-1],el=birdEl(b.id);if(el){el.classList.remove('up');el.classList.add('shake')}SFX.buzz();
   const why=state[i].length>=cap?'На этой ветке нет места 🙈':JOKES[Math.random()*JOKES.length|0];aina(why);setTimeout(()=>{sel=-1;render()},420)}}
 function checkWin(){if(state.some(b=>b.length))return;const lv=LV[L];
- const best=lv.bestN||lv.cats.length*2;const st=moves<=best+1?3:moves<=best+4?2:1;
- setTimeout(()=>{SFX.win();$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички улетели домой! 🐦💨 Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
-  $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},400)}
-$('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;HIDE.clear();state=hist.pop();undoLeft--;sel=-1;render();aina('Вернула птичек назад ↩️')};
-$('add').onclick=()=>{if(busy||!addLeft)return;addLeft--;state.push([]);sel=-1;render();aina('Новая ветка выросла! 🌿 Используй с умом.')};
+ const best=lv.bestN||cats.length*2,small=cats.length<=4;const st=small?(moves<=best+1?3:moves<=best+4?2:1):(moves<=best?3:moves<=Math.ceil(best*1.35)?2:1);
+ FEA+=st;lsSet(FK,FEA);
+ setTimeout(()=>{SFX.win();$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички улетели! 🐦💨 Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}<br><span class="gain">+${st} 🪶 · у тебя ${FEA} 🪶</span>`;
+  $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},350)}
+$('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;HIDE.clear();const h=hist.pop();state=h.s;meta=h.m;undoLeft--;sel=-1;render();aina('Вернула птичек назад ↩️')};
+$('add').onclick=()=>{if(busy)return;if(FEA<BRANCH_COST){aina(`Новая ветка стоит ${BRANCH_COST} 🪶. У тебя ${FEA} 🪶 — пёрышки дают за победу ⭐`);return}
+ if(state.length>=14){aina('Дерево и так большое 🌳');return}
+ FEA-=BRANCH_COST;lsSet(FK,FEA);const [l,r]=colCount();state.push([]);meta.push({k:++KEY,s:l<=r?'L':'R',grow:true});sel=-1;render();SFX.chirp();aina(`Новая ветка выросла! 🌿 −${BRANCH_COST} 🪶`)};
 $('mix').onclick=()=>{if(busy||!mixLeft)return;const sizes=state.map(b=>b.length),all=[].concat(...state);
- for(let t=0;t<200;t++){const sh=shuffled(all);let k=0;const ns=sizes.map(n=>{const r=sh.slice(k,k+n);k+=n;return r});if(ns.some(full1))continue;if(minMoves(ns)>=0){hist.push(state.map(x=>x.slice()));state=ns;mixLeft--;sel=-1;render();aina('Перемешала птичек! 🔀 Попробуй ещё раз.');return}}
+ for(let t=0;t<200;t++){const sh=shuffled(all);let k=0;const ns=sizes.map(n=>{const r=sh.slice(k,k+n);k+=n;return r});if(ns.some(full1))continue;const ok=cats.length<=4?minMoves(ns)>=0:!!solvePath(ns,20000);
+  if(ok){hist.push(snap());state=ns;mixLeft--;sel=-1;render();aina('Перемешала птичек! 🔀 Попробуй ещё раз.');return}}
  aina('Не получилось перемешать — попробуй «Назад» или «Ветка» 🙈')};
+function syncToggles(){$('tmus').classList.toggle('off',!MUSICON);$('tmus').textContent=MUSICON?'🎵':'🎵';$('tvoi').textContent=VOICE?'🗣️':'🔇';$('tvoi').classList.toggle('off',!VOICE)}
+$('tmus').onclick=()=>{MUSICON=!MUSICON;lsSet('tilashar-birds-music',MUSICON?1:0);if(MUSICON)startMusic();else if(MUS)MUS.pause();syncToggles();aina(MUSICON?'Музыка включена 🎵':'Музыка выключена 🤫')};
+$('tvoi').onclick=()=>{VOICE=!VOICE;lsSet('tilashar-birds-voice',VOICE?1:0);if(!VOICE)qid++;syncToggles();aina(VOICE?'Голос включён 🗣️':'Голос выключен 🔇 Слова видно на кубиках')};
 $('again').onclick=()=>{if(!busy)start(L)};
 $('next').onclick=()=>{if(L<LV.length-1)showIntro(L+1);else start(L)};
 $('play').onclick=()=>{initAudio();start(L)};
 $('back').onclick=()=>{if(!busy)showIntro(L)};
-document.addEventListener('pointerdown',initAudio,{once:true});
-window.__T={start,showIntro,st:()=>state,LV,canMove,doMove,minMoves,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN,busy:()=>busy};
+document.addEventListener('pointerdown',()=>initAudio(),{once:true});
+syncToggles();
+window.__T={start,showIntro,st:()=>state,meta:()=>meta,LV,canMove,minMoves,solvePath,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN,busy:()=>busy,tap,fea:()=>FEA,moves:()=>moves};
 showIntro(0);
 }
 </script>
