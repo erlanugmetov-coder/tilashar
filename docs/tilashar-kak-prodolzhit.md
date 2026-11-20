@@ -28,9 +28,9 @@
 
 | Что | Ссылка | slug | base_version |
 |---|---|---|---|
-| **Главная** «Тілашар · Город Айны» | https://claude.ai/artifact/XbkaoTGKZyFWsFmoNVp5vz | f7cc4e8b-aaf0-4eb6-87fd-c80cd3309583 | 1795155011-214d |
-| **Новый игрок** (public, title «Тілашар · новый игрок») | https://claude.ai/artifact/8DBV3vDwhbHzwxL735NGbM | 3a635b4b-b531-4442-bd45-4af604fff5ac | 1795155306-1adc |
-| **Тест** «Тілашар · тест Тем 4–5» | https://claude.ai/artifact/5ASTa7ZZSA8JLFyrHJrTm6 | 21b5f00c-ac6b-4e41-81fa-26747316bf9d | 1795155311-89e3 |
+| **Главная** «Тілашар · Город Айны» | https://claude.ai/artifact/XbkaoTGKZyFWsFmoNVp5vz | f7cc4e8b-aaf0-4eb6-87fd-c80cd3309583 | 1795156446-5d21 |
+| **Новый игрок** (public, title «Тілашар · новый игрок») | https://claude.ai/artifact/8DBV3vDwhbHzwxL735NGbM | 3a635b4b-b531-4442-bd45-4af604fff5ac | 1795156451-0ecc |
+| **Тест** «Тілашар · тест Тем 4–5» | https://claude.ai/artifact/5ASTa7ZZSA8JLFyrHJrTm6 | 21b5f00c-ac6b-4e41-81fa-26747316bf9d | 1795156455-daec |
 
 - В каждом артефакте: `index.html` + озвучка **`kk21.mp3`**. При новой озвучке: добавить kkNN.mp3, в `remove` указать старый.
 - Новый игрок публикуется с `shared_live:"public"` и `artifact_title:"Тілашар · новый игрок"`.
