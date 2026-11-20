@@ -24,18 +24,18 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .av{flex:none;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:26px;box-shadow:0 2px 0 #c9b98f}
 .bub{background:#fff;border-radius:4px 16px 16px 16px;padding:9px 12px;font-size:15px;box-shadow:0 2px 0 #e3d6b6;flex:1}
 .bub .kk{color:var(--hard);font-weight:800}
-.tree{position:relative}
-.br{position:relative;height:118px;margin:6px 0;cursor:pointer;border-radius:16px;transition:background .2s}
+.tree{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:16px}
+.br{position:relative;height:112px;margin:4px 0;cursor:pointer;border-radius:16px;transition:background .2s}
 .br.sel{background:#ffffff66}
 .br .wood{position:absolute;bottom:30px;height:14px;border-radius:8px;background:linear-gradient(180deg,var(--bark),var(--bark2));box-shadow:0 3px 0 #3d2414}
-.br.L .wood{left:-12px;right:5%;border-radius:0 8px 8px 0}.br.R .wood{right:-12px;left:5%;border-radius:8px 0 0 8px}
-.br .wood:after{content:"";position:absolute;top:6px;width:64px;height:9px;border-radius:8px;background:var(--bark2)}
+.br.L .wood{left:-12px;right:2%;border-radius:0 8px 8px 0}.br.R .wood{right:-12px;left:2%;border-radius:8px 0 0 8px}
+.br .wood:after{content:"";position:absolute;top:6px;width:40px;height:8px;border-radius:8px;background:var(--bark2)}
 .br.L .wood:after{right:14%;transform:rotate(16deg);transform-origin:left}.br.R .wood:after{left:14%;transform:rotate(-16deg);transform-origin:right}
 .br .tag{position:absolute;bottom:4px;font:800 13px "Nunito";color:var(--muted)}.br.L .tag{left:8px}.br.R .tag{right:8px}
-.slots{position:absolute;bottom:38px;display:flex;gap:4px;width:calc(95% - 8px)}
+.slots{position:absolute;bottom:38px;display:flex;gap:3px;width:calc(98% - 6px)}
 .br.L .slots{left:4px;flex-direction:row}.br.R .slots{right:4px;flex-direction:row-reverse}
-.bird{position:relative;width:calc((100% - 12px)/4);max-width:96px;display:flex;flex-direction:column;align-items:center;transition:transform .25s}
-.bird svg{width:58px;height:52px;display:block}
+.bird{position:relative;width:calc((100% - 6px)/3);max-width:96px;display:flex;flex-direction:column;align-items:center;transition:transform .25s}
+.bird svg{width:46px;height:41px;display:block}
 .br.R .bird svg{transform:scaleX(-1)}
 .bird.edge svg{border-radius:50%;background:radial-gradient(circle at 50% 55%,#ffffffb0 0 55%,transparent 57%)}
 .bird.up{transform:translateY(-20px)}
@@ -48,9 +48,9 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 @keyframes fly{0%{transform:none;opacity:1}30%{transform:translateY(-14px) rotate(-6deg)}100%{transform:translate(40px,-260px) rotate(-20deg) scale(.6);opacity:0}}
 .br.R .bird.fly{animation-name:flyR}
 @keyframes flyR{0%{transform:none;opacity:1}30%{transform:translateY(-14px) rotate(6deg)}100%{transform:translate(-40px,-260px) rotate(20deg) scale(.6);opacity:0}}
-.cube{display:inline-flex;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);margin-top:-6px;max-width:100%}
-.cube span{padding:2px 4px;font:800 13px "Rubik",Arial;white-space:nowrap}.cube.sm span{font-size:11px;padding:2px 2px}.cube.xs span{font-size:10px;padding:2px 2px}
-.cube .r{background:#efe6d2}.cube .h{background:var(--hard);color:#fff}.cube .s{background:var(--soft);color:#fff}
+.cube{display:inline-flex;flex-direction:column;align-items:stretch;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);margin-top:-5px;max-width:100%}
+.cube span{display:block;text-align:center;padding:1px 4px;font:800 12px/1.15 "Rubik",Arial;white-space:nowrap}
+.cube .r{background:#efe6d2}.cube .h{background:var(--hard);color:#fff;font-size:13px}.cube .s{background:var(--soft);color:#fff;font-size:13px}
 .bar{position:fixed;left:0;right:0;bottom:0;padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:#fff7e6f2;box-shadow:0 -4px 14px #0002}
 .bar .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .btn{border:0;border-radius:14px;padding:10px 2px;line-height:1.15;background:#fde8cf;color:#8a4a10;font:800 15px "Nunito",Arial;box-shadow:0 3px 0 #e2c39b;cursor:pointer}
@@ -65,6 +65,7 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .card p{margin:8px 0 14px}
 .card .go{width:100%;border:0;border-radius:16px;padding:14px;background:#2fb37a;color:#fff;font:800 17px "Nunito";box-shadow:0 4px 0 #1f8a5b;cursor:pointer}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+@media (max-width:360px){.wrap{padding-left:6px;padding-right:6px}.tree{column-gap:8px}.slots{gap:1px;width:calc(100% - 2px)}.bird{width:calc((100% - 2px)/3)}.cube span{padding:1px 2px}.bird svg{width:40px;height:36px}}
 @media (prefers-reduced-motion:reduce){.bird,.bird.land,.card{animation:none;transition:none}}
 </style></head><body>
 <div class="wrap">
@@ -94,11 +95,17 @@ const LV = [
   cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['саябақ','қа'],['дүкен','ге']]},
         {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['саябақ','та'],['дүкен','де']]},
         {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]}]},
- {t:'Уровень 3',s:'Связи: чей? · что? · с кем?',cap:4,spare:2,need:10,
-  hello:'Трудный уровень! 🔗 чей? (-ның), 🔍 что? (-ны), 🤝 с кем? (-мен). Две запасные ветки — пригодятся!',
-  cats:[{k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың'],['дос','тың']]},
-        {k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды'],['нан','ды']]},
-        {k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен'],['қалам','мен']]}]}
+ {t:'Уровень 3',s:'Связи: чей? · что? · с кем?',cap:3,spare:1,need:8,
+  hello:'Связи! 🔗 чей? (-ның), 🔍 что? (-ны), 🤝 с кем? (-мен). Запасная ветка всего одна — думай! 🧠',
+  cats:[{k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['Алтай','дың'],['дос','тың']]},
+        {k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды']]},
+        {k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен']]}]},
+ {t:'Уровень 4',s:'Мастер: 4 группы',cap:3,spare:2,need:12,
+  hello:'Мастер-уровень! 🏆 Четыре стайки: ➡️ куда, 📍 где, ⬅️ откуда и 🔗 чей. Слушай хвостики 👂',
+  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['мектеп','ке'],['саябақ','қа']]},
+        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['мектеп','те'],['қала','да']]},
+        {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]},
+        {k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]}]}
 ];
 const BIRDC=['#ffb43a','#7ad1ff','#ff8fb1','#9be37a','#c9a2ff','#ffd96a','#ff9d6b','#7fe0c8'];
 const JOKES=['Ой, бзз… тут сидят другие хвостики 🌀','Птичка говорит: «Это не мои!» 🐦','Чик-чирик… не та ветка! 🌀','Хвостик не подходит — послушай его 👂'];
@@ -133,14 +140,16 @@ function gen(){const lv=LV[L];cap=lv.cap;spareN=lv.spare;let id=0;birds=[];
  lv.bestN=bestN;return best}
 function start(n){L=n;const lv=LV[L];state=gen();moves=0;undoLeft=3;addLeft=1;mixLeft=2;hist=[];sel=-1;doneSay={};
  $('lt').textContent=lv.t;$('ls').textContent=lv.s;aina(lv.hello);renderTabs();render();$('win').classList.remove('on')}
-function renderTabs(){$('tabs').innerHTML=LV.map((l,i)=>`<button class="tab ${i===L?'on':''}" data-l="${i}">${i+1}. ${l.s.split(':')[0]}</button>`).join('');
+function renderTabs(){$('tabs').innerHTML=LV.map((l,i)=>`<button class="tab ${i===L?'on':''}" data-l="${i}">${i+1}. ${l.s.split(':')[0].replace('Мастер','🏆 Мастер')}</button>`).join('');
  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{initAudio();start(+b.dataset.l)})}
 function aina(h){$('bub').innerHTML=h}
 function render(land){$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;$('mix').disabled=!mixLeft;
  $('tree').innerHTML=state.map((br,i)=>{const side=i%2?'R':'L',tg=sel===i?topGroup(br):0;
-  return `<div class="br ${side} ${i===sel?'sel':''}" data-i="${i}"><div class="wood"></div><div class="tag">${br.length?'':'пустая ветка'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
-   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}">${birdSVG(b.col)}<div class="cube ${(w[0]+w[1]).length>9?'xs':(w[0]+w[1]).length>7?'sm':''}"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
- $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i))}
+  return `<div class="br ${side} ${i===sel?'sel':''}" data-i="${i}"><div class="wood"></div><div class="tag">${br.length?'':'пусто'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
+   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}">${birdSVG(b.col)}<div class="cube"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
+ $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i));fitWords()}
+function fitWords(){$('tree').querySelectorAll('.bird').forEach(b=>{const max=b.clientWidth;b.querySelectorAll('.cube span').forEach(sp=>{let f=parseFloat(getComputedStyle(sp).fontSize);while(sp.scrollWidth>max&&f>9){f-=.5;sp.style.fontSize=f+'px'}})})}
+addEventListener('resize',()=>{try{fitWords()}catch(e){}});
 function birdEl(id){return $('tree').querySelector(`[data-b="${id}"]`)}
 function tap(i){initAudio();if(busy)return;const br=state[i];
  if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}
