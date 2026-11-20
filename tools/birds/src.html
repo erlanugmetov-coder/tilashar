@@ -144,6 +144,8 @@ body.playing #game{display:flex}body.playing #intro{display:none}
 .hero .fea{display:inline-block;margin-top:6px;background:#fff;border-radius:99px;padding:3px 12px;font-weight:800;box-shadow:0 2px 0 #d9c9a5}
 .gmid{justify-content:flex-start!important}.tree{margin:auto 0}
 @media (max-width:370px){.gtop{gap:5px;padding-left:6px;padding-right:6px}.gtop .lvl b{font-size:15px;white-space:nowrap}.gtop .lvl small{font-size:11px}.tg{width:32px;height:32px;font-size:15px}.gtop .pill{padding:5px 7px;font-size:13px}.back{width:34px;height:34px;font-size:17px}}
+.flyer .face svg{width:48px;height:42px;display:block;overflow:visible}
+@media (max-width:360px){.flyer .face svg{width:40px;height:36px}}
 </style></head><body>
 <div class="clouds"><i></i><i></i><i></i></div><div id="sky"></div>
 <div class="wrap" id="intro">
@@ -241,7 +243,7 @@ function animFlyer(F,pathFn,dur,opts){opts=opts||{};return new Promise(res=>{con
   let ang=Math.atan2(dy,Math.abs(dx)+.001)*57.3*.45;ang=Math.max(-28,Math.min(28,ang));if(faceL)ang=-ang;
   const bob=Math.sin(t*Math.PI*7)*2.5*(1-t),sc=opts.scale?opts.scale(t):1;
   f.style.transform=`translate(${p[0]}px,${p[1]+bob}px) rotate(${ang}deg) scale(${sc})`;if(opts.fade)f.style.opacity=String(opts.fade(t));
-  if(opts.land&&t>.82)f.classList.add('landing');prev=p;if(t<1)requestAnimationFrame(step);else res()}
+  if(opts.land&&t>.82)f.classList.add('landing');if(opts.step)opts.step(p,t);prev=p;if(t<1)requestAnimationFrame(step);else res()}
  requestAnimationFrame(step)})}
 function brEl(i){return $('tree').querySelector(`.br[data-i="${i}"]`)}
 function swayBranch(i,amp){if(RM)return;const br=brEl(i);if(!br)return;const L=br.classList.contains('L'),o=L?'0% 100%':'100% 100%',s=L?1:-1;
@@ -262,17 +264,24 @@ async function flyMove(ids,before,to){ /* перелёт с ветки на ве
 function popCube(el,k){const c=el.querySelector('.cube');if(!c)return;const r=c.getBoundingClientRect();
  if(!RM){const p=c.cloneNode(true);p.classList.add('cpop');p.style.left=r.left+'px';p.style.top=r.top+'px';p.style.width=r.width+'px';document.body.appendChild(p);setTimeout(()=>p.remove(),600)}
  c.style.visibility='hidden';SFX.pop(0);sparks(r,5,['✨','⭐','✨'])}
-async function flyAway(i,grp){ /* кубики лопаются, птички улетают */
+async function flyAway(i,grp){ /* кубики лопаются; стайка цепочкой делает круг над деревом и улетает волной. Игра не ждёт полёта */
  const els=grp.map(x=>birdEl(x.id)).filter(Boolean);const br=brEl(i),isL=br&&br.classList.contains('L');
- els.forEach((el,k)=>setTimeout(()=>popCube(el,k),k*120));
- els.forEach(e=>e.classList.add('crouch'));await wait(150+els.length*120);
+ els.forEach((el,k)=>setTimeout(()=>popCube(el,k),k*110));
+ els.forEach(e=>e.classList.add('crouch'));await wait(120+els.length*110);
  leaves(i,5);swayBranch(i,4);SFX.poof(0);
- const W=innerWidth,dir=isL?1:-1;
- const ps=els.map((el,k)=>new Promise(async res=>{if(RM){el.style.visibility='hidden';res();return}await wait(k*80);
-  const F=makeFlyer(el,true);const r0=el.getBoundingClientRect();el.style.visibility='hidden';const x0=r0.left,y0=r0.top,o=k*26;
-  const P=[[x0,y0],[x0+dir*30,y0-70-o*.4],[x0+dir*W*.3,y0-150-o],[W/2+dir*(W*.25),Math.max(-40,y0-260-o)],[dir>0?W+140:-180,-160-o]];
-  SFX.flap(0);SFX.flap(.22);await animFlyer(F,t=>cr(P,t),1050,{linear:true,scale:t=>1+Math.sin(t*Math.PI)*.15-t*.2});F.f.remove();res()}));
- await Promise.all(ps)}
+ const W=innerWidth,H=innerHeight,dir=isL?1:-1;
+ els.forEach((el,k)=>{if(RM){el.style.visibility='hidden';return}
+  const F=makeFlyer(el,true),r0=el.getBoundingClientRect();el.style.visibility='hidden';F.f.style.transform=`translate(${r0.left}px,${r0.top}px)`;
+  const x0=r0.left,y0=r0.top,R=Math.min(W*.3,120)+k*8,cx=W/2-r0.width/2,cy=Math.max(R+60,Math.min(y0-110,H*.34));
+  const P=[[x0,y0],[x0+dir*22,y0-55]];
+  const a0=Math.atan2(y0-55-cy,x0+dir*22-cx),sw=-dir*Math.PI*1.75;
+  for(let j=1;j<=12;j++){const a=a0+sw*j/12,rr=R+9*Math.sin(j*1.9+k);P.push([cx+Math.cos(a)*rr,cy+Math.sin(a)*rr*.62])}
+  const e=P[P.length-1],ex=dir>0?W+160:-200,ey=-140-k*30;
+  for(let j=1;j<=9;j++){const t=j/9;P.push([e[0]+(ex-e[0])*t,e[1]+(ey-e[1])*t*t+24*Math.sin(j*1.35+k)])}
+  let nf=0;
+  setTimeout(()=>{SFX.flap(0);SFX.flap(.3);animFlyer(F,t=>cr(P,t),2300,{linear:true,scale:t=>1+Math.sin(t*Math.PI)*.22-t*.15,
+   step:(p,t)=>{if(t>nf){nf+=.18;sparks({left:p[0]+10,top:p[1]+10,width:20,height:20},1,['🪶'])}}}).then(()=>F.f.remove())},k*150)});
+ await wait(120)}
 async function breakBranch(i){ /* ветка ломается на 2 обломка и падает */
  const br=brEl(i);if(!br)return;const w=br.querySelector('.wood'),r=w.getBoundingClientRect(),isL=br.classList.contains('L');SFX.crack();
  br.style.visibility='hidden';if(RM)return;
