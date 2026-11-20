@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Книжка правил · Тема 1</title>
+<style>
+:root{--ink:#14222c;--muted:#5d7483;--card:#fffaf0;--line:#e9dcc0;--aina:#ff8a3d;--hard:#2f6fd6;--soft:#e05a9c;--sky:#0d3b4f;--display:"Rubik",Arial,sans-serif;--body:"Nunito",Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--sky);font:600 15px/1.45 var(--body);color:var(--ink);padding:14px 10px 24px}
+.book{background:var(--card);border-radius:24px;padding:16px 14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.ico{width:46px;height:46px;border-radius:14px;background:linear-gradient(160deg,#ffb26b,#ff8a3d);display:grid;place-items:center;font-size:26px;box-shadow:0 3px 0 #d96a1f}
+.badge{font:800 12px var(--body);color:#a35a14;background:#ffe9d2;border-radius:99px;padding:3px 10px;display:inline-block}
+h1{font:800 23px/1.1 var(--display);margin:4px 0 0}
+.say{display:flex;gap:8px;align-items:flex-start;margin:12px 0 4px}
+.av{flex:none;width:34px;height:34px;border-radius:50%;background:#dbeef7;display:grid;place-items:center;font-size:19px}
+.bub{background:#fff;border:2px solid var(--line);border-radius:4px 16px 16px 16px;padding:8px 11px;font-size:14.5px}
+.blk{border-radius:18px;padding:12px 12px 13px;margin-top:12px;position:relative}
+.blk h2{font:800 17px/1.2 var(--display);margin:0 0 8px;display:flex;align-items:center;gap:7px}
+.blk h2 .n{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font:800 13px var(--display);color:#fff;flex:none}
+.b1{background:#fff3e3}.b1 .n{background:var(--aina)}
+.b2{background:#eef3ff}.b2 .n{background:var(--hard)}
+.b3{background:#f4f0ff}.b3 .n{background:#7a5af5}
+.b4{background:#e9f7f0}.b4 .n{background:#2fb37a}
+.b5{background:#fff0f0}.b5 .n{background:#e2574c}
+.b6{background:#e6f1fb}.b6 .n{background:#0c447c}
+.lego{display:inline-flex;border-radius:10px;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.12);vertical-align:middle}
+.lego span{padding:4px 9px;font:700 18px var(--display);white-space:nowrap}
+.lego .r{background:#efe6d2}.lego .h{background:var(--hard);color:#fff}.lego .s{background:var(--soft);color:#fff}
+.cap{display:flex;font:700 11px var(--body);color:var(--muted)}
+.lw{display:inline-flex;flex-direction:column;align-items:flex-start;gap:3px}
+.lw .cap span{text-align:center}
+.eq{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ph{font:800 16px var(--display)}.ru{color:var(--muted);font-size:13.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{background:#fff;border-radius:14px;padding:9px;text-align:center;border:2px solid transparent}
+.tile.h{border-color:#b9cdf4}.tile.s{border-color:#f3bdd8}
+.tile b{display:block;font:800 13px var(--body);margin-bottom:6px}
+.tile small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+.chars{display:grid;gap:7px}
+.ch{display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:8px;background:#fff;border-radius:14px;padding:8px 10px}
+.ch .e{font-size:24px;text-align:center}
+.ch b{font:800 14px var(--body);display:block}
+.ch small{color:var(--muted);font-size:12px}
+.tails{display:flex;gap:4px}
+.tails i{font:800 13px var(--display);font-style:normal;color:#fff;border-radius:7px;padding:3px 6px}
+.ih{background:var(--hard)}.is{background:var(--soft)}
+.fam{display:grid;gap:5px}
+.fr{display:grid;grid-template-columns:92px 1fr;justify-items:start;align-items:center;background:#fff;border-radius:12px;padding:6px 9px}
+.fr .p{font:800 15px var(--display);color:var(--aina)}
+.fr .p small{display:block;font:700 11px var(--body);color:var(--muted)}
+.rest{font:800 13px var(--body);color:#7d98a8;background:#eef2f4;border-radius:8px;padding:3px 8px}
+.joke{margin-top:8px;font-size:13.5px;background:#fff;border-radius:12px;padding:7px 10px;border:2px dashed #cfe8db}
+.trap{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center}
+.trap div{background:#fff;border-radius:14px;padding:9px 6px;font:800 16px var(--display)}
+.trap .no{color:#e2574c}.trap .no s{text-decoration-thickness:2px}
+.trap .yes{color:#1f8a5b}
+.trap small{display:block;font:700 12px var(--body);color:var(--muted);text-decoration:none;margin-top:3px}
+.school{text-align:center}
+.school .w{font:800 22px var(--display);color:#0c447c}
+.school p{margin:6px 0 0;font-size:14px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:12px;overflow:hidden;font-size:13px}
+th,td{padding:6px 5px;text-align:center;border-bottom:1px solid #e3edf7}
+th{font:800 11.5px var(--body);color:#0c447c;background:#d5e7f8}
+td:first-child{text-align:left;font-weight:800;padding-left:9px}
+td.h{color:var(--hard);font-weight:800}td.s{color:var(--soft);font-weight:800}
+tr:last-child td{border-bottom:0}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.btn{border-radius:14px;padding:12px 6px;text-align:center;font:800 15px var(--body)}
+.btn.a{background:#fde8cf;color:#8a4a10}.btn.b{background:#2fb37a;color:#fff;box-shadow:0 3px 0 #1f8a5b}
+.spk{font-size:13px;opacity:.75}
+</style></head><body>
+<div class="book">
+  <div class="top"><div class="ico">📖</div><div><span class="badge">Тема 1 · Кто я?</span><h1>Хвостик «это я»</h1></div></div>
+
+  <div class="say"><div class="av">🤖</div><div class="bub">Это моя книжка памяти! Облако стёрло слова — а тут всё записано. Загляни, если забудешь 😉</div></div>
+
+  <div class="blk b1">
+    <h2><span class="n">1</span>Казахский — конструктор 🧱</h2>
+    <div class="eq">
+      <span class="lw"><span class="lego"><span class="r">оқушы</span><span class="h">мын</span></span><span class="cap"><span style="width:64px">ученик</span><span style="width:46px">я</span></span></span>
+      <span>=</span>
+      <span><span class="ph">Мен оқушымын</span> <span class="spk">🔊</span><br><span class="ru">я ученик</span></span>
+    </div>
+    <div class="joke">Слово — большая деталь, хвостик — маленькая. Без хвостика фраза — как робот без батарейки 🔋</div>
+  </div>
+
+  <div class="blk b2">
+    <h2><span class="n">2</span>Синий или розовый?</h2>
+    <div class="two">
+      <div class="tile h"><b>Твёрдое слово</b><span class="lego"><span class="r">бала</span><span class="h">мын</span></span><small>а, о, ұ, ы — синий</small></div>
+      <div class="tile s"><b>Мягкое слово</b><span class="lego"><span class="r">биші</span><span class="s">мін</span></span><small>ә, е, і, ө, ү — розовый</small></div>
+    </div>
+    <div class="joke">👂 Слушай последнюю гласную в слове — она и выбирает цвет.</div>
+  </div>
+
+  <div class="blk b3">
+    <h2><span class="n">3</span>Буквы с характером</h2>
+    <div class="chars">
+      <div class="ch"><span class="e">😌</span><span><b>Спокойные</b><small>гласные, м, н, ң, р, л, й, у</small></span><span class="tails"><i class="ih">мын</i><i class="is">мін</i></span></div>
+      <div class="ch"><span class="e">🤫</span><span><b>Шептуны</b><small>к, қ, п, с, т, ш</small></span><span class="tails"><i class="ih">пын</i><i class="is">пін</i></span></div>
+      <div class="ch"><span class="e">🐝</span><span><b>Жужжалки</b><small>з, ж</small></span><span class="tails"><i class="ih">бын</i><i class="is">бін</i></span></div>
+    </div>
+    <div class="eq" style="margin-top:9px;justify-content:space-around">
+      <span class="lego"><span class="r">оқушы</span><span class="h">мын</span></span>
+      <span class="lego"><span class="r">дос</span><span class="h">пын</span></span>
+      <span class="lego"><span class="r">қыз</span><span class="h">бын</span></span>
+    </div>
+    <div class="joke">Шептун «с» шепчет хвостику: «Будь „п“!» А «м» такая: «Ок» 🤫😄</div>
+  </div>
+
+  <div class="blk b4">
+    <h2><span class="n">4</span>Вся семья на одном слове</h2>
+    <div class="fam">
+      <div class="fr"><span class="p">Мен<small>я</small></span><span class="lego"><span class="r">оқушы</span><span class="h">мын</span></span></div>
+      <div class="fr"><span class="p">Сен<small>ты</small></span><span class="lego"><span class="r">оқушы</span><span class="h">сың</span></span></div>
+      <div class="fr"><span class="p">Сіз<small>вы, вежливо</small></span><span class="lego"><span class="r">оқушы</span><span class="h">сыз</span></span></div>
+      <div class="fr"><span class="p">Ол<small>он, она</small></span><span><span class="lego"><span class="r">оқушы</span></span> <span class="rest">без хвостика</span></span></div>
+      <div class="fr"><span class="p">Біз<small>мы</small></span><span class="lego"><span class="r">оқушы</span><span class="h">мыз</span></span></div>
+      <div class="fr"><span class="p">Сендер<small>вы все</small></span><span class="lego"><span class="r">оқушы</span><span class="h">сыңдар</span></span></div>
+      <div class="fr"><span class="p">Сіздер<small>вы все, вежливо</small></span><span class="lego"><span class="r">оқушы</span><span class="h">сыздар</span></span></div>
+      <div class="fr"><span class="p">Олар<small>они</small></span><span><span class="lego"><span class="r">оқушы</span></span> <span class="rest">без хвостика</span></span></div>
+    </div>
+    <div class="joke">Ол и Олар хвостик не носят — отдыхают 😴</div>
+  </div>
+
+  <div class="blk b5">
+    <h2><span class="n">5</span>⚠️ Ловушка!</h2>
+    <div class="trap">
+      <div class="no"><s>Мен досмын</s><small>«с» — шептун!</small></div>
+      <div class="yes">Мен доспын ✅<small>я друг</small></div>
+    </div>
+  </div>
+
+  <div class="blk b6">
+    <h2><span class="n">6</span>🏫 Как это в школе</h2>
+    <div class="school"><div class="w">жіктік жалғау</div><p>Так в учебнике называют хвостик «кто». Он показывает, <b>кто</b> это: я, ты, мы…</p></div>
+    <p style="margin:10px 0 6px;font:800 13px var(--body);color:#0c447c;text-align:center">📋 Шпаргалка — все хвостики</p>
+    <table>
+      <tr><th></th><th>😌 спокойные</th><th>🤫 шептуны</th><th>🐝 з, ж</th></tr>
+      <tr><td>Мен</td><td><span class="h" style="color:var(--hard)">-мын</span> / <span style="color:var(--soft)">-мін</span></td><td><span style="color:var(--hard)">-пын</span> / <span style="color:var(--soft)">-пін</span></td><td><span style="color:var(--hard)">-бын</span> / <span style="color:var(--soft)">-бін</span></td></tr>
+      <tr><td>Біз</td><td><span style="color:var(--hard)">-мыз</span> / <span style="color:var(--soft)">-міз</span></td><td><span style="color:var(--hard)">-пыз</span> / <span style="color:var(--soft)">-піз</span></td><td><span style="color:var(--hard)">-быз</span> / <span style="color:var(--soft)">-біз</span></td></tr>
+    </table>
+    <table style="margin-top:8px">
+      <tr><th></th><th>твёрдое</th><th>мягкое</th></tr>
+      <tr><td>Сен</td><td class="h">-сың</td><td class="s">-сің</td></tr>
+      <tr><td>Сіз</td><td class="h">-сыз</td><td class="s">-сіз</td></tr>
+      <tr><td>Сендер</td><td class="h">-сыңдар</td><td class="s">-сіңдер</td></tr>
+      <tr><td>Сіздер</td><td class="h">-сыздар</td><td class="s">-сіздер</td></tr>
+      <tr><td>Ол, Олар</td><td colspan="2" style="color:#7d98a8;font-weight:800">без хвостика</td></tr>
+    </table>
+  </div>
+
+  <div class="btns"><div class="btn a">🔊 Послушать всё</div><div class="btn b">К урокам →</div></div>
+</div>
+</body></html>
