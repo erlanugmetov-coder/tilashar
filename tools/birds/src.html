@@ -26,7 +26,7 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .bub{background:#fff;border-radius:4px 16px 16px 16px;padding:9px 12px;font-size:15px;box-shadow:0 2px 0 #e3d6b6;flex:1}
 .bub .kk{color:var(--hard);font-weight:800}
 .tree{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:16px}
-.br{position:relative;height:112px;margin:4px 0;cursor:pointer;border-radius:16px;transition:background .2s}
+.br{position:relative;height:var(--bh,112px);margin:4px 0;cursor:pointer;border-radius:16px;transition:background .2s}
 .br.sel{background:#ffffff66}
 .br .wood{position:absolute;bottom:30px;height:14px;border-radius:8px;background:linear-gradient(180deg,var(--bark),var(--bark2));box-shadow:0 3px 0 #3d2414}
 .br.L .wood{left:-12px;right:2%;border-radius:0 8px 8px 0}.br.R .wood{right:-12px;left:2%;border-radius:8px 0 0 8px}
@@ -70,7 +70,7 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .clouds i:before{width:60px;height:60px;left:22px;top:-28px}.clouds i:after{width:46px;height:46px;left:72px;top:-18px}
 .clouds i:nth-child(1){top:12%;animation-duration:70s;animation-delay:-20s}.clouds i:nth-child(2){top:38%;transform:scale(.7);animation-duration:95s;animation-delay:-60s;opacity:.55}.clouds i:nth-child(3){top:66%;transform:scale(.85);animation-duration:85s;animation-delay:-5s;opacity:.5}
 @keyframes cloud{from{left:-180px}to{left:105%}}
-.wrap,.bar{position:relative;z-index:1}.bar{position:fixed}
+.wrap{position:relative;z-index:1}
 .cube{display:inline-flex;flex-direction:column;align-items:stretch;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);margin-top:-5px;max-width:100%}
 .cube span{display:block;text-align:center;padding:1px 4px;font:800 12px/1.15 "Rubik",Arial;white-space:nowrap}
 .cube .r{background:#efe6d2}.cube .h{background:var(--hard);color:#fff;font-size:13px}.cube .s{background:var(--soft);color:#fff;font-size:13px}
@@ -89,25 +89,57 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .card .go{width:100%;border:0;border-radius:16px;padding:14px;background:#2fb37a;color:#fff;font:800 17px "Nunito";box-shadow:0 4px 0 #1f8a5b;cursor:pointer}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
 
+
+/* --- экран 1: подготовка --- */
+.hero{text-align:center;margin:4px 0 10px}.hero h1{font:800 26px/1.1 "Rubik",Arial;margin:0}.hero p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.lvcards{display:grid;gap:8px}
+.lvc{display:flex;align-items:center;gap:10px;border:0;border-radius:16px;padding:10px 12px;background:#ffffffc4;text-align:left;font:700 14px "Nunito",Arial;color:var(--ink);box-shadow:0 2px 0 #d9c9a5;cursor:pointer}
+.lvc .n{flex:none;width:34px;height:34px;border-radius:50%;background:#fff3e2;color:#d96a1f;display:grid;place-items:center;font:800 18px "Rubik"}
+.lvc b{display:block;font:800 16px "Rubik",Arial}.lvc small{color:var(--muted);font-size:13px}
+.lvc.on{background:var(--aina);color:#fff;box-shadow:0 3px 0 #d96a1f}.lvc.on small{color:#fff}.lvc.on .n{background:#fff}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;margin:6px 0 4px}
+.chip{border:0;background:#fff;border-radius:12px;padding:7px 10px;font:700 14px "Nunito",Arial;color:var(--ink);box-shadow:0 2px 0 #e3d6b6;text-align:left;cursor:pointer}
+.chip .kk{font-weight:800}.chip .kk .t{color:#fff;border-radius:5px;padding:0 3px;margin-left:1px}.t.h{background:var(--hard)}.t.s{background:var(--soft)}
+.play{display:block;width:100%;margin:14px 0 6px;border:0;border-radius:18px;padding:16px;background:#2fb37a;color:#fff;font:800 20px "Rubik",Arial;box-shadow:0 5px 0 #1f8a5b;cursor:pointer}
+.play:active{transform:translateY(3px);box-shadow:0 2px 0 #1f8a5b}
+/* --- экран 2: игра --- */
+#game{display:none;position:fixed;inset:0;z-index:1;flex-direction:column}
+body.playing #game{display:flex}body.playing #intro{display:none}
+.gtop{display:flex;align-items:center;gap:8px;padding:10px 10px 4px;max-width:520px;width:100%;margin:0 auto;box-sizing:border-box}
+.back{flex:none;border:0;width:40px;height:40px;border-radius:50%;background:#fff;font:800 20px "Rubik";color:var(--ink);box-shadow:0 2px 0 #d9c9a5;cursor:pointer}
+.gtop .lvl b{font-size:18px}.gtop .lvl small{font-size:12px}
+.gmid{flex:1;min-height:0;overflow-y:auto;overflow-x:clip;max-width:520px;width:100%;margin:0 auto;padding:0 10px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;position:relative}
+.gbar{max-width:520px;width:100%;margin:0 auto;box-sizing:border-box;display:flex;justify-content:center;gap:14px;padding:6px 10px calc(10px + env(safe-area-inset-bottom))}
+.gb{position:relative;border:0;width:54px;height:54px;border-radius:50%;background:#fde8cf;font-size:24px;box-shadow:0 3px 0 #e2c39b;cursor:pointer}
+.gb:disabled{opacity:.4}
+.gb small{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;line-height:20px;border-radius:99px;background:#e2574c;color:#fff;font:800 12px "Rubik"}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translate(-50%,8px);width:min(500px,calc(100% - 24px));box-sizing:border-box;display:flex;gap:8px;align-items:center;background:#fff;border-radius:16px;padding:8px 12px;font-size:15px;box-shadow:0 4px 14px #0003;opacity:0;transition:opacity .25s,transform .25s;z-index:6;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}.toast .av{width:32px;height:32px;font-size:20px;box-shadow:none}.toast .kk{color:var(--hard);font-weight:800}
 .feather{position:fixed;pointer-events:none;font-size:18px;z-index:8;animation:fth 1.2s ease-out forwards}
 @keyframes fth{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
 @media (max-width:360px){.wrap{padding-left:6px;padding-right:6px}.tree{column-gap:8px}.slots{gap:1px;width:calc(100% - 2px)}.bird{width:calc((100% - 2px)/3)}.cube span{padding:1px 2px}.bird svg{width:40px;height:36px}}
 @media (prefers-reduced-motion:reduce){.bird,.card,.bsv,.face,.feather,.leaf,.clouds i{animation:none!important;transition:none!important}}
 </style></head><body>
 <div class="clouds"><i></i><i></i><i></i></div><div id="sky"></div>
-<div class="wrap">
-  <div class="top"><div class="lvl"><b id="lt">Уровень 1</b><small id="ls">куда и где</small></div><div class="pill">👣 <span id="mv">0</span></div></div>
-  <div class="tabs" id="tabs"></div>
-  <div class="say"><div class="av">🤖</div><div class="bub" id="bub">Привет! Рассади птичек по веткам 🐦</div></div>
-  <div class="tree" id="tree"></div>
-  <div class="note">Тест мини-игры «Рассади птичек» · звук включится после первого нажатия 🔊</div>
+<div class="wrap" id="intro">
+  <div class="hero"><h1>🐦 Рассади птичек</h1><p>Собери одинаковые хвостики — и стайка улетит</p></div>
+  <div class="lvcards" id="lvcards"></div>
+  <div class="say"><div class="av">🤖</div><div class="bub" id="ibub"></div></div>
+  <div class="chips" id="chips"></div>
+  <button class="play" id="play">Играть ▶</button>
+  <div class="note">Тест мини-игры · нажми на хвостик, чтобы услышать 🔊</div>
 </div>
-<div class="bar"><div class="in">
-  <button class="btn" id="undo">↩️<br>Назад<small id="un">3</small></button>
-  <button class="btn" id="add">🌿<br>Ветка<small id="ad">1</small></button>
-  <button class="btn" id="mix">🔀<br>Смешать<small id="mx">2</small></button>
-  <button class="btn" id="again">🔄<br>Заново</button>
-</div></div>
+<div id="game">
+  <div class="gtop"><button class="back" id="back" aria-label="Назад к уровням">←</button><div class="lvl"><b id="lt">Уровень 1</b><small id="ls"></small></div><div class="pill">👣 <span id="mv">0</span></div></div>
+  <div class="gmid" id="gmid"><div class="tree" id="tree"></div></div>
+  <div class="gbar">
+    <button class="gb" id="undo" aria-label="Назад">↩️<small id="un">3</small></button>
+    <button class="gb" id="add" aria-label="Ветка">🌿<small id="ad">1</small></button>
+    <button class="gb" id="mix" aria-label="Смешать">🔀<small id="mx">2</small></button>
+    <button class="gb" id="again" aria-label="Заново">🔄</button>
+  </div>
+</div>
+<div class="toast" id="toast"><div class="av">🤖</div><div id="bub"></div></div>
 <div class="win" id="win"><div class="card"><div style="font-size:46px">🎉</div><h2>Жарайсың!</h2><div class="stars" id="stars">⭐⭐⭐</div><p id="wt"></p><button class="go" id="next">Дальше →</button></div></div>
 <script>
 {
@@ -132,7 +164,15 @@ const LV = [
   cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['мектеп','ке'],['саябақ','қа']]},
         {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['мектеп','те'],['қала','да']]},
         {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]},
-        {k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]}]}
+        {k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]}]},
+ {t:'Уровень 5',s:'🌳 Большое дерево: 6 стаек',cap:3,spare:2,need:14,
+  hello:'Большое дерево! 🌳 Шесть стаек: ➡️ куда, 📍 где, ⬅️ откуда, 🔗 чей, 🔍 что и 🤝 с кем. Слушай хвостики 👂',
+  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['мектеп','ке'],['саябақ','қа']]},
+        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['мектеп','те'],['қала','да']]},
+        {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]},
+        {k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың']]},
+        {k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды']]},
+        {k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен']]}]}
 ];
 const BIRDC=['#ffb43a','#7ad1ff','#ff8fb1','#9be37a','#c9a2ff','#ffd96a','#ff9d6b','#7fe0c8'];
 const JOKES=['Ой, бзз… тут сидят другие хвостики 🌀','Птичка говорит: «Это не мои!» 🐦','Чик-чирик… не та ветка! 🌀','Хвостик не подходит — послушай его 👂'];
@@ -218,17 +258,23 @@ function gen(){const lv=LV[L];cap=lv.cap;spareN=lv.spare;let id=0;birds=[];
   if(s.some(full1))continue;const n=minMoves(s);if(n<0)continue;if(n>bestN){bestN=n;best=s}if(n>=lv.need){lv.bestN=n;return s}}
  lv.bestN=bestN;return best}
 function start(n){HIDE.clear();busy=false;$('sky').innerHTML='';L=n;const lv=LV[L];state=gen();moves=0;undoLeft=3;addLeft=1;mixLeft=2;hist=[];sel=-1;doneSay={};
- $('lt').textContent=lv.t;$('ls').textContent=lv.s;aina(lv.hello);renderTabs();render();$('win').classList.remove('on')}
-function renderTabs(){$('tabs').innerHTML=LV.map((l,i)=>`<button class="tab ${i===L?'on':''}" data-l="${i}">${i+1}. ${l.s.split(':')[0].replace('Мастер','🏆 Мастер')}</button>`).join('');
- $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{initAudio();start(+b.dataset.l)})}
-function aina(h){$('bub').innerHTML=h}
+ document.body.classList.add('playing');$('lt').textContent=lv.t;$('ls').textContent=lv.s;$('win').classList.remove('on');render();aina('Поехали! 🐦 Нажми на ветку — потом на другую ветку.')}
+function showIntro(n){HIDE.clear();busy=false;$('sky').innerHTML='';L=n;const lv=LV[L];document.body.classList.remove('playing');$('win').classList.remove('on');$('toast').classList.remove('on');
+ $('lvcards').innerHTML=LV.map((l,i)=>`<button class="lvc ${i===L?'on':''}" data-l="${i}"><span class="n">${i+1}</span><span><b>${l.t}</b><small>${l.s}</small></span></button>`).join('');
+ $('lvcards').querySelectorAll('.lvc').forEach(x=>x.onclick=()=>{initAudio();showIntro(+x.dataset.l)});
+ $('ibub').innerHTML=lv.hello;
+ $('chips').innerHTML=lv.cats.map(c=>{const w=c.w[0];return `<button class="chip" data-w="${w[0]+w[1]}">${c.k} — <span class="kk">${w[0]}<span class="t ${hard(w[1])?'h':'s'}">${w[1]}</span></span> 🔊</button>`}).join('');
+ $('chips').querySelectorAll('.chip').forEach(x=>x.onclick=()=>{initAudio();sayList([x.dataset.w])});scrollTo(0,0)}
+let toastT=0;
+function aina(h){$('bub').innerHTML=h;const t=$('toast');t.classList.add('on');clearTimeout(toastT);const len=h.replace(/<[^>]+>/g,'').length;toastT=setTimeout(()=>t.classList.remove('on'),Math.min(5000,1800+len*35))}
+function sizeTree(){const rows=Math.ceil(state.length/2),h=$('gmid').clientHeight;const bh=Math.max(104,Math.min(128,Math.floor(h/rows)-8));$('tree').style.setProperty('--bh',bh+'px')}
 function render(land){$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;$('mix').disabled=!mixLeft;
- $('tree').innerHTML=state.map((br,i)=>{const side=i%2?'R':'L',tg=sel===i?topGroup(br):0;
+ sizeTree();$('tree').innerHTML=state.map((br,i)=>{const side=i%2?'R':'L',tg=sel===i?topGroup(br):0;
   return `<div class="br ${side} ${i===sel?'sel':''}" data-i="${i}"><div class="wood"></div><div class="tag">${br.length?'':'пусто'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
    return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}" style="${HIDE.has(b.id)?'visibility:hidden':''}"><div class="face" style="--d:-${(b.id*0.37)%2.6}s">${birdSVG(b.col)}</div><div class="cube"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
  $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i));fitWords()}
 function fitWords(){$('tree').querySelectorAll('.bird').forEach(b=>{const max=b.clientWidth;b.querySelectorAll('.cube span').forEach(sp=>{let f=parseFloat(getComputedStyle(sp).fontSize);while(sp.scrollWidth>max&&f>9){f-=.5;sp.style.fontSize=f+'px'}})})}
-addEventListener('resize',()=>{try{fitWords()}catch(e){}});
+addEventListener('resize',()=>{try{if(state&&document.body.classList.contains('playing'))render()}catch(e){}});
 function birdEl(id){return $('tree').querySelector(`[data-b="${id}"]`)}
 function tap(i){initAudio();if(busy)return;const br=state[i];
  if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}
@@ -253,10 +299,12 @@ $('mix').onclick=()=>{if(busy||!mixLeft)return;const sizes=state.map(b=>b.length
  for(let t=0;t<200;t++){const sh=shuffled(all);let k=0;const ns=sizes.map(n=>{const r=sh.slice(k,k+n);k+=n;return r});if(ns.some(full1))continue;if(minMoves(ns)>=0){hist.push(state.map(x=>x.slice()));state=ns;mixLeft--;sel=-1;render();aina('Перемешала птичек! 🔀 Попробуй ещё раз.');return}}
  aina('Не получилось перемешать — попробуй «Назад» или «Ветка» 🙈')};
 $('again').onclick=()=>{if(!busy)start(L)};
-$('next').onclick=()=>start(L<LV.length-1?L+1:L);
+$('next').onclick=()=>{if(L<LV.length-1)showIntro(L+1);else start(L)};
+$('play').onclick=()=>{initAudio();start(L)};
+$('back').onclick=()=>{if(!busy)showIntro(L)};
 document.addEventListener('pointerdown',initAudio,{once:true});
-window.__T={st:()=>state,LV,canMove,doMove,minMoves,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN,busy:()=>busy};
-start(0);
+window.__T={start,showIntro,st:()=>state,LV,canMove,doMove,minMoves,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN,busy:()=>busy};
+showIntro(0);
 }
 </script>
 </body></html>
