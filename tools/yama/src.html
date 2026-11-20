@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Тілашар · яма фраз (тест)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: весёлая аркада, тёплая, как Город Айны
+   IDEA: яма, в которую падают кубики-фразы; хвостик с полочки их взрывает
+   PICTURE: сама яма с кубиками
+   COLOUR/TYPE: небо, кубики: кто — оранжевый, слово — бежевый, хвостик — синий/розовый; Rubik
+   LAYOUT: шапка · полочка хвостиков · яма · Айна снизу */
+:root{color-scheme:light;--ink:#14222c;--muted:#5d7483;--hard:#2f6fd6;--soft:#e05a9c;--aina:#ff8a3d;--rowh:62px}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font:700 15px/1.35 "Nunito",Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#bfe6ff 0%,#e6f6ff 55%,#fff6e3 100%);user-select:none}
+.app{max-width:520px;height:100%;margin:0 auto;display:flex;flex-direction:column;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;gap:6px}
+.top b{flex:1;font:800 20px "Rubik",Arial;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{flex:none;background:#fff;border-radius:99px;padding:5px 10px;font:800 15px "Rubik",Arial;box-shadow:0 2px 0 #d9c9a5;white-space:nowrap}
+.pill.fire{background:#fff3e2;color:#d9531f}
+.shelf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 8px;padding:10px;border-radius:18px;background:#fff9;box-shadow:inset 0 -3px 0 #e8dcc0}
+.tl{border:0;border-radius:14px;padding:12px 4px;font:800 20px "Rubik",Arial;color:#fff;cursor:pointer;box-shadow:0 4px 0 #0003;transition:transform .1s}
+.tl:active{transform:translateY(3px);box-shadow:0 1px 0 #0003}
+.tl.h{background:var(--hard)}.tl.s{background:var(--soft)}.tl.z{background:#8d99a6}
+.tl.new{animation:pop .35s}
+.tl.bad{animation:shake .4s}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.1)}100%{transform:none;opacity:1}}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.pit{position:relative;flex:1;min-height:0;border-radius:20px;background:linear-gradient(180deg,#ffffff55,#f5e6c8aa);box-shadow:inset 0 3px 10px #0001,inset 0 -4px 0 #e2cfa6;overflow:hidden}
+.edge{position:absolute;left:8px;right:8px;border-top:3px dashed #e2574c;opacity:.55}
+.edge span{position:absolute;right:0;top:-20px;font-size:12px;color:#e2574c}
+.edge.warn{opacity:1;animation:blink .6s infinite alternate}
+@keyframes blink{to{opacity:.3}}
+.row{position:absolute;left:0;right:0;height:var(--rowh);display:flex;justify-content:center;align-items:center;gap:6px;transition:bottom .35s cubic-bezier(.3,1.4,.5,1);cursor:pointer}
+.row.sel .cb{box-shadow:0 4px 0 #0003,0 0 0 3px #fff,0 0 0 6px #ffb15c}
+.row.bad{animation:shake .4s}
+.cb{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 14px;border-radius:12px;font:800 20px "Rubik",Arial;box-shadow:0 4px 0 #0003;white-space:nowrap}
+.cb.p{background:var(--aina);color:#fff}.cb.w{background:#fff8ea;color:#3a2a14;border:2px solid #e7d3ac}
+.cb.q{background:transparent;border:2px dashed #b9a98a;color:#b9a98a;min-width:58px;box-shadow:none}
+.cb.mg{background:#fff8ea;border:2px solid #ffb15c;color:#3a2a14}.cb.mg i{font-style:normal;color:#fff;border-radius:7px;padding:0 5px;margin-left:2px}
+.cb.mg i.h{background:var(--hard)}.cb.mg i.s{background:var(--soft)}
+.drop{animation:drop .5s cubic-bezier(.5,0,.7,1.4) both}
+@keyframes drop{from{transform:translateY(var(--fall,-500px))}to{transform:none}}
+.boom{animation:boom .45s ease-in forwards}
+@keyframes boom{0%{transform:scale(1)}35%{transform:scale(1.12)}100%{transform:scale(.2);opacity:0}}
+.spark{position:fixed;pointer-events:none;z-index:9;font-size:20px;animation:spark .9s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.fly{position:fixed;z-index:8;pointer-events:none;margin:0}
+.tr{position:absolute;left:0;right:0;text-align:center;font:800 16px "Rubik";color:#2b7a4b;pointer-events:none;animation:tr 1.4s ease-out forwards}
+@keyframes tr{0%{opacity:0;transform:translateY(6px)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+.toast{position:absolute;left:10px;right:10px;top:10px;transform:translateY(-8px);display:flex;gap:8px;align-items:center;background:#fff;border-radius:16px;padding:8px 12px;font-size:15px;box-shadow:0 4px 14px #0002;opacity:0;transition:opacity .25s,transform .25s;z-index:6;pointer-events:none}
+.toast.on{opacity:1;transform:none}.toast .av{flex:none;width:32px;height:32px;border-radius:50%;background:#fff3e2;display:grid;place-items:center;font-size:20px}
+.kk{color:var(--hard);font-weight:800}
+.ov{position:fixed;inset:0;background:#0d3b4fcc;display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.ov.off{display:none}
+.card{background:#fffaf0;border-radius:24px;padding:22px 18px;max-width:360px;width:100%;text-align:center;animation:pop .35s}
+.card h2{font:800 28px "Rubik";margin:4px 0 6px}
+.card p{margin:8px 0 14px;font-size:16px}
+.go{width:100%;border:0;border-radius:16px;padding:15px;background:#2fb37a;color:#fff;font:800 19px "Rubik";box-shadow:0 4px 0 #1f8a5b;cursor:pointer}
+.demo{display:flex;justify-content:center;gap:5px;margin:10px 0}.demo .cb{height:38px;font-size:17px;padding:0 10px}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+@media (max-width:360px){.cb{font-size:16px;padding:0 8px;height:42px}.row{gap:4px}.tl{font-size:18px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="app">
+  <div class="top"><b>Яма фраз</b><span class="pill">⭐ <span id="sc">0</span></span><span class="pill fire">🔥 <span id="cm">0</span></span><span class="pill">❌ <span id="mi">0</span></span></div>
+  <div class="shelf" id="shelf"></div>
+  <div class="pit" id="pit"><div class="edge" id="edge"><span>край</span></div><div class="toast" id="toast"><div class="av">🤖</div><div id="bub"></div></div></div>
+</div>
+<div class="ov" id="start"><div class="card"><div style="font-size:44px">🧱</div><h2>Яма фраз</h2>
+ <p>Падают кубики <b>кто + слово</b>. Нажми нужный хвостик — фраза взорвётся! Не дай яме заполниться до края.</p>
+ <div class="demo"><span class="cb p">Мен</span><span class="cb w">дос</span><span class="cb mg" style="background:var(--hard);color:#fff;border-color:var(--hard)">-пын</span></div>
+ <button class="go" id="play">Играть ▶</button><div class="note">Прототип · без озвучки</div></div></div>
+<div class="ov off" id="over"><div class="card"><div style="font-size:44px">🕳️</div><h2>Яма полна!</h2><p id="ot"></p><button class="go" id="again">Ещё раз 🔄</button></div></div>
+<script>
+{
+const COMBOS=__COMBOS__;
+const $=id=>document.getElementById(id),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PERS={'Мен':'«я»','Сен':'«ты»','Сіз':'«вы» (вежливо)','Біз':'«мы»','Сендер':'«вы» (все)','Сіздер':'«вы» (вежливо, много)'};
+const PRU={'Мен':'я','Сен':'ты','Сіз':'вы','Біз':'мы','Ол':'он / она','Сендер':'вы (все)','Сіздер':'вы','Олар':'они'};
+function tailOf(p,w){const soft=/[әеіөү]/.test(w),l=w.slice(-1),vl='сткқпшфхцчщ'.includes(l),bz='зж'.includes(l);
+ switch(p){case 'Мен':return (vl?'п':bz?'б':'м')+(soft?'ін':'ын');case 'Біз':return (vl?'п':bz?'б':'м')+(soft?'із':'ыз');
+  case 'Сен':return soft?'сің':'сың';case 'Сіз':return soft?'сіз':'сыз';case 'Сендер':return soft?'сіңдер':'сыңдар';case 'Сіздер':return soft?'сіздер':'сыздар';default:return ''}}
+const NONE='∅';const isSoft=t=>/[әеіөү]/.test(t);
+const TAILP={};Object.keys(PERS).forEach(q=>['бала','суретші','дос','қыз','ұстаз','дәрігер','әнші','қонақ'].forEach(w=>{TAILP[tailOf(q,w)]=q}));
+/* этапы: открываются по очкам */
+const STAGES=[{at:0,p:['Мен'],say:'Начнём с <span class="kk">Мен</span> — «я» 🙋'},{at:50,p:['Мен','Сен'],say:'Новый кубик: <span class="kk">Сен</span> — «ты» 👉'},
+ {at:120,p:['Мен','Сен','Біз','Сіз'],say:'Ещё: <span class="kk">Біз</span> — мы, <span class="kk">Сіз</span> — вы 🎩'},
+ {at:200,p:['Мен','Сен','Біз','Сіз','Ол'],say:'<span class="kk">Ол</span> — без хвостика! Жми <b>∅</b> 😎'},
+ {at:300,p:['Мен','Сен','Біз','Сіз','Ол','Сендер','Сіздер','Олар'],say:'Вся семья! <span class="kk">Сендер, Сіздер, Олар</span> 👨‍👩‍👧‍👦'}];
+let MAXR=7;function calcMax(){MAXR=Math.max(4,Math.min(9,Math.floor(($('pit').clientHeight-78)/rowH())))}
+let rows=[],shelf=[],sel=null,score=0,combo=0,mist=0,stage=0,interval=7000,nextAt=0,running=false,RID=0,TID=0,lastP='',busy=0,timer=0;
+/* ---------- звуки (синтез, без голоса) ---------- */
+let AC=null;function ac(){if(!AC)try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}return AC}
+function tone(f1,f2,d,type,vol,dl){const a=ac();if(!a)return;try{const t=a.currentTime+(dl||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.07,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
+const SFX={thud:()=>tone(160,70,.12,'triangle',.08),good:()=>{tone(660,990,.1,'triangle',.07);tone(990,1320,.12,'triangle',.06,.08)},boom:()=>{tone(300,60,.3,'sawtooth',.05);tone(1200,400,.2,'triangle',.04)},
+ bad:()=>{tone(190,150,.18,'square',.035);tone(200,160,.12,'square',.03,.2)},tick:()=>tone(1300,900,.04,'triangle',.03),over:()=>[523,440,349,262].forEach((f,i)=>tone(f,f*.98,.25,'triangle',.07,i*.18)),up:()=>[523,659,784].forEach((f,i)=>tone(f,f,.16,'triangle',.06,i*.1))};
+/* ---------- Айна ---------- */
+let toastT=0;function aina(h,ms){$('bub').innerHTML=h;$('toast').classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('on'),ms||3200)}
+/* ---------- ряды ---------- */
+const pick=a=>a[Math.random()*a.length|0];
+function needOf(r){const t=tailOf(r.p,r.w);return t||NONE}
+function rowH(){return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--rowh'))||62}
+function place(){const h=rowH();rows.forEach((r,i)=>{if(r.el)r.el.style.bottom=(8+i*h)+'px'});$('edge').style.bottom=(8+MAXR*h)+'px';$('edge').classList.toggle('warn',rows.length>=MAXR-1);
+ rows.forEach(r=>r.el&&r.el.classList.toggle('sel',sel===r.id))}
+function spawn(){const ps=STAGES[stage].p;let p=pick(ps);if(p===lastP&&ps.length>1)p=pick(ps);lastP=p;const [w,ru]=pick(COMBOS[p]);
+ const r={id:++RID,p,w,ru,ready:false};const el=document.createElement('div');el.className='row';el.innerHTML=`<span class="cb p">${p}</span>`;r.el=el;
+ el.onclick=()=>{if(!running)return;sel=sel===r.id?null:r.id;place();SFX.tick()};
+ rows.push(r);$('pit').appendChild(el);place();const fall=-($('pit').clientHeight)+'px';const pc=el.firstChild;pc.style.setProperty('--fall',fall);pc.classList.add('drop');
+ setTimeout(()=>{SFX.thud();if(!r.el)return;const wc=document.createElement('span');wc.className='cb w drop';wc.textContent=w;wc.style.setProperty('--fall',fall);el.appendChild(wc);
+  setTimeout(()=>{SFX.thud();if(!r.el)return;const q=document.createElement('span');q.className='cb q';q.textContent='?';el.appendChild(q);r.ready=true;fillShelf()},500)},380);
+ if(rows.length>MAXR)gameOver()}
+/* ---------- полочка ---------- */
+function tailsOf(ps){const s=new Set();ps.forEach(p=>(COMBOS[p]||[]).forEach(([w])=>s.add(tailOf(p,w)||NONE)));return [...s]}
+function fillShelf(){const need=[...new Set(rows.slice(0,4).map(needOf))],pool=tailsOf(STAGES[stage].p);
+ while(shelf.length<6)shelf.push(null);
+ for(const t of need){if(shelf.some(x=>x&&x.t===t))continue;let j=shelf.findIndex(x=>!x);if(j<0)j=shelf.findIndex(x=>!need.includes(x.t));if(j>=0)shelf[j]={id:++TID,t,fresh:1}}
+ for(let i=0;i<6;i++)if(!shelf[i]){let t,k=0;do{t=pick(pool)}while(shelf.some(x=>x&&x.t===t)&&k++<30);shelf[i]={id:++TID,t,fresh:1}}
+ drawShelf()}
+function drawShelf(){$('shelf').innerHTML=shelf.map((x,i)=>`<button class="tl ${x.t===NONE?'z':isSoft(x.t)?'s':'h'} ${x.fresh?'new':''}" data-i="${i}">${x.t===NONE?'∅ без':'-'+x.t}</button>`).join('');
+ shelf.forEach(x=>delete x.fresh);$('shelf').querySelectorAll('.tl').forEach(b=>b.onclick=()=>useTail(+b.dataset.i,b))}
+/* ---------- почему нельзя ---------- */
+function why(r,t){const need=needOf(r);
+ if(need===NONE)return `<span class="kk">${r.p}</span> — без хвостика! Жми <b>∅</b> 😎`;
+ if(t===NONE)return `<span class="kk">${r.p}</span> — нужен хвостик ${PERS[r.p]}: <span class="kk">-${need}</span>`;
+ const tp=TAILP[t];if(tp&&tp!==r.p)return `<span class="kk">${r.p}</span> — значит хвостик ${PERS[r.p]}: <span class="kk">-${need}</span> 👀`;
+ if(isSoft(t)!==isSoft(need))return `<span class="kk">${r.w}</span> — ${isSoft(r.w)?'мягкое слово → розовый':'твёрдое слово → синий'} хвостик 🎨`;
+ const l=r.w.slice(-1);if(t[0]!==need[0])return need[0]==='п'?`<span class="kk">${r.w}</span> — на шептуна «${l}» 🤫 → <span class="kk">-${need}</span>`:need[0]==='б'?`<span class="kk">${r.w}</span> — на жужжалку «${l}» 🐝 → <span class="kk">-${need}</span>`:`<span class="kk">${r.w}</span> — спокойная буква 😌 → <span class="kk">-${need}</span>`;
+ return `Нужен <span class="kk">-${need}</span>`}
+/* ---------- ход ---------- */
+function sparks(rc,n){if(RM)return;const ch=['✨','⭐','💥','✨'];for(let i=0;i<n;i++){const f=document.createElement('div');f.className='spark';f.textContent=ch[i%4];f.style.left=(rc.left+Math.random()*rc.width)+'px';f.style.top=(rc.top+rc.height/2-10)+'px';
+ f.style.setProperty('--dx',(Math.random()*160-80)+'px');f.style.setProperty('--dy',(-40-Math.random()*90)+'px');f.style.setProperty('--r',(Math.random()*300-150)+'deg');document.body.appendChild(f);setTimeout(()=>f.remove(),950)}}
+async function useTail(i,btn){if(!running)return;ac();const x=shelf[i];let r=rows.find(q=>q.id===sel&&q.ready)||rows.find(q=>q.ready);
+ if(!r){aina('Подожди, кубик ещё падает ⏳',1500);return}
+ if(needOf(r)!==x.t){mist++;combo=0;hud();SFX.bad();btn.classList.add('bad');r.el.classList.add('bad');setTimeout(()=>{btn.classList.remove('bad');r.el&&r.el.classList.remove('bad')},420);aina(why(r,x.t),3800);nextAt=Math.min(nextAt,performance.now()+700);return}
+ /* верно */
+ r.ready=false;sel=null;shelf[i]=null;const q=r.el.querySelector('.cb.q'),b0=btn.getBoundingClientRect(),b1=q.getBoundingClientRect();
+ if(!RM){const f=btn.cloneNode(true);f.className=btn.className+' fly';f.style.left=b0.left+'px';f.style.top=b0.top+'px';f.style.width=b0.width+'px';document.body.appendChild(f);btn.style.visibility='hidden';
+  await f.animate([{transform:'none'},{transform:`translate(${b1.left-b0.left}px,${b1.top-b0.top}px) scale(.8)`}],{duration:260,easing:'ease-in'}).finished.catch(()=>{});f.remove()}
+ SFX.good();const wc=r.el.querySelector('.cb.w');q.remove();
+ if(x.t!==NONE){wc.className='cb mg';wc.innerHTML=`${r.w}<i class="${isSoft(x.t)?'s':'h'}">${x.t}</i>`}else{wc.className='cb mg'}
+ combo++;const gain=10*Math.min(combo,5);score+=gain;hud();
+ const tr=document.createElement('div');tr.className='tr';tr.style.bottom=(parseFloat(r.el.style.bottom)+rowH())+'px';tr.textContent=`${r.p} ${r.w}${x.t===NONE?'':x.t} — ${PRU[r.p]} ${r.ru}  +${gain}`;$('pit').appendChild(tr);setTimeout(()=>tr.remove(),1400);
+ if(combo>=3&&combo%3===0)aina(pick(['Мықты! 🔥','Имба! 🔥','Керемет! 🔥','Топчик! 🔥'])+` Серия ${combo}!`,1600);
+ await wait(260);SFX.boom();sparks(r.el.getBoundingClientRect(),9);r.el.classList.add('boom');await wait(420);
+ r.el.remove();r.el=null;rows=rows.filter(q=>q!==r);place();
+ interval=Math.max(3000,interval-120);
+ const ns=STAGES.findLastIndex?STAGES.findLastIndex(s=>score>=s.at):(()=>{let k=0;STAGES.forEach((s,j)=>{if(score>=s.at)k=j});return k})();
+ if(ns>stage){stage=ns;SFX.up();aina(STAGES[stage].say,3600)}
+ fillShelf();if(!rows.length)nextAt=Math.min(nextAt,performance.now()+500)}
+function hud(){$('sc').textContent=score;$('cm').textContent=combo;$('mi').textContent=mist}
+function loop(now){if(!running)return;if(now>=nextAt){spawn();nextAt=now+interval}timer=requestAnimationFrame(loop)}
+function start(){calcMax();rows.forEach(r=>r.el&&r.el.remove());$('pit').querySelectorAll('.row,.tr').forEach(e=>e.remove());rows=[];shelf=[];sel=null;score=0;combo=0;mist=0;stage=0;interval=7000;lastP='';hud();
+ $('start').classList.add('off');$('over').classList.add('off');running=true;ac();fillShelf();nextAt=performance.now()+300;cancelAnimationFrame(timer);timer=requestAnimationFrame(loop);aina(STAGES[0].say,2600)}
+function gameOver(){running=false;cancelAnimationFrame(timer);SFX.over();let best=0;try{best=+localStorage.getItem('tilashar-yama-best')||0;if(score>best){localStorage.setItem('tilashar-yama-best',score);best=score}}catch(e){}
+ $('ot').innerHTML=`Очки: <b>${score}</b> · рекорд: <b>${best}</b><br>Ошибок: ${mist}`;setTimeout(()=>$('over').classList.remove('off'),500)}
+let paused=0;document.addEventListener('visibilitychange',()=>{if(document.hidden&&running){running=false;cancelAnimationFrame(timer);paused=performance.now()}else if(!document.hidden&&paused){nextAt+=performance.now()-paused;paused=0;running=true;timer=requestAnimationFrame(loop)}});
+addEventListener('resize',()=>{calcMax();place()});$('play').onclick=start;$('again').onclick=start;
+window.__Y={rows:()=>rows,shelf:()=>shelf,needOf,useTail:i=>useTail(i,$('shelf').querySelectorAll('.tl')[i]),start,score:()=>score,stage:()=>stage,running:()=>running,spawn};
+}
+</script></body></html>
