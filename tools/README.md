@@ -17,3 +17,5 @@
 | voice_append.py | дописать нарезанные слова к спрайту (kkNN.wav/json → новый), потом ffmpeg → kkNN.mp3 |
 
 Озвучка: ElevenLabs flow gVkuaI4IXBDJNZ6JCvvG, голос Pbk8E6dlpCANrnpOLIns, eleven_v3, «Слово.» по строке. Подробности — документ проекта `claude/tilashar-kak-prodolzhit.md`.
+
+Спрайт: `k21.json` — карта слов текущего спрайта (то же, что SNDW). Несжатого k21.wav нет — получить из kk21.mp3: `ffmpeg -i kk21.mp3 -ac 1 -ar 22050 k21.wav`, затем voice_append.py (поменять k20→k21, k21→k22).
