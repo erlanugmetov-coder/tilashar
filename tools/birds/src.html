@@ -25,28 +25,35 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .bub{background:#fff;border-radius:4px 16px 16px 16px;padding:9px 12px;font-size:15px;box-shadow:0 2px 0 #e3d6b6;flex:1}
 .bub .kk{color:var(--hard);font-weight:800}
 .tree{position:relative}
-.br{position:relative;height:122px;margin:6px 0;cursor:pointer;border-radius:16px;transition:background .2s}
+.br{position:relative;height:118px;margin:6px 0;cursor:pointer;border-radius:16px;transition:background .2s}
 .br.sel{background:#ffffff66}
-.br.done{background:#fff8d9a8}
-.br .wood{position:absolute;left:-10px;right:-10px;bottom:30px;height:14px;border-radius:8px;background:linear-gradient(180deg,var(--bark),var(--bark2));box-shadow:0 3px 0 #3d2414}
-.br .wood:after{content:"";position:absolute;right:16%;top:6px;width:70px;height:9px;border-radius:8px;background:var(--bark2);transform:rotate(16deg);transform-origin:left}
-.br .tag{position:absolute;left:6px;bottom:2px;font:800 13px "Nunito";color:var(--muted)}
-.br.done .tag{color:#1f8a5b}
-.slots{position:absolute;left:4px;right:4px;bottom:38px;display:flex;gap:4px}
+.br .wood{position:absolute;bottom:30px;height:14px;border-radius:8px;background:linear-gradient(180deg,var(--bark),var(--bark2));box-shadow:0 3px 0 #3d2414}
+.br.L .wood{left:-12px;right:5%;border-radius:0 8px 8px 0}.br.R .wood{right:-12px;left:5%;border-radius:8px 0 0 8px}
+.br .wood:after{content:"";position:absolute;top:6px;width:64px;height:9px;border-radius:8px;background:var(--bark2)}
+.br.L .wood:after{right:14%;transform:rotate(16deg);transform-origin:left}.br.R .wood:after{left:14%;transform:rotate(-16deg);transform-origin:right}
+.br .tag{position:absolute;bottom:4px;font:800 13px "Nunito";color:var(--muted)}.br.L .tag{left:8px}.br.R .tag{right:8px}
+.slots{position:absolute;bottom:38px;display:flex;gap:4px;width:calc(95% - 8px)}
+.br.L .slots{left:4px;flex-direction:row}.br.R .slots{right:4px;flex-direction:row-reverse}
 .bird{position:relative;width:calc((100% - 12px)/4);max-width:96px;display:flex;flex-direction:column;align-items:center;transition:transform .25s}
 .bird svg{width:58px;height:52px;display:block}
+.br.R .bird svg{transform:scaleX(-1)}
+.bird.edge svg{border-radius:50%;background:radial-gradient(circle at 50% 55%,#ffffffb0 0 55%,transparent 57%)}
 .bird.up{transform:translateY(-20px)}
 .bird.shake{animation:sh .4s}
 .bird.say svg{filter:drop-shadow(0 0 6px #ffc58f)}
 @keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .bird.land{animation:land .35s}
 @keyframes land{0%{transform:translateY(-40px) scale(.9)}100%{transform:none}}
+.bird.fly{animation:fly 1.1s ease-in forwards}
+@keyframes fly{0%{transform:none;opacity:1}30%{transform:translateY(-14px) rotate(-6deg)}100%{transform:translate(40px,-260px) rotate(-20deg) scale(.6);opacity:0}}
+.br.R .bird.fly{animation-name:flyR}
+@keyframes flyR{0%{transform:none;opacity:1}30%{transform:translateY(-14px) rotate(6deg)}100%{transform:translate(-40px,-260px) rotate(20deg) scale(.6);opacity:0}}
 .cube{display:inline-flex;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);margin-top:-6px;max-width:100%}
 .cube span{padding:2px 4px;font:800 13px "Rubik",Arial;white-space:nowrap}.cube.sm span{font-size:11px;padding:2px 2px}.cube.xs span{font-size:10px;padding:2px 2px}
 .cube .r{background:#efe6d2}.cube .h{background:var(--hard);color:#fff}.cube .s{background:var(--soft);color:#fff}
 .bar{position:fixed;left:0;right:0;bottom:0;padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:#fff7e6f2;box-shadow:0 -4px 14px #0002}
-.bar .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.btn{border:0;border-radius:14px;padding:12px 4px;background:#fde8cf;color:#8a4a10;font:800 15px "Nunito",Arial;box-shadow:0 3px 0 #e2c39b;cursor:pointer}
+.bar .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.btn{border:0;border-radius:14px;padding:10px 2px;line-height:1.15;background:#fde8cf;color:#8a4a10;font:800 15px "Nunito",Arial;box-shadow:0 3px 0 #e2c39b;cursor:pointer}
 .btn:disabled{opacity:.45}
 .btn small{display:inline-block;margin-left:4px;background:#e2574c;color:#fff;border-radius:99px;padding:0 6px;font-size:12px}
 .win{position:fixed;inset:0;background:#0d3b4fcc;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
@@ -68,9 +75,10 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
   <div class="note">Тест мини-игры «Рассади птичек» · звук включится после первого нажатия 🔊</div>
 </div>
 <div class="bar"><div class="in">
-  <button class="btn" id="undo">↩️ Назад<small id="un">3</small></button>
-  <button class="btn" id="add">🌿 Ветка<small id="ad">1</small></button>
-  <button class="btn" id="again">🔄 Заново</button>
+  <button class="btn" id="undo">↩️<br>Назад<small id="un">3</small></button>
+  <button class="btn" id="add">🌿<br>Ветка<small id="ad">1</small></button>
+  <button class="btn" id="mix">🔀<br>Смешать<small id="mx">2</small></button>
+  <button class="btn" id="again">🔄<br>Заново</button>
 </div></div>
 <div class="win" id="win"><div class="card"><div style="font-size:46px">🎉</div><h2>Жарайсың!</h2><div class="stars" id="stars">⭐⭐⭐</div><p id="wt"></p><button class="go" id="next">Дальше →</button></div></div>
 <script>
@@ -78,7 +86,7 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 const SND = __SND__;
 const LV = [
  {t:'Уровень 1',s:'➡️ куда · 📍 где',cap:3,spare:1,need:4,
-  hello:'Птички перепутались! 🐦 Посади к «куда» только «куда», к «где» — только «где». Нажми на птичку — услышишь слово.',
+  hello:'Птички перепутались! 🐦 Двигать можно только крайнюю птичку — у свободного конца ветки. Собери на ветке одинаковые хвостики — и стайка улетит домой! 🐦💨',
   cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['қала','ға'],['мектеп','ке']]},
         {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['қала','да'],['мектеп','те']]}]},
  {t:'Уровень 2',s:'➡️ куда · 📍 где · ⬅️ откуда',cap:3,spare:1,need:7,
@@ -94,7 +102,7 @@ const LV = [
 ];
 const BIRDC=['#ffb43a','#7ad1ff','#ff8fb1','#9be37a','#c9a2ff','#ffd96a','#ff9d6b','#7fe0c8'];
 const JOKES=['Ой, бзз… тут сидят другие хвостики 🌀','Птичка говорит: «Это не мои!» 🐦','Чик-чирик… не та ветка! 🌀','Хвостик не подходит — послушай его 👂'];
-let L=0,state,moves,undoLeft,addLeft,hist,sel=-1,birds,cap,spareN,doneSay={};
+let L=0,state,moves,undoLeft,addLeft,mixLeft,hist,sel=-1,birds,cap,spareN,doneSay={},busy=false;
 const $=id=>document.getElementById(id);
 /* ---------- звук ---------- */
 let AC=null,BUF=null,loading=null,qid=0,SAIDN=0;
@@ -107,56 +115,58 @@ async function sayList(list,els){const my=++qid;if(loading)await loading;for(let
 function wordOf(b){return b.w[0]+b.w[1]}
 function hard(w){return !/[әеіөү]/i.test(w)}
 function birdSVG(c){return `<svg viewBox="0 0 58 52"><ellipse cx="30" cy="49" rx="16" ry="3" fill="#0002"/><path d="M10 30 Q2 22 6 14 Q14 20 16 26Z" fill="${c}" opacity=".8"/><ellipse cx="30" cy="30" rx="19" ry="17" fill="${c}"/><ellipse cx="33" cy="34" rx="10" ry="9" fill="#fff" opacity=".55"/><circle cx="38" cy="22" r="6" fill="#fff"/><circle cx="39.5" cy="22.5" r="3" fill="#14222c"/><path d="M47 25 L56 28 L47 31Z" fill="#ff8a3d"/><path d="M24 46 v4 M33 46 v4" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/></svg>`}
-function solvedOK(br){return br.length===cap&&br.every(b=>b.c===br[0].c)}
-function legalFwd(s,from,to){if(from===to)return false;const a=s[from],b=s[to];if(!a.length||b.length>=cap)return false;return !b.length||b[b.length-1].c===a[a.length-1].c}
+function full1(br){return br.length===cap&&br.every(b=>b.c===br[0].c)}
+function topGroup(br){let n=0;const c=br.length?br[br.length-1].c:-1;for(let i=br.length-1;i>=0&&br[i].c===c;i--)n++;return n}
+function canMove(s,f,t){if(f===t)return 0;const a=s[f],b=s[t];if(!a.length||b.length>=cap)return 0;if(b.length&&b[b.length-1].c!==a[a.length-1].c)return 0;return Math.min(topGroup(a),cap-b.length)}
+function doMove(s,f,t){const n=canMove(s,f,t);for(let i=0;i<n;i++)s[t].push(s[f].pop());let cleared=false;if(full1(s[t])){cleared=s[t].slice();s[t].length=0}return {n,cleared}}
+function keyOf(s){return s.map(b=>b.map(x=>x.c).join('')).sort().join('|')}
+function minMoves(s0){const seen=new Set([keyOf(s0)]);let q=[s0],d=0;
+ while(q.length&&seen.size<40000){const nq=[];for(const s of q){if(s.every(b=>!b.length))return d;
+  for(let f=0;f<s.length;f++)for(let t=0;t<s.length;t++){if(!canMove(s,f,t))continue;const m=s.map(x=>x.slice());doMove(m,f,t);const k=keyOf(m);if(!seen.has(k)){seen.add(k);nq.push(m)}}}q=nq;d++}
+ return -1}
+function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
 function gen(){const lv=LV[L];cap=lv.cap;spareN=lv.spare;let id=0;birds=[];
- let s=lv.cats.map((c,ci)=>c.w.map(w=>{const b={id:id++,c:ci,w,col:BIRDC[(id*3+ci)%BIRDC.length]};birds.push(b);return b}));
- for(let i=0;i<spareN;i++)s.push([]);
- /* обратные ходы от решённого — уровень всегда решаем */
+ lv.cats.forEach((c,ci)=>c.w.forEach(w=>{birds.push({id:id++,c:ci,w,col:BIRDC[(id*3+ci)%BIRDC.length]})}));
  let best=null,bestN=-1;
- for(let tries=0;tries<160;tries++){let t=s.map(x=>x.slice());
-  for(let k=0;k<400;k++){const fr=[];t.forEach((br,i)=>{if(br.length){const below=br[br.length-2];if(!below||below.c===br[br.length-1].c)fr.push(i)}});
-   if(!fr.length)break;const f=fr[Math.random()*fr.length|0];const tos=t.map((br,i)=>i).filter(i=>i!==f&&t[i].length<cap);if(!tos.length)continue;const to=tos[Math.random()*tos.length|0];t[to].push(t[f].pop())}
-  const mixed=t.filter(br=>br.length&&!(br.length===cap&&br.every(b=>b.c===br[0].c))).length;
-  const empties=t.filter(br=>!br.length).length;
-  if(t.every(br=>!solvedOK(br))&&mixed>=lv.cats.length&&empties<=spareN){const n=minMoves(t,lv.cats.length);if(n>bestN){bestN=n;best=t}if(n>=lv.need)return t}}
- return best||s}
-function minMoves(s0,n){const key=s=>s.map(b=>b.map(x=>x.c).join('')).join('|');const seen=new Set([key(s0)]);let q=[s0],d=0;
- while(q.length&&seen.size<30000){const nq=[];for(const s of q){if(s.filter(solvedOK).length>=n)return d;
-  for(let f=0;f<s.length;f++)for(let t=0;t<s.length;t++){if(!legalFwd(s,f,t))continue;const m=s.map(x=>x.slice());m[t].push(m[f].pop());const k=key(m);if(!seen.has(k)){seen.add(k);nq.push(m)}}}q=nq;d++}
- return d}
-function start(n){L=n;const lv=LV[L];state=gen().sort((x,y)=>(y.length>0)-(x.length>0));moves=0;undoLeft=3;addLeft=1;hist=[];sel=-1;doneSay={};
+ for(let tries=0;tries<300;tries++){const all=shuffled(birds);const s=lv.cats.map((c,i)=>all.slice(i*cap,i*cap+cap));for(let i=0;i<spareN;i++)s.push([]);
+  if(s.some(full1))continue;const n=minMoves(s);if(n<0)continue;if(n>bestN){bestN=n;best=s}if(n>=lv.need){lv.bestN=n;return s}}
+ lv.bestN=bestN;return best}
+function start(n){L=n;const lv=LV[L];state=gen();moves=0;undoLeft=3;addLeft=1;mixLeft=2;hist=[];sel=-1;doneSay={};
  $('lt').textContent=lv.t;$('ls').textContent=lv.s;aina(lv.hello);renderTabs();render();$('win').classList.remove('on')}
 function renderTabs(){$('tabs').innerHTML=LV.map((l,i)=>`<button class="tab ${i===L?'on':''}" data-l="${i}">${i+1}. ${l.s.split(':')[0]}</button>`).join('');
  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{initAudio();start(+b.dataset.l)})}
 function aina(h){$('bub').innerHTML=h}
-function render(land){const lv=LV[L];$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;
- $('tree').innerHTML=state.map((br,i)=>{const done=solvedOK(br);
-  const tag=done?('✅ '+lv.cats[br[0].c].k):(br.length?'':'пустая ветка');
-  return `<div class="br ${i===sel?'sel':''} ${done?'done':''}" data-i="${i}"><div class="wood"></div><div class="tag">${tag}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
-   return `<div class="bird ${i===sel&&j===br.length-1?'up':''} ${land&&land.i===i&&j===br.length-1?'land':''}" data-b="${b.id}">${birdSVG(b.col)}<div class="cube ${(w[0]+w[1]).length>9?'xs':(w[0]+w[1]).length>7?'sm':''}"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
+function render(land){$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;$('mix').disabled=!mixLeft;
+ $('tree').innerHTML=state.map((br,i)=>{const side=i%2?'R':'L',tg=sel===i?topGroup(br):0;
+  return `<div class="br ${side} ${i===sel?'sel':''}" data-i="${i}"><div class="wood"></div><div class="tag">${br.length?'':'пустая ветка'}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
+   return `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j>=br.length-tg?'up':''} ${land&&land.i===i&&j>=br.length-land.n?'land':''}" data-b="${b.id}">${birdSVG(b.col)}<div class="cube ${(w[0]+w[1]).length>9?'xs':(w[0]+w[1]).length>7?'sm':''}"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
  $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i))}
 function birdEl(id){return $('tree').querySelector(`[data-b="${id}"]`)}
-function tap(i){initAudio();const br=state[i];
- if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}if(solvedOK(br)){const b=br[br.length-1];sayList(br.map(wordOf),br.map(x=>birdEl(x.id)));return}
-  sel=i;render();const b=br[br.length-1];sayList([wordOf(b)],[birdEl(b.id)]);return}
+function tap(i){initAudio();if(busy)return;const br=state[i];
+ if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}
+  sel=i;render();const g=topGroup(br),grp=br.slice(br.length-g);sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));return}
  if(sel===i){sel=-1;render();return}
- if(legalFwd(state,sel,i)){hist.push(state.map(x=>x.slice()));const b=state[sel].pop();state[i].push(b);moves++;sel=-1;render({i});
-  const lv=LV[L];if(solvedOK(state[i])&&!doneSay[i+'_'+b.c]){doneSay[i+'_'+b.c]=1;const c=lv.cats[b.c];aina(c.say+' <span class="kk">'+state[i].map(wordOf).join(', ')+'</span>');
-   setTimeout(()=>sayList(state[i].map(wordOf),state[i].map(x=>birdEl(x.id))),250)}
-  checkWin()}
+ const n=canMove(state,sel,i);
+ if(n){hist.push(state.map(x=>x.slice()));const f=sel;sel=-1;for(let k=0;k<n;k++)state[i].push(state[f].pop());moves++;render({i,n});
+  if(full1(state[i])){busy=true;const lv=LV[L],grp=state[i].slice(),c=lv.cats[grp[0].c];aina(c.say+' <span class="kk">'+grp.map(wordOf).join(', ')+'</span> 🐦💨');
+   setTimeout(async()=>{await sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));grp.forEach(x=>{const e=birdEl(x.id);if(e)e.classList.add('fly')});
+    setTimeout(()=>{state[i]=[];busy=false;render();checkWin()},1100)},250)}
+  else if(n>1)aina('Стайка из '+n+' полетела вместе! 🐦🐦');}
  else{const from=state[sel],b=from[from.length-1],el=birdEl(b.id);if(el){el.classList.remove('up');el.classList.add('shake')}
   const why=state[i].length>=cap?'На этой ветке нет места 🙈':JOKES[Math.random()*JOKES.length|0];aina(why);setTimeout(()=>{sel=-1;render()},420)}}
-function checkWin(){const lv=LV[L];const full=state.filter(solvedOK).length;if(full<lv.cats.length)return;
- const best=lv.cats.length*cap;const st=moves<=best*1.25?3:moves<=best*1.8?2:1;
- setTimeout(()=>{$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички на своих ветках! Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
-  $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},1600)}
-$('undo').onclick=()=>{if(!undoLeft||!hist.length)return;state=hist.pop();undoLeft--;moves++;sel=-1;render();aina('Вернула птичку назад ↩️')};
-$('add').onclick=()=>{if(!addLeft)return;addLeft--;state.push([]);render();aina('Новая ветка выросла! 🌿 Используй с умом.')};
-$('again').onclick=()=>start(L);
+function checkWin(){if(state.some(b=>b.length))return;const lv=LV[L];
+ const best=lv.bestN||lv.cats.length*2;const st=moves<=best+1?3:moves<=best+4?2:1;
+ setTimeout(()=>{$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички улетели домой! 🐦💨 Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
+  $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},400)}
+$('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;state=hist.pop();undoLeft--;sel=-1;render();aina('Вернула птичек назад ↩️')};
+$('add').onclick=()=>{if(busy||!addLeft)return;addLeft--;state.push([]);sel=-1;render();aina('Новая ветка выросла! 🌿 Используй с умом.')};
+$('mix').onclick=()=>{if(busy||!mixLeft)return;const sizes=state.map(b=>b.length),all=[].concat(...state);
+ for(let t=0;t<200;t++){const sh=shuffled(all);let k=0;const ns=sizes.map(n=>{const r=sh.slice(k,k+n);k+=n;return r});if(ns.some(full1))continue;if(minMoves(ns)>=0){hist.push(state.map(x=>x.slice()));state=ns;mixLeft--;sel=-1;render();aina('Перемешала птичек! 🔀 Попробуй ещё раз.');return}}
+ aina('Не получилось перемешать — попробуй «Назад» или «Ветка» 🙈')};
+$('again').onclick=()=>{if(!busy)start(L)};
 $('next').onclick=()=>start(L<LV.length-1?L+1:L);
 document.addEventListener('pointerdown',initAudio,{once:true});
-window.__T={st:()=>state,LV,legalFwd,solvedOK,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN};
+window.__T={st:()=>state,LV,canMove,doMove,minMoves,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN,busy:()=>busy};
 start(0);
 }
 </script>
