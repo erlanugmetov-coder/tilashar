@@ -1273,9 +1273,9 @@ function follow(){if(bottom()-window.scrollY<260)window.scrollTo(0,bottom())}
 function splitHtml(html){var d=document.createElement('div');d.innerHTML=html;if((d.textContent||'').length<170)return [html];var ch=[],cur=[],len=0;
   Array.prototype.slice.call(d.childNodes).forEach(function(n){var isP=n.nodeType===1&&n.tagName==='P',tl=(n.textContent||'').trim().length;if(isP&&cur.length&&len>90){ch.push(cur);cur=[];len=0}cur.push(n);len+=tl});if(cur.length)ch.push(cur);
   if(ch.length<2)return [html];return ch.map(function(g){var w=document.createElement('div');g.forEach(function(n){w.appendChild(n)});return w.innerHTML})}
-function robotSplit(who,mood,html,done){var parts=splitHtml(html),i=0,my=run;if(parts.length<2){robot(who,mood,html,done);return}
-  (function nx(){if(my!==run)return;var h=parts[i++];robot(who,mood,h,i<parts.length?function(){setTimeout(nx,300)}:done)})()}
-function robot(who,mood,html,done,fire){
+function robotSplit(who,mood,html,done,ak){var parts=splitHtml(html),i=0,my=run;if(parts.length<2){robot(who,mood,html,done,undefined,ak);return}
+  (function nx(){if(my!==run)return;var h=parts[i++];robot(who,mood,h,i<parts.length?function(){setTimeout(nx,300)}:done,undefined,ak)})()}
+function robot(who,mood,html,done,fire,ak){
   busy=true;var my=run,b=BOT[who]||BOT.s;var row=document.createElement('div');row.className='say'+(who==='a'?' guest':'');
   var sleepy=L&&!L._woke&&si===0;if(L)L._woke=true;
   row.innerHTML='<div class="av">'+b.draw(sleepy?'sleepy':mood,58,curO())+'</div><div class="bubble"><span class="dots"><i></i><i></i><i></i></span></div>';
@@ -1291,7 +1291,7 @@ function robot(who,mood,html,done,fire){
     (function tick(){if(my!==run)return;
       if(skip){nodes.forEach(function(n,i){n.nodeValue=full[i]});ni=nodes.length}
       if(ni>=nodes.length){svg.classList.remove('talk');if(cur.parentNode)cur.remove();busy=false;scrollEnd();
-        var AE=[].slice.call(bub.querySelectorAll('[data-auto],.model,.flmod')).filter(function(e){if(!e.dataset.auto)e.dataset.auto=modelSay(e);return e.dataset.auto&&canSay(e.dataset.auto)}),au=AE.map(function(e){return e.dataset.auto});(function nx(i){if(i>=au.length||my!==run)return;var e=AE[i];if(e)e.classList.add('saying');say(au[i],function(){if(e)e.classList.remove('saying');setTimeout(function(){nx(i+1)},380)})})(0); /* v116: все примеры по очереди */
+        var AE=[].slice.call(bub.querySelectorAll('[data-auto],.model,.flmod'+(ak?',.kk,.lego':''))).filter(function(e){if(e.matches('.kk,.lego')&&!e.matches('[data-auto]')&&e.parentElement&&e.parentElement.closest('[data-auto],.model,.flmod,.kk,.lego,.ru,.task,.opts'))return false; /* v180: в объяснениях звучит весь казахский */ if(!e.dataset.auto)e.dataset.auto=modelSay(e);return e.dataset.auto&&canSay(e.dataset.auto)}),au=AE.map(function(e){return e.dataset.auto});(function nx(i){if(i>=au.length||my!==run)return;var e=AE[i];if(e)e.classList.add('saying');say(au[i],function(){if(e)e.classList.remove('saying');setTimeout(function(){nx(i+1)},380)})})(0); /* v116: все примеры по очереди */
         done&&done(bub);return}
       var n=nodes[ni];if(ci<full[ni].length){var step=Math.min(3,full[ni].length-ci);n.nodeValue+=full[ni].substr(ci,step);ci+=step;n.parentNode.insertBefore(cur,n.nextSibling);follow()}else{ni++;ci=0}
       setTimeout(tick,18)})();
@@ -1308,14 +1308,14 @@ function react(svg,ok){if(!svg)return;var p=svg.parentNode;if(!p)return;
   if(ok){n.classList.add(cmb>=5?'dance':'jump');sBoing()}else{if(m!=='sneeze')n.classList.add('shake');sBzz()}}
 function meSay(t,bad){var d=document.createElement('div');d.className='me'+(bad?' no':'');d.innerHTML=t;chat().appendChild(d)}
 
-var CURV='v179'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
+var CURV='v180'; /* версия содержания уроков: незаконченный урок, начатый на старой версии, начинается заново */
 function snap(){if(!L||!chat()||L.warm)return;st.cur={v:CURV,th:THX,k:L.k,si:si,run:L.run,html:chat().innerHTML,gained:gained,firstOk:firstOk,nTasks:nTasks,cmb:cmb};save()}
 function next(){
   setBar();ctl().innerHTML='';clearTimeout(timer);skipWait=null;
   if(si>=L.run.length){finish();return}
   snap();
   var s=L.run[si];if(L.warm&&s._th!=null&&s._th!==THX)setTheme(s._th);
-  if(!s.task&&(s.s||s.a)){var who=s.a?'a':'s';robotSplit(who,s.s||s.a,s.t,function(){nextBtn()});return}
+  if(!s.task&&(s.s||s.a)){var who=s.a?'a':'s';robotSplit(who,s.s||s.a,s.t,function(){nextBtn()},1);return}
   nTasks++;tries=0;
   if(s.task==='tail'){
     var o=s.o||optsFor(s.r,s.p,s.g);
@@ -3957,7 +3957,8 @@ CHTXT[4]=['🌳','Облако заморозило парк — все заме
   if(!st.m158){st.m158=1;if(add){st.energy=(st.energy||0)+add}save()}}catch(e){}setTheme(sv)})();
 /* ===================== v171: Тема 4 «Қайда?» — куда и где · район «Мектеп» =====================
    Внутренний номер темы THX=5, прогресс — st.d6, постройки — поле ml (номер урока). Идёт после парка (ORD). */
-function csx(root,tail){return '<span class="lego"><span class="r">'+root+'</span>'+z3t(tail)+'</span>'}
+var POSSG={'м':'мой','ым':'мой','ім':'мой','ң':'твой','ың':'твой','ің':'твой','ңыз':'ваш','ыңыз':'ваш','іңіз':'ваш','сы':'его','сі':'его','ы':'его','і':'его','мыз':'наш','міз':'наш','ымыз':'наш','іміз':'наш'}; /* v180: подписи хвостиков «мой» */
+function csx(root,tail){var t=z3t(tail);if(POSSG[tail])t=t.replace('<span ','<span data-gl="'+POSSG[tail]+'" ');return '<span class="lego"><span class="r">'+root+'</span>'+t+'</span>'}
 var LESSONS6=[
  {title:'Үйге барамын — куда?',sub:'стрелка ➡️ -ға / -ге',end:'Школа и остановка ожили! 🏫🚌',papa:'Когда выходите из дома, спросите ребёнка: «Қайда барасың?» — пусть ответит: «Мектепке!» или «Дүкенге!»',
   intro:[{s:'happy',t:'<p>Мен барамын! Иду, иду, иду… 🚶</p>'},
@@ -4330,7 +4331,7 @@ var GLT={},GLR={};
  ['ақылды','умный'],['биші','танцор'],['күшті','сильный'],['биік','высокий'],['мейірімді','добрый'],['жақсы','хороший'],['батыл','смелый'],['аю','медведь'],['түйе','верблюд'],['кірпі','ёж'],['арыстан','лев'],['піл','слон'],['қоян','заяц'],['бұлан','лось'],
  ['барыс','барс'],['үйрек','утка'],['киік','антилопа'],['сусиыр','бегемот'],['түйеқұс','страус'],['ақбөкен','сайгак'],['керік','жираф'],['жаста','лет'],['екеу','двое'],['үшеу','трое'],['бар','идти'],['кел','приходить'],['ойна','играть'],['оқ','читать'],
  ['үй','дом'],['қала','город'],['мектеп','школа'],['саябақ','парк'],['дүкен','магазин'],['бассейн','бассейн'],['Алматы','Алматы']].forEach(function(r){GLR[r[0]]=r[1]});
-function glossOf(c){var x=(c.textContent||'').trim();if(!x)return '';if(c.classList.contains('r'))return GLR[x]||'';return GLT[x]||''}
+function glossOf(c){var x=(c.textContent||'').trim();if(!x)return '';if(c.dataset&&c.dataset.gl)return c.dataset.gl;if(c.classList.contains('r'))return GLR[x]||'';return GLT[x]||''}
 function glossLego(l,tries){if(!l.isConnected)return;var pcs=[].slice.call(l.children),labs=pcs.map(glossOf),key=labs.join('|');if(!labs.some(function(x){return x}))return;
   var w=l.parentNode&&l.parentNode.classList&&l.parentNode.classList.contains('lgwrap')?l.parentNode:null;if(w&&w.dataset.k===key&&w.dataset.w==String(l.offsetWidth))return;
   if(!l.offsetWidth){if((tries||0)<20)setTimeout(function(){glossLego(l,(tries||0)+1)},150);return}
@@ -4344,7 +4345,7 @@ function glossLego(l,tries){if(!l.isConnected)return;var pcs=[].slice.call(l.chi
 
 /* ===================== v179: Тема «Менің — мой» (как «Сақшы — ЧЕЙ?») · район «Үйлер» =====================
    THX=7, прогресс st.d8, постройки — поле hl. Идёт после парка, до «Қайда?» (ORD). */
-function famRow(p,ru,root,tail,ru2){return '<div class="kfrow"><b>'+p+'</b> <span class="lego"><span class="r">'+root+'</span>'+z3t(tail)+'</span> <small>'+ru2+'</small></div>'}
+function famRow(p,ru,root,tail,ru2){var ph=p+' '+root+tail,g=String(ru2).split(' ')[0];return '<div class="kfrow" data-auto="'+ph+'" data-say="'+ph+'"><b>'+p+'</b> <span class="lego"><span class="r">'+root+'</span>'+z3t(tail).replace('<span ','<span data-gl="'+g+'" ')+'</span> <small>'+ru2+'</small></div>'} /* v180: строки звучат сами */
 var LESSONS8=[
  {title:'Менің анам — мой',sub:'мой: -м · после согласной -ым / -ім',end:'Первые дома ожили! 🏠🏡',papa:'Покажите на вещи и людей дома и скажите вместе: «Менің анам!», «Менің үйім!» 🏠',
   intro:[{s:'happy',t:'<p>Мен доп ойнаймын! ⚽ …Стоп. А <b>чей</b> это мяч? 🤔</p>'},
@@ -4395,7 +4396,7 @@ var LESSONS8=[
   intro:[{s:'happy',t:'<p>А если школа общая — твоя, моя, его? Это <b>наша</b> школа! 🏫</p>'},
    {s:'look',t:'<p><b>Біздің</b> — наш. Хвостик <b>-мыз / -міз</b>, после согласной <b>-ымыз / -іміз</b>:</p>'+ex(csx('ана','мыз'),'анамыз — наша мама','анамыз')+ex(csx('мектеб','іміз'),'мектебіміз — наша школа (п звенит!)','мектебіміз')},
    {s:'wink',t:'<p>Вежливо взрослому — <b>Сіздің</b>, «ваш»: <b>-ңыз / -ыңыз</b>:</p>'+ex(csx('ана','ңыз'),'анаңыз — ваша мама','анаңыз')},
-   {s:'look',t:'<p>Вся семья на одном слове <b>дос</b>:</p><div class="kfam2">'+famRow('Менің','','дос','ым','мой друг')+famRow('Сенің','','дос','ың','твой друг')+famRow('Сіздің','','дос','ыңыз','ваш друг')+famRow('Оның','','дос','ы','его друг')+famRow('Біздің','','дос','ымыз','наш друг')+famRow('Сендердің','','дос','ың','ваш друг')+famRow('Сіздердің','','дос','ыңыз','ваш (вежл.)')+famRow('Олардың','','дос','ы','их друг')+'</div><p>Сендердің, Сіздердің, Олардың — деталь та же, что у сенің, сіздің, оның! 😎</p>'},
+   {s:'look',t:'<p>Вся семья на одном слове <b>дос</b>:</p><div class="kfam2">'+famRow('Менің','','дос','ым','мой друг')+famRow('Сенің','','дос','ың','твой друг')+famRow('Сіздің','','дос','ыңыз','ваш (вежл.)')+famRow('Оның','','дос','ы','его друг')+famRow('Біздің','','дос','ымыз','наш друг')+famRow('Сендердің','','дос','ың','ваш (вы все)')+famRow('Сіздердің','','дос','ыңыз','ваш (вежл., все)')+famRow('Олардың','','дос','ы','их друг')+'</div><p>Сендердің, Сіздердің, Олардың — деталь та же, что у сенің, сіздің, оның! 😎</p>'},
    {s:'laugh',t:'<p>Біздің мысығымыз… Он думает, что это мы — его люди. 🐱👑</p>'},
    {s:'star',t:'<p>🏫 Школьный секрет: эта деталь в учебнике — <b>тәуелдік жалғау</b>. «Тәуелді» — значит «принадлежит»: деталь показывает <b>хозяина</b>. Чей? — Менікі! 😎</p>'}],
   mix:function(){var I=this.intro;return [I[0],I[1],
