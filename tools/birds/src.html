@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Тілашар · птички (тест)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: тёплый, детский, как Город Айны
+   IDEA: ветки во дворе, на них птички с кубиками-словами
+   PICTURE: сами ветки и птички — это и есть игра
+   COLOUR/TYPE: небо, кора, кубики синие/розовые; Rubik + Nunito
+   LAYOUT: шапка, пузырь Айны, ветки одна под другой, кнопки внизу */
+:root{color-scheme:light;--ink:#14222c;--muted:#5d7483;--hard:#2f6fd6;--soft:#e05a9c;--aina:#ff8a3d;--bark:#7a4a2a;--bark2:#5e3820}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#bfe6ff 0%,#e6f6ff 45%,#fff6e3 100%);min-height:100vh;overflow-x:clip;user-select:none}
+.wrap{max-width:520px;margin:0 auto;padding:12px 10px 120px}
+.top{display:flex;align-items:center;gap:10px}
+.lvl{flex:1}
+.lvl b{display:block;font:800 21px/1.1 "Rubik",Arial,sans-serif}
+.lvl small{color:var(--muted);font-size:13px}
+.pill{background:#fff;border-radius:99px;padding:6px 12px;font:800 15px "Rubik",Arial;box-shadow:0 2px 0 #d9c9a5;white-space:nowrap}
+.tabs{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap}
+.tab{border:0;border-radius:12px;padding:8px 11px;background:#ffffffb3;font:800 13px "Nunito",Arial;color:var(--ink);cursor:pointer}
+.tab.on{background:var(--aina);color:#fff;box-shadow:0 3px 0 #d96a1f}
+.say{display:flex;gap:8px;align-items:flex-start;margin:8px 0 6px;min-height:58px}
+.av{flex:none;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:26px;box-shadow:0 2px 0 #c9b98f}
+.bub{background:#fff;border-radius:4px 16px 16px 16px;padding:9px 12px;font-size:15px;box-shadow:0 2px 0 #e3d6b6;flex:1}
+.bub .kk{color:var(--hard);font-weight:800}
+.tree{position:relative}
+.br{position:relative;height:122px;margin:6px 0;cursor:pointer;border-radius:16px;transition:background .2s}
+.br.sel{background:#ffffff66}
+.br.done{background:#fff8d9a8}
+.br .wood{position:absolute;left:-10px;right:-10px;bottom:30px;height:14px;border-radius:8px;background:linear-gradient(180deg,var(--bark),var(--bark2));box-shadow:0 3px 0 #3d2414}
+.br .wood:after{content:"";position:absolute;right:16%;top:6px;width:70px;height:9px;border-radius:8px;background:var(--bark2);transform:rotate(16deg);transform-origin:left}
+.br .tag{position:absolute;left:6px;bottom:2px;font:800 13px "Nunito";color:var(--muted)}
+.br.done .tag{color:#1f8a5b}
+.slots{position:absolute;left:4px;right:4px;bottom:38px;display:flex;gap:4px}
+.bird{position:relative;width:calc((100% - 12px)/4);max-width:96px;display:flex;flex-direction:column;align-items:center;transition:transform .25s}
+.bird svg{width:58px;height:52px;display:block}
+.bird.up{transform:translateY(-20px)}
+.bird.shake{animation:sh .4s}
+.bird.say svg{filter:drop-shadow(0 0 6px #ffc58f)}
+@keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.bird.land{animation:land .35s}
+@keyframes land{0%{transform:translateY(-40px) scale(.9)}100%{transform:none}}
+.cube{display:inline-flex;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);margin-top:-6px;max-width:100%}
+.cube span{padding:2px 4px;font:800 13px "Rubik",Arial;white-space:nowrap}.cube.sm span{font-size:11px;padding:2px 2px}.cube.xs span{font-size:10px;padding:2px 2px}
+.cube .r{background:#efe6d2}.cube .h{background:var(--hard);color:#fff}.cube .s{background:var(--soft);color:#fff}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:#fff7e6f2;box-shadow:0 -4px 14px #0002}
+.bar .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btn{border:0;border-radius:14px;padding:12px 4px;background:#fde8cf;color:#8a4a10;font:800 15px "Nunito",Arial;box-shadow:0 3px 0 #e2c39b;cursor:pointer}
+.btn:disabled{opacity:.45}
+.btn small{display:inline-block;margin-left:4px;background:#e2574c;color:#fff;border-radius:99px;padding:0 6px;font-size:12px}
+.win{position:fixed;inset:0;background:#0d3b4fcc;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+.win.on{display:flex}
+.card{background:#fffaf0;border-radius:24px;padding:20px 16px;max-width:360px;width:100%;text-align:center;animation:pop .35s}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:none;opacity:1}}
+.card h2{font:800 26px "Rubik";margin:6px 0}
+.stars{font-size:38px;letter-spacing:6px}
+.card p{margin:8px 0 14px}
+.card .go{width:100%;border:0;border-radius:16px;padding:14px;background:#2fb37a;color:#fff;font:800 17px "Nunito";box-shadow:0 4px 0 #1f8a5b;cursor:pointer}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+@media (prefers-reduced-motion:reduce){.bird,.bird.land,.card{animation:none;transition:none}}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><div class="lvl"><b id="lt">Уровень 1</b><small id="ls">куда и где</small></div><div class="pill">👣 <span id="mv">0</span></div></div>
+  <div class="tabs" id="tabs"></div>
+  <div class="say"><div class="av">🤖</div><div class="bub" id="bub">Привет! Рассади птичек по веткам 🐦</div></div>
+  <div class="tree" id="tree"></div>
+  <div class="note">Тест мини-игры «Рассади птичек» · звук включится после первого нажатия 🔊</div>
+</div>
+<div class="bar"><div class="in">
+  <button class="btn" id="undo">↩️ Назад<small id="un">3</small></button>
+  <button class="btn" id="add">🌿 Ветка<small id="ad">1</small></button>
+  <button class="btn" id="again">🔄 Заново</button>
+</div></div>
+<div class="win" id="win"><div class="card"><div style="font-size:46px">🎉</div><h2>Жарайсың!</h2><div class="stars" id="stars">⭐⭐⭐</div><p id="wt"></p><button class="go" id="next">Дальше →</button></div></div>
+<script>
+{
+const SND = __SND__;
+const LV = [
+ {t:'Уровень 1',s:'➡️ куда · 📍 где',cap:3,spare:1,need:4,
+  hello:'Птички перепутались! 🐦 Посади к «куда» только «куда», к «где» — только «где». Нажми на птичку — услышишь слово.',
+  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['қала','ға'],['мектеп','ке']]},
+        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['қала','да'],['мектеп','те']]}]},
+ {t:'Уровень 2',s:'➡️ куда · 📍 где · ⬅️ откуда',cap:3,spare:1,need:7,
+  hello:'Три стрелки! ➡️ куда, 📍 где, ⬅️ откуда. Слушай хвостик — он подскажет 👂',
+  cats:[{k:'➡️ куда',say:'Все летят КУДА! ➡️',w:[['үй','ге'],['саябақ','қа'],['дүкен','ге']]},
+        {k:'📍 где',say:'Все уже ЗДЕСЬ — где! 📍',w:[['үй','де'],['саябақ','та'],['дүкен','де']]},
+        {k:'⬅️ откуда',say:'Все летят ОТКУДА! ⬅️',w:[['үй','ден'],['қала','дан'],['мектеп','тен']]}]},
+ {t:'Уровень 3',s:'Связи: чей? · что? · с кем?',cap:4,spare:2,need:10,
+  hello:'Трудный уровень! 🔗 чей? (-ның), 🔍 что? (-ны), 🤝 с кем? (-мен). Две запасные ветки — пригодятся!',
+  cats:[{k:'🔗 чей?',say:'Это всё ЧЕЙ? — хвостик хозяина 🔗',w:[['Айна','ның'],['бала','ның'],['Алтай','дың'],['дос','тың']]},
+        {k:'🔍 что?',say:'Вот эта вещь — ЧТО? 🔍',w:[['алма','ны'],['кітап','ты'],['су','ды'],['нан','ды']]},
+        {k:'🤝 с кем? чем?',say:'Все С КЕМ? ЧЕМ? 🤝',w:[['әже','мен'],['дос','пен'],['автобус','пен'],['қалам','мен']]}]}
+];
+const BIRDC=['#ffb43a','#7ad1ff','#ff8fb1','#9be37a','#c9a2ff','#ffd96a','#ff9d6b','#7fe0c8'];
+const JOKES=['Ой, бзз… тут сидят другие хвостики 🌀','Птичка говорит: «Это не мои!» 🐦','Чик-чирик… не та ветка! 🌀','Хвостик не подходит — послушай его 👂'];
+let L=0,state,moves,undoLeft,addLeft,hist,sel=-1,birds,cap,spareN,doneSay={};
+const $=id=>document.getElementById(id);
+/* ---------- звук ---------- */
+let AC=null,BUF=null,loading=null,qid=0,SAIDN=0;
+function initAudio(){if(AC)return loading;try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}
+ loading=fetch('kk22.mp3').then(r=>r.arrayBuffer()).then(b=>new Promise((res,rej)=>AC.decodeAudioData(b,res,rej))).then(b=>{BUF=b}).catch(()=>{});return loading}
+function playOne(w){return new Promise(res=>{const p=SND[w.toLowerCase()];if(!AC||!BUF||!p){setTimeout(res,350);return}
+ try{SAIDN++;const s=AC.createBufferSource();s.buffer=BUF;s.connect(AC.destination);s.start(0,p[0],p[1]);s.onended=res;setTimeout(res,p[1]*1000+400)}catch(e){res()}})}
+async function sayList(list,els){const my=++qid;if(loading)await loading;for(let i=0;i<list.length;i++){if(my!==qid)return;if(els&&els[i])els[i].classList.add('say');await playOne(list[i]);if(els&&els[i])els[i].classList.remove('say');await new Promise(r=>setTimeout(r,120))}}
+/* ---------- уровень ---------- */
+function wordOf(b){return b.w[0]+b.w[1]}
+function hard(w){return !/[әеіөү]/i.test(w)}
+function birdSVG(c){return `<svg viewBox="0 0 58 52"><ellipse cx="30" cy="49" rx="16" ry="3" fill="#0002"/><path d="M10 30 Q2 22 6 14 Q14 20 16 26Z" fill="${c}" opacity=".8"/><ellipse cx="30" cy="30" rx="19" ry="17" fill="${c}"/><ellipse cx="33" cy="34" rx="10" ry="9" fill="#fff" opacity=".55"/><circle cx="38" cy="22" r="6" fill="#fff"/><circle cx="39.5" cy="22.5" r="3" fill="#14222c"/><path d="M47 25 L56 28 L47 31Z" fill="#ff8a3d"/><path d="M24 46 v4 M33 46 v4" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/></svg>`}
+function solvedOK(br){return br.length===cap&&br.every(b=>b.c===br[0].c)}
+function legalFwd(s,from,to){if(from===to)return false;const a=s[from],b=s[to];if(!a.length||b.length>=cap)return false;return !b.length||b[b.length-1].c===a[a.length-1].c}
+function gen(){const lv=LV[L];cap=lv.cap;spareN=lv.spare;let id=0;birds=[];
+ let s=lv.cats.map((c,ci)=>c.w.map(w=>{const b={id:id++,c:ci,w,col:BIRDC[(id*3+ci)%BIRDC.length]};birds.push(b);return b}));
+ for(let i=0;i<spareN;i++)s.push([]);
+ /* обратные ходы от решённого — уровень всегда решаем */
+ let best=null,bestN=-1;
+ for(let tries=0;tries<160;tries++){let t=s.map(x=>x.slice());
+  for(let k=0;k<400;k++){const fr=[];t.forEach((br,i)=>{if(br.length){const below=br[br.length-2];if(!below||below.c===br[br.length-1].c)fr.push(i)}});
+   if(!fr.length)break;const f=fr[Math.random()*fr.length|0];const tos=t.map((br,i)=>i).filter(i=>i!==f&&t[i].length<cap);if(!tos.length)continue;const to=tos[Math.random()*tos.length|0];t[to].push(t[f].pop())}
+  const mixed=t.filter(br=>br.length&&!(br.length===cap&&br.every(b=>b.c===br[0].c))).length;
+  const empties=t.filter(br=>!br.length).length;
+  if(t.every(br=>!solvedOK(br))&&mixed>=lv.cats.length&&empties<=spareN){const n=minMoves(t,lv.cats.length);if(n>bestN){bestN=n;best=t}if(n>=lv.need)return t}}
+ return best||s}
+function minMoves(s0,n){const key=s=>s.map(b=>b.map(x=>x.c).join('')).join('|');const seen=new Set([key(s0)]);let q=[s0],d=0;
+ while(q.length&&seen.size<30000){const nq=[];for(const s of q){if(s.filter(solvedOK).length>=n)return d;
+  for(let f=0;f<s.length;f++)for(let t=0;t<s.length;t++){if(!legalFwd(s,f,t))continue;const m=s.map(x=>x.slice());m[t].push(m[f].pop());const k=key(m);if(!seen.has(k)){seen.add(k);nq.push(m)}}}q=nq;d++}
+ return d}
+function start(n){L=n;const lv=LV[L];state=gen().sort((x,y)=>(y.length>0)-(x.length>0));moves=0;undoLeft=3;addLeft=1;hist=[];sel=-1;doneSay={};
+ $('lt').textContent=lv.t;$('ls').textContent=lv.s;aina(lv.hello);renderTabs();render();$('win').classList.remove('on')}
+function renderTabs(){$('tabs').innerHTML=LV.map((l,i)=>`<button class="tab ${i===L?'on':''}" data-l="${i}">${i+1}. ${l.s.split(':')[0]}</button>`).join('');
+ $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{initAudio();start(+b.dataset.l)})}
+function aina(h){$('bub').innerHTML=h}
+function render(land){const lv=LV[L];$('mv').textContent=moves;$('un').textContent=undoLeft;$('ad').textContent=addLeft;$('undo').disabled=!undoLeft||!hist.length;$('add').disabled=!addLeft;
+ $('tree').innerHTML=state.map((br,i)=>{const done=solvedOK(br);
+  const tag=done?('✅ '+lv.cats[br[0].c].k):(br.length?'':'пустая ветка');
+  return `<div class="br ${i===sel?'sel':''} ${done?'done':''}" data-i="${i}"><div class="wood"></div><div class="tag">${tag}</div><div class="slots">${br.map((b,j)=>{const w=b.w,hc=hard(w[1])?'h':'s';
+   return `<div class="bird ${i===sel&&j===br.length-1?'up':''} ${land&&land.i===i&&j===br.length-1?'land':''}" data-b="${b.id}">${birdSVG(b.col)}<div class="cube ${(w[0]+w[1]).length>9?'xs':(w[0]+w[1]).length>7?'sm':''}"><span class="r">${w[0]}</span><span class="${hc}">${w[1]}</span></div></div>`}).join('')}</div></div>`}).join('');
+ $('tree').querySelectorAll('.br').forEach(el=>el.onclick=()=>tap(+el.dataset.i))}
+function birdEl(id){return $('tree').querySelector(`[data-b="${id}"]`)}
+function tap(i){initAudio();const br=state[i];
+ if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}if(solvedOK(br)){const b=br[br.length-1];sayList(br.map(wordOf),br.map(x=>birdEl(x.id)));return}
+  sel=i;render();const b=br[br.length-1];sayList([wordOf(b)],[birdEl(b.id)]);return}
+ if(sel===i){sel=-1;render();return}
+ if(legalFwd(state,sel,i)){hist.push(state.map(x=>x.slice()));const b=state[sel].pop();state[i].push(b);moves++;sel=-1;render({i});
+  const lv=LV[L];if(solvedOK(state[i])&&!doneSay[i+'_'+b.c]){doneSay[i+'_'+b.c]=1;const c=lv.cats[b.c];aina(c.say+' <span class="kk">'+state[i].map(wordOf).join(', ')+'</span>');
+   setTimeout(()=>sayList(state[i].map(wordOf),state[i].map(x=>birdEl(x.id))),250)}
+  checkWin()}
+ else{const from=state[sel],b=from[from.length-1],el=birdEl(b.id);if(el){el.classList.remove('up');el.classList.add('shake')}
+  const why=state[i].length>=cap?'На этой ветке нет места 🙈':JOKES[Math.random()*JOKES.length|0];aina(why);setTimeout(()=>{sel=-1;render()},420)}}
+function checkWin(){const lv=LV[L];const full=state.filter(solvedOK).length;if(full<lv.cats.length)return;
+ const best=lv.cats.length*cap;const st=moves<=best*1.25?3:moves<=best*1.8?2:1;
+ setTimeout(()=>{$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички на своих ветках! Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
+  $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},1600)}
+$('undo').onclick=()=>{if(!undoLeft||!hist.length)return;state=hist.pop();undoLeft--;moves++;sel=-1;render();aina('Вернула птичку назад ↩️')};
+$('add').onclick=()=>{if(!addLeft)return;addLeft--;state.push([]);render();aina('Новая ветка выросла! 🌿 Используй с умом.')};
+$('again').onclick=()=>start(L);
+$('next').onclick=()=>start(L<LV.length-1?L+1:L);
+document.addEventListener('pointerdown',initAudio,{once:true});
+window.__T={st:()=>state,LV,legalFwd,solvedOK,L:()=>L,buf:()=>!!BUF,said:()=>SAIDN};
+start(0);
+}
+</script>
+</body></html>
