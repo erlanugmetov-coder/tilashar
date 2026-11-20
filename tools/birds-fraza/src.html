@@ -151,10 +151,16 @@ body.playing #game{display:flex}body.playing #intro{display:none}
 .cube.mg{flex-direction:row;max-width:none;overflow:visible;position:relative;z-index:3;box-shadow:0 0 0 3px #fff8,0 3px 0 rgba(0,0,0,.15)}.cube.mg span{font-size:12px!important;padding:1px 3px}
 .glide{position:fixed;z-index:9;pointer-events:none;margin:0}
 .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+.col{position:relative}
+.col.R:before{content:"";position:absolute;left:-12px;top:-6px;bottom:-6px;width:13px;border-radius:7px;background:linear-gradient(90deg,#55331c,#8d5a35 45%,#5e3820);box-shadow:2px 0 0 #3d241444;z-index:0}
+.col.L:before{content:"";position:absolute;left:-16px;top:-6px;bottom:-6px;width:12px;border-radius:7px;background:linear-gradient(90deg,#55331c,#8d5a35 45%,#5e3820);z-index:0}
+.col .br{z-index:1}
+.gtop .lvl{flex:1;min-width:0;overflow:hidden}.gtop .lvl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.gtop .pill,.tg{flex:none}
 </style></head><body>
 <div class="clouds"><i></i><i></i><i></i></div><div id="sky"></div>
 <div id="game">
-  <div class="gtop"><div class="lvl"><b>🧱 Собери фразу</b><small>Тема 1 · Кто я</small></div><div class="pill">👣 <span id="mv">0</span></div><div class="pill">🪶 <span id="fe">0</span></div><button class="tg" id="tmus" aria-label="Музыка">🎵</button><button class="tg" id="tvoi" aria-label="Голос">🗣️</button></div>
+  <div class="gtop"><div class="lvl"><b>Собери фразу</b></div><div class="pill">👣 <span id="mv">0</span></div><div class="pill">🪶 <span id="fe">0</span></div><button class="tg" id="tmus" aria-label="Музыка">🎵</button><button class="tg" id="tvoi" aria-label="Голос">🗣️</button></div>
   <div class="gmid" id="gmid"><div class="tree" id="tree"></div></div>
   <div class="gbar">
     <button class="gb" id="undo" aria-label="Назад">↩️<small id="un">5</small></button>
@@ -332,13 +338,13 @@ function gen(){const rd=ROUNDS[R];let id=0;birds=[];
   s.push([],[]);const m=minMoves(s);if(m<0)continue;if(m>bestN){bestN=m;bestS=s}if(m>=n*3+1)break}
  best=bestN;return bestS}
 /* ---------- игра ---------- */
-function newMeta(n){meta=[];for(let i=0;i<n;i++)meta.push({k:++KEY,s:i%2?'R':'L'})}
+function newMeta(n){meta=[];for(let i=0;i<n;i++)meta.push({k:++KEY,s:'L',c:i%2?'R':'L'})}
 function snap(){return {s:state.map(x=>x.slice()),m:meta.map(x=>({...x}))}}
 function start(n){HIDE.clear();busy=false;$('sky').innerHTML='';R=n;state=gen();newMeta(state.length);moves=0;undoLeft=5;mixLeft=2;hist=[];sel=-1;
  $('win').classList.remove('on');render();aina(ROUNDS[R].hello,6500)}
 let toastT=0;
 function aina(h,ms){$('bub').innerHTML=h;const t=$('toast');t.classList.add('on');clearTimeout(toastT);const len=h.replace(/<[^>]+>/g,'').length;toastT=setTimeout(()=>t.classList.remove('on'),ms||Math.min(5500,2000+len*35))}
-function colCount(){let l=0,r=0;meta.forEach(m=>m.s==='L'?l++:r++);return [l,r]}
+function colCount(){let l=0,r=0;meta.forEach(m=>m.c==='L'?l++:r++);return [l,r]}
 function sizeTree(){const [l,r]=colCount(),rows=Math.max(l,r,1)+.5,h=$('gmid').clientHeight;const bh=Math.max(100,Math.min(122,Math.floor(h/rows)-4));$('tree').style.setProperty('--bh',bh+'px')}
 function rnd(seed){let x=seed*9301+49297;return ()=>{x=(x*9301+49297)%233280;return x/233280}}
 function cubeHTML(b){const c=b.t==='p'?'p':b.t==='w'?'r':(soft(b.v)?'s':'h');return `<div class="cube"><span class="${c}">${b.t==='s'?'-':''}${b.v}</span></div>`}
@@ -347,7 +353,7 @@ function brHTML(i){const br=state[i],m=meta[i],tg=sel===i;
   `<div class="bird ${j===br.length-1?'edge':''} ${tg&&j===br.length-1?'up':''}" data-b="${b.id}" style="${HIDE.has(b.id)?'visibility:hidden':''}"><div class="face" style="--d:-${(b.id*0.37)%2.6}s">${birdSVG(b.col)}</div>${cubeHTML(b)}</div>`).join('')}</div></div>`}
 function render(){$('mv').textContent=moves;$('fe').textContent=FEA;$('un').textContent=undoLeft;$('mx').textContent=mixLeft;$('undo').disabled=!undoLeft||!hist.length;$('mix').disabled=!mixLeft;
  $('add').classList.toggle('need',FEA<BRANCH_COST);
- sizeTree();const cols={L:[],R:[]};state.forEach((b,i)=>cols[meta[i].s].push(i));
+ sizeTree();const cols={L:[],R:[]};state.forEach((b,i)=>cols[meta[i].c].push(i));
  $('tree').innerHTML=['L','R'].map(sd=>`<div class="col ${sd}">${cols[sd].map(brHTML).join('')}</div>`).join('');
  meta.forEach(m=>{delete m.grow});
  $('tree').querySelectorAll('.br').forEach(el=>{el.onclick=()=>tap(+el.dataset.i);const wd=el.querySelector('.wood');wd.innerHTML=woodSVG(Math.max(60,Math.round(wd.clientWidth)),el.classList.contains('L')?'L':'R',+el.dataset.k)});fitWords()}
@@ -401,7 +407,7 @@ function checkWin(){if(state.some(b=>b.length))return false;
 $('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;HIDE.clear();const h=hist.pop();state=h.s;meta=h.m;undoLeft--;sel=-1;render();aina('Вернула птичку назад ↩️')};
 $('add').onclick=()=>{if(busy)return;if(FEA<BRANCH_COST){aina(`Новая ветка стоит ${BRANCH_COST} 🪶. У тебя ${FEA} 🪶 — пёрышки дают за победу ⭐`);return}
  if(state.length>=12){aina('Дерево и так большое 🌳');return}
- FEA-=BRANCH_COST;lsSet(FK,FEA);const [l,r]=colCount();state.push([]);meta.push({k:++KEY,s:l<=r?'L':'R',grow:true});sel=-1;render();SFX.chirp();aina(`Новая ветка выросла! 🌿 −${BRANCH_COST} 🪶`)};
+ FEA-=BRANCH_COST;lsSet(FK,FEA);const [l,r]=colCount();state.push([]);meta.push({k:++KEY,s:'L',c:l<=r?'L':'R',grow:true});sel=-1;render();SFX.chirp();aina(`Новая ветка выросла! 🌿 −${BRANCH_COST} 🪶`)};
 $('mix').onclick=()=>{if(busy||!mixLeft)return;const sizes=state.map(b=>b.length),all=[].concat(...state);
  for(let t=0;t<200;t++){const sh=shuffled(all);let k=0;const ns=sizes.map(n=>{const r=sh.slice(k,k+n);k+=n;return r});if(ns.some(b=>done(b.map(x=>x.k))))continue;
   if(solvePath(ns,20000)){hist.push(snap());state=ns;mixLeft--;sel=-1;render();aina('Перемешала птичек! 🔀 Попробуй ещё раз.');return}}
