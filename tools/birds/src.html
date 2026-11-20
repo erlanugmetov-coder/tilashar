@@ -65,8 +65,23 @@ body{margin:0;font:700 15px/1.4 "Nunito",Arial,sans-serif;color:var(--ink);backg
 .card p{margin:8px 0 14px}
 .card .go{width:100%;border:0;border-radius:16px;padding:14px;background:#2fb37a;color:#fff;font:800 17px "Nunito";box-shadow:0 4px 0 #1f8a5b;cursor:pointer}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+.bird .wg{transform-box:fill-box;transform-origin:20% 80%}
+.bird.flying .wg{animation:flap .11s infinite alternate}
+@keyframes flap{0%{transform:rotate(0)}100%{transform:rotate(-55deg)}}
+.bird.flying .shd{opacity:0}
+.bird.flying{z-index:5}
+.bird.hop svg{animation:hop .35s}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}}
+.br.R .bird.hop svg{animation-name:hopR}
+@keyframes hopR{0%,100%{transform:scaleX(-1) translateY(0)}40%{transform:scaleX(-1) translateY(-10px)}}
+.bird .eye{transform-box:fill-box;transform-origin:center}
+.bird.blink .eye{animation:blink .25s}
+@keyframes blink{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.1)}}
+.feather{position:fixed;pointer-events:none;font-size:18px;z-index:8;animation:fth 1.2s ease-out forwards}
+@keyframes fth{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
 @media (max-width:360px){.wrap{padding-left:6px;padding-right:6px}.tree{column-gap:8px}.slots{gap:1px;width:calc(100% - 2px)}.bird{width:calc((100% - 2px)/3)}.cube span{padding:1px 2px}.bird svg{width:40px;height:36px}}
-@media (prefers-reduced-motion:reduce){.bird,.bird.land,.card{animation:none;transition:none}}
+@media (prefers-reduced-motion:reduce){.bird,.bird.land,.card,.bird.flying .wg,.bird.hop svg,.feather{animation:none!important;transition:none}}
 </style></head><body>
 <div class="wrap">
   <div class="top"><div class="lvl"><b id="lt">Уровень 1</b><small id="ls">куда и где</small></div><div class="pill">👣 <span id="mv">0</span></div></div>
@@ -118,10 +133,25 @@ function initAudio(){if(AC)return loading;try{AC=new (window.AudioContext||windo
 function playOne(w){return new Promise(res=>{const p=SND[w.toLowerCase()];if(!AC||!BUF||!p){setTimeout(res,350);return}
  try{SAIDN++;const s=AC.createBufferSource();s.buffer=BUF;s.connect(AC.destination);s.start(0,p[0],p[1]);s.onended=res;setTimeout(res,p[1]*1000+400)}catch(e){res()}})}
 async function sayList(list,els){const my=++qid;if(loading)await loading;for(let i=0;i<list.length;i++){if(my!==qid)return;if(els&&els[i])els[i].classList.add('say');await playOne(list[i]);if(els&&els[i])els[i].classList.remove('say');await new Promise(r=>setTimeout(r,120))}}
+/* ---------- звуки игры (синтез, тише голоса) ---------- */
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function tone(f1,f2,dur,type,vol,delay){if(!AC)return;try{const t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.08,t+.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+.02)}catch(e){}}
+function noise(dur,vol,f,delay){if(!AC)return;try{const t=AC.currentTime+(delay||0),n=AC.createBuffer(1,AC.sampleRate*dur|0,AC.sampleRate),d=n.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
+ const src=AC.createBufferSource(),bp=AC.createBiquadFilter(),g=AC.createGain();src.buffer=n;bp.type='bandpass';bp.frequency.value=f||1200;g.gain.value=vol||.06;src.connect(bp);bp.connect(g);g.connect(AC.destination);src.start(t)}catch(e){}}
+const SFX={chirp:()=>{tone(2300,3400,.07,'sine',.05);tone(2600,3800,.07,'sine',.05,.09)},flap:(d)=>{for(let i=0;i<3;i++)noise(.05,.05,900,(d||0)+i*.07)},
+ buzz:()=>{tone(190,150,.18,'square',.035);tone(200,160,.12,'square',.03,.2)},poof:(d)=>{noise(.35,.07,600,d||0);tone(900,300,.3,'triangle',.03,d||0)},
+ win:()=>{[523,659,784,1046].forEach((f,i)=>tone(f,f,.22,'triangle',.07,i*.13));tone(1318,1318,.5,'triangle',.06,.55)}};
+function feathers(el,n){if(RM||!el)return;const r=el.getBoundingClientRect();for(let i=0;i<n;i++){const f=document.createElement('div');f.className='feather';f.textContent=['🪶','✨','🪶'][i%3];f.style.left=(r.left+r.width/2)+'px';f.style.top=(r.top+20)+'px';
+ f.style.setProperty('--dx',(Math.random()*120-60)+'px');f.style.setProperty('--dy',(-40-Math.random()*90)+'px');f.style.setProperty('--r',(Math.random()*240-120)+'deg');document.body.appendChild(f);setTimeout(()=>f.remove(),1300)}}
+function flyFLIP(ids,before){if(RM)return 0;let last=0;ids.forEach((id,k)=>{const el=birdEl(id),r0=before[id];if(!el||!r0)return;const r1=el.getBoundingClientRect();const dx=r0.left-r1.left,dy=r0.top-r1.top;
+ const lift=-Math.max(50,Math.abs(dx)*.35)-20,delay=k*90;el.classList.add('flying');
+ const a=el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:`translate(${dx*.5}px,${dy*.5+lift}px)`,offset:.5},{transform:'translate(0,0)'}],{duration:520,delay,easing:'cubic-bezier(.45,.05,.35,1)',fill:'backwards'});
+ a.onfinish=()=>{el.classList.remove('flying');el.classList.add('hop');setTimeout(()=>el.classList.remove('hop'),360)};SFX.flap(delay/1000);last=Math.max(last,delay+520)});return last}
+setInterval(()=>{if(RM||document.hidden)return;const bs=$('tree').querySelectorAll('.bird:not(.flying)');if(!bs.length)return;const b=bs[Math.random()*bs.length|0];const c=Math.random()<.6?'blink':'hop';b.classList.add(c);setTimeout(()=>b.classList.remove(c),400)},1600);
 /* ---------- уровень ---------- */
 function wordOf(b){return b.w[0]+b.w[1]}
 function hard(w){return !/[әеіөү]/i.test(w)}
-function birdSVG(c){return `<svg viewBox="0 0 58 52"><ellipse cx="30" cy="49" rx="16" ry="3" fill="#0002"/><path d="M10 30 Q2 22 6 14 Q14 20 16 26Z" fill="${c}" opacity=".8"/><ellipse cx="30" cy="30" rx="19" ry="17" fill="${c}"/><ellipse cx="33" cy="34" rx="10" ry="9" fill="#fff" opacity=".55"/><circle cx="38" cy="22" r="6" fill="#fff"/><circle cx="39.5" cy="22.5" r="3" fill="#14222c"/><path d="M47 25 L56 28 L47 31Z" fill="#ff8a3d"/><path d="M24 46 v4 M33 46 v4" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/></svg>`}
+function birdSVG(c){return `<svg viewBox="0 0 58 52"><ellipse class="shd" cx="30" cy="49" rx="16" ry="3" fill="#0002"/><path d="M10 30 Q2 22 6 14 Q14 20 16 26Z" fill="${c}" opacity=".8"/><ellipse cx="30" cy="30" rx="19" ry="17" fill="${c}"/><ellipse cx="33" cy="34" rx="10" ry="9" fill="#fff" opacity=".55"/><path class="wg" d="M18 28 Q24 14 36 22 Q30 34 18 28Z" fill="${c}" stroke="#0002" stroke-width="1.5"/><g class="eye"><circle cx="38" cy="22" r="6" fill="#fff"/><circle cx="39.5" cy="22.5" r="3" fill="#14222c"/></g><path d="M47 25 L56 28 L47 31Z" fill="#ff8a3d"/><path d="M24 46 v4 M33 46 v4" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/></svg>`}
 function full1(br){return br.length===cap&&br.every(b=>b.c===br[0].c)}
 function topGroup(br){let n=0;const c=br.length?br[br.length-1].c:-1;for(let i=br.length-1;i>=0&&br[i].c===c;i--)n++;return n}
 function canMove(s,f,t){if(f===t)return 0;const a=s[f],b=s[t];if(!a.length||b.length>=cap)return 0;if(b.length&&b[b.length-1].c!==a[a.length-1].c)return 0;return Math.min(topGroup(a),cap-b.length)}
@@ -153,19 +183,21 @@ addEventListener('resize',()=>{try{fitWords()}catch(e){}});
 function birdEl(id){return $('tree').querySelector(`[data-b="${id}"]`)}
 function tap(i){initAudio();if(busy)return;const br=state[i];
  if(sel<0){if(!br.length){aina('Эта ветка пустая — сначала выбери птичку 🐦');return}
-  sel=i;render();const g=topGroup(br),grp=br.slice(br.length-g);sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));return}
+  sel=i;render();SFX.chirp();const g=topGroup(br),grp=br.slice(br.length-g);grp.forEach(x=>{const e=birdEl(x.id);if(e){e.classList.add('hop');setTimeout(()=>e.classList.remove('hop'),360)}});sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));return}
  if(sel===i){sel=-1;render();return}
  const n=canMove(state,sel,i);
- if(n){hist.push(state.map(x=>x.slice()));const f=sel;sel=-1;for(let k=0;k<n;k++)state[i].push(state[f].pop());moves++;render({i,n});
-  if(full1(state[i])){busy=true;const lv=LV[L],grp=state[i].slice(),c=lv.cats[grp[0].c];aina(c.say+' <span class="kk">'+grp.map(wordOf).join(', ')+'</span> 🐦💨');
-   setTimeout(async()=>{await sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));grp.forEach(x=>{const e=birdEl(x.id);if(e)e.classList.add('fly')});
-    setTimeout(()=>{state[i]=[];busy=false;render();checkWin()},1100)},250)}
+ if(n){hist.push(state.map(x=>x.slice()));const f=sel;sel=-1;const mv=state[f].slice(state[f].length-n).reverse(),before={};mv.forEach(x=>{const e=birdEl(x.id);if(e)before[x.id]=e.getBoundingClientRect()});
+  for(let k=0;k<n;k++)state[i].push(state[f].pop());moves++;render();const tFly=flyFLIP(mv.map(x=>x.id),before);
+  if(full1(state[i])){busy=true;const lv=LV[L],grp=state[i].slice(),c=lv.cats[grp[0].c];
+   setTimeout(async()=>{aina(c.say+' <span class="kk">'+grp.map(wordOf).join(', ')+'</span> 🐦💨');SFX.chirp();await sayList(grp.map(wordOf),grp.map(x=>birdEl(x.id)));
+    grp.forEach((x,k)=>{const e=birdEl(x.id);setTimeout(()=>{if(e){e.classList.add('flying','fly');feathers(e,3)}SFX.flap(0);if(k===0)SFX.poof(.1)},k*140)});
+    setTimeout(()=>{state[i]=[];busy=false;render();checkWin()},1100+grp.length*140)},tFly+150)}
   else if(n>1)aina('Стайка из '+n+' полетела вместе! 🐦🐦');}
- else{const from=state[sel],b=from[from.length-1],el=birdEl(b.id);if(el){el.classList.remove('up');el.classList.add('shake')}
+ else{const from=state[sel],b=from[from.length-1],el=birdEl(b.id);if(el){el.classList.remove('up');el.classList.add('shake')}SFX.buzz();
   const why=state[i].length>=cap?'На этой ветке нет места 🙈':JOKES[Math.random()*JOKES.length|0];aina(why);setTimeout(()=>{sel=-1;render()},420)}}
 function checkWin(){if(state.some(b=>b.length))return;const lv=LV[L];
  const best=lv.bestN||lv.cats.length*2;const st=moves<=best+1?3:moves<=best+4?2:1;
- setTimeout(()=>{$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички улетели домой! 🐦💨 Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
+ setTimeout(()=>{SFX.win();$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('wt').innerHTML=`Все птички улетели домой! 🐦💨 Ходов: <b>${moves}</b>.<br>${st===3?'Идеально! Ты мастер хвостиков 😎':st===2?'Отлично! Можно ещё быстрее 💪':'Получилось! Попробуй за меньше ходов 😉'}`;
   $('next').textContent=L<LV.length-1?'Дальше →':'Сыграть снова 🔄';$('win').classList.add('on')},400)}
 $('undo').onclick=()=>{if(busy||!undoLeft||!hist.length)return;state=hist.pop();undoLeft--;sel=-1;render();aina('Вернула птичек назад ↩️')};
 $('add').onclick=()=>{if(busy||!addLeft)return;addLeft--;state.push([]);sel=-1;render();aina('Новая ветка выросла! 🌿 Используй с умом.')};
