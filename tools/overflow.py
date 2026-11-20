@@ -14,7 +14,7 @@ with sync_playwright() as p:
         errs = []; pg.on('pageerror', lambda e: errs.append(str(e)))
         pg.goto('file://' + f); pg.wait_for_timeout(1200)
         pg.evaluate("()=>{['cintro','cneed','fbov','sumov'].forEach(i=>{var o=document.getElementById(i);if(o)o.remove()});rbFull=function(){return true}}")
-        for slot in [0, 1, 4, 7, 5, 6, 2, 3]:
+        for slot in [0, 1, 4, 7, 5, 6, 8, 2, 3]:
             pg.evaluate("t=>sumCard(true,t)", slot); pg.wait_for_timeout(700)
             bad = pg.evaluate(CHK)
             if bad: print(w, 'book', slot, bad); tot += 1
