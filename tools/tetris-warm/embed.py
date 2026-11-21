@@ -68,9 +68,14 @@ window.tetDone=function(r){r=r||{};var o=document.getElementById('tetov');var d=
 warmEntry=tetOpen;startWarm=tetOpen;
 """
 hj=json.dumps(w,ensure_ascii=False).replace('</','<\\/').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
+SP=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','split5.js'),encoding='utf-8').read()
+m1=SP.index('/* ---------- книжки и карточки ---------- */');m2=SP.index('/* ---------- перенос прогресса')
+SP_MAIN=SP[:m1]+SP[m2:];SP_BOOK=SP[m1:m2]
+js=SP_MAIN+js
 js=js.replace('__THEMES__',open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'themes.js'),encoding='utf-8').read()).replace('__TETHTML__',hj).replace('__COMBOS__',combos.strip())
 anchor='window.__c.showCity=showCity;showCity();'
 assert s.count(anchor)==1
 s=s.replace(anchor,js+anchor)
+last=s.rfind('</script>');s=s[:last]+'\n'+SP_BOOK+'\n'+s[last:]
 open(out,'w',encoding='utf-8').write(s)
 print('ok',len(s))

@@ -44,16 +44,16 @@ function tet4(dl){var it=[];if(dl.indexOf(0)<0)return it;var ps=['Менің'];i
     it.push({a:p,w:n[0],need:t,m:m,ru:T4P[p][g]+' '+n[1],full:p+' '+m,k:Math.max(n[3],p==='Менің'?0:p==='Сенің'||p==='Оның'?2:3),vc:m.slice(0,n[0].length)!==n[0]})})});return it}
 /* ---------- Тема 5 «Қайда» (слот 5): куда и где ---------- */
 var T5PL=[['үй','домой','дома'],['қала','в город','в городе'],['дүкен','в магазин','в магазине'],['асхана','в столовую','в столовой'],['кітапхана','в библиотеку','в библиотеке'],
- ['бассейн','в бассейн','в бассейне'],['стадион','на стадион','на стадионе'],['ауыл','в аул','в ауле'],['дала','на улицу','на улице'],['мектеп','в школу','в школе'],['саябақ','в парк','в парке']];
-var T5WH={'үй':['отырмын','я сижу'],'қала':['тұрамын','я живу'],'дүкен':['тұрмын','я стою'],'асхана':['отырмын','я сижу'],'кітапхана':['оқимын','я читаю'],'бассейн':['жүземін','я плаваю'],
- 'стадион':['ойнаймын','я играю'],'ауыл':['ойнаймын','я играю'],'дала':['ойнаймын','я играю'],'мектеп':['оқимын','я учусь'],'саябақ':['ойнаймын','я играю']};
+ ['бассейн','в бассейн','в бассейне'],['стадион','на стадион','на стадионе'],['ауыл','в аул','в ауле'],['дала','на улицу','на улице'],['мектеп','в школу','в школе'],['саябақ','в парк','в парке'],['сынып','в класс','в классе']];
+var T5WH={'үй':[['отырмын','я сижу'],['ойнаймын','я играю'],['оқимын','я читаю']],'қала':[['тұрамын','я живу']],'дүкен':[['тұрмын','я стою']],'асхана':[['отырмын','я сижу']],'кітапхана':[['оқимын','я читаю'],['отырмын','я сижу']],'бассейн':[['жүземін','я плаваю']],
+ 'стадион':[['ойнаймын','я играю']],'ауыл':[['ойнаймын','я играю']],'дала':[['ойнаймын','я играю']],'мектеп':[['оқимын','я учусь'],['отырмын','я сижу']],'саябақ':[['ойнаймын','я играю'],['жүгіремін','я бегаю']],'сынып':[['отырмын','я сижу'],['оқимын','я учусь']]};
 function t5dat(w){var s=tSoft(w);return TVL.test(w)?(s?'ке':'қа'):(s?'ге':'ға')}
 function t5loc(w){var s=tSoft(w);return TVL.test(w)?(s?'те':'та'):(s?'де':'да')}
-function tet5(dl){var it=[];if(dl.indexOf(0)<0)return it;
+function tet5(dl,only){var it=[];if(dl.indexOf(0)<0)return it;
   T5PL.forEach(function(pl){var vl=TVL.test(pl[0]);if(vl&&dl.indexOf(1)<0)return;var kk=vl?1:0;
-    it.push({a:'',w:pl[0],post:'барамын',need:t5dat(pl[0]),m:pl[0]+t5dat(pl[0]),ru:'я пойду '+pl[1],full:pl[0]+t5dat(pl[0])+' барамын',k:kk,q:'dat'});
-    if(pl[0]==='үй'||pl[0]==='мектеп')it.push({a:'',w:pl[0],post:'келемін',need:t5dat(pl[0]),m:pl[0]+t5dat(pl[0]),ru:'я прихожу '+pl[1],full:pl[0]+t5dat(pl[0])+' келемін',k:kk,q:'dat'});
-    if(dl.indexOf(2)>=0){var v=T5WH[pl[0]];it.push({a:'',w:pl[0],post:v[0],need:t5loc(pl[0]),m:pl[0]+t5loc(pl[0]),ru:v[1]+' '+pl[2],full:pl[0]+t5loc(pl[0])+' '+v[0],k:2,q:'loc'})}});return it}
+    if(only!=='loc')it.push({a:'',w:pl[0],post:'барамын',need:t5dat(pl[0]),m:pl[0]+t5dat(pl[0]),ru:'я пойду '+pl[1],full:pl[0]+t5dat(pl[0])+' барамын',k:kk,q:'dat'});
+    if(only!=='loc'&&['үй','мектеп','саябақ','дүкен','қала'].indexOf(pl[0])>=0)it.push({a:'',w:pl[0],post:'келемін',need:t5dat(pl[0]),m:pl[0]+t5dat(pl[0]),ru:'я прихожу '+pl[1],full:pl[0]+t5dat(pl[0])+' келемін',k:kk,q:'dat'});
+    if(only!=='dat'&&dl.indexOf(2)>=0)(T5WH[pl[0]]||[]).forEach(function(v){it.push({a:'',w:pl[0],post:v[0],need:t5loc(pl[0]),m:pl[0]+t5loc(pl[0]),ru:v[1]+' '+pl[2],full:pl[0]+t5loc(pl[0])+' '+v[0],k:2,q:'loc'})})});return it}
 /* ---------- подсказки при ошибке (одна строчка, ответ не говорит) ---------- */
 function tKK(x){return '<span class="kk">'+x+'</span>'}
 var T1TP=null;function t1tp(t){if(!T1TP){T1TP={};Object.keys(TCODE).forEach(function(p){['бала','дос','суретші','әнші','қонақ','ұстаз','ақылды','күшті','жас','биік','қыз','мұғалім'].forEach(function(w){var x=tailOf(w,TCODE[p]);if(x&&!T1TP[x])T1TP[x]=p})})}return T1TP[t]}
@@ -69,15 +69,15 @@ function tetWhy(th,it,t){try{var tS=/[әеіөү]/.test(t),nS=/[әеіөү]/.tes
     if(t[0]!==it.need[0])return it.cv==='й'?tKK(it.st)+' — на гласную → жёлтый кубик '+tKK('й'):it.cv==='и'?tKK(it.st)+' — «ы / і» на конце → '+tKK('и'):tKK(it.st)+' — на согласную → жёлтый кубик '+tKK('а / е');return ''}
   if(th===7){var g4=function(p){return p==='Олардың'?'Оның':p};if(t4who(t)!==g4(it.a))return tKK(it.a)+' → хвостик «'+T4P[it.a][0]+'» 👀';
     if(tS!==nS)return col();return tVow(it.w)?tKK(it.w)+' — на гласную → короткий хвостик':tKK(it.w)+' — на согласную → хвостик с '+tKK(nS?'і':'ы')}
-  if(th===5){var td=/^[ғгқк]/.test(t);if(td!==(it.q==='dat'))return it.q==='dat'?tKK(it.post)+' — куда? → '+tKK('-ға / -ке'):tKK(it.post)+' — где? → '+tKK('-да / -та');
+  if(th===5||th===9){var td=/^[ғгқк]/.test(t);if(td!==(it.q==='dat'))return it.q==='dat'?tKK(it.post)+' — куда? → '+tKK('-ға / -ке'):tKK(it.post)+' — где? → '+tKK('-да / -та');
     if(tS!==nS)return col();var l5=it.w.slice(-1);return TVL.test(it.w)?tKK(it.w)+' — шептун «'+l5+'» 🤫 → '+tKK(it.q==='dat'?'-қа / -ке':'-та / -те'):tKK(it.w)+' — спокойная буква 😌 → '+tKK(it.q==='dat'?'-ға / -ге':'-да / -де')}
   }catch(e){}return ''}
 /* ---------- темы, тема дня ---------- */
-var TETTH=[{slot:0,n:1,name:'Кто я',ico:'🧒'},{slot:1,n:2,name:'Какой я',ico:'🎪'},{slot:4,n:3,name:'Парк',ico:'🌳'},{slot:7,n:4,name:'Менің — мой',ico:'🏠'},{slot:5,n:5,name:'Қайда',ico:'🏫'}];
+var TETTH=[{slot:0,n:1,name:'Кто я',ico:'🧒'},{slot:1,n:2,name:'Какой я',ico:'🎪'},{slot:4,n:3,name:'Парк',ico:'🌳'},{slot:7,n:4,name:'Менің — мой',ico:'🏠'},{slot:5,n:5,name:'Куда?',ico:'➡️'},{slot:9,n:6,name:'Где?',ico:'📍'}];
 var TALLK=[0,1,2,3,4,5,6,7,8,9];
 function tetItems(slot){var dl=TALLK,it; /* v187: тетрис темы открывается после всей темы — берём все её уроки */
   if(slot===0){var c=tetCfg1();it=[];Object.keys(c).forEach(function(p){c[p].forEach(function(x){var t=tailOf(x[0],TCODE[p])||'';it.push({a:p,w:x[0],need:t,m:x[0]+t,ru:TPR[p]+' '+x[1],full:p+' '+x[0]+t})})});return it}
-  it=slot===1?tet2(dl):slot===4?tet3(dl):slot===7?tet4(dl):slot===5?tet5(dl):[];
+  it=slot===1?tet2(dl):slot===4?tet3(dl):slot===7?tet4(dl):slot===5?tet5(dl,'dat'):slot===9?tet5(dl,'loc'):[];
   return it.filter(function(x){return dl.indexOf(x.k)>=0&&canSay(x.full)})}
 function tetTails(items){var s={};items.forEach(function(x){s[x.need||'∅']=1});return Object.keys(s)}
 function tetAvail(){return TETTH.filter(function(T){try{if(!thDone(T.slot))return false;var it=tetItems(T.slot);return it.length>=4&&tetTails(it).length>=3}catch(e){return false}})}
