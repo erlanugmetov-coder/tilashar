@@ -93,5 +93,8 @@ s=s.replace('<div class="cbot">__ROBOT__</div>','<div class="cbot">'+r('demo-kon
 s=s.replace('__ROBOT__',r('tetris/robot.svg'))
 assert '__' not in re.sub(r'window\.__\w+|__ct','',s), re.findall(r'.{30}__.{30}',s)[:5]
 assert 'cele(' not in s and 'toCity' not in s and 'd_lesson' not in s
+# v200: больше простых кубиков (Ерлан): раз в 3 с вместо 7, чуть быстрее, пока поле заполнено меньше чем наполовину
+_a="if(room&&mxh<ROWS-5)spawnFill(false);nextF=now+7000";assert s.count(_a)==1;s=s.replace(_a,"if(room&&mxh<Math.floor(ROWS/2))spawnFill(false);nextF=now+3000")
+_a="v:(fast?260:55+Math.random()*130)";assert s.count(_a)==1;s=s.replace(_a,"v:(fast?260:90+Math.random()*130)")
 open(sys.argv[1],'w',encoding='utf-8').write(s)
 print('ok',len(s))
