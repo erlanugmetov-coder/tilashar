@@ -137,7 +137,7 @@ body{font:700 15px/1.3 "Nunito",Arial,sans-serif;color:#14222c;background:linear
 </div>
 <div class="ov" id="start"><div class="card"><div style="font-size:40px">🧱</div><h2>Сөйлемді құрастыр!</h2><p>Собери фразу — 2 минуты</p>
  <div class="rules"><div><b>1</b>Сверху падают «кто + слово» и цветные кубики</div><div><b>2</b>Жми нужный хвостик внизу — фраза взорвётся</div><div><b>3</b>Не дай кубикам дойти до красного края</div></div>
- <button class="go" id="play">Играть ▶</button><p style="font-size:12px;color:#5d7483;margin:8px 0 0">Прототип · без озвучки</p></div></div>
+ <button class="go" id="play">Играть ▶</button><p style="font-size:12px;color:#5d7483;margin:8px 0 0">Прототип · музыка «World of Games» · без озвучки слов</p></div></div>
 <div class="ov off" id="over"><div class="card"><div id="oico" style="font-size:40px">🏆</div><h2 id="otit">Время вышло!</h2>
  <div class="res"><div>Очки<b id="osc">0</b></div><div>Фразы<b id="oph">0</b></div><div>Монеты<b id="oco">+0</b></div></div>
  <p style="margin:4px 0 0;font-weight:800">Ты собрал:</p><div class="got" id="ogot"></div>
@@ -165,6 +165,12 @@ let AC=null;function ac(){if(!AC)try{AC=new (window.AudioContext||window.webkitA
 function tone(f1,f2,d,type,vol,dl){if(!SOUND)return;const a=ac();if(!a)return;try{const t=a.currentTime+(dl||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.07,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
 const SFX={thud:()=>tone(150,70,.08,'triangle',.05),good:()=>{tone(660,990,.1,'triangle',.07);tone(990,1320,.12,'triangle',.06,.08)},boom:()=>{tone(320,60,.3,'sawtooth',.05);tone(1300,400,.2,'triangle',.04)},
  bad:()=>{tone(190,150,.18,'square',.035);tone(200,160,.12,'square',.03,.2)},tick:()=>tone(1300,900,.04,'triangle',.03),win:()=>[523,659,784,1046].forEach((f,i)=>tone(f,f,.2,'triangle',.07,i*.12)),lose:()=>[523,440,349,262].forEach((f,i)=>tone(f,f*.98,.25,'triangle',.07,i*.18)),power:()=>{tone(400,1200,.25,'sine',.06)}};
+/* ---------- музыка (World of Games, по кругу) ---------- */
+let MBUF=null,MSRC=null,MGAIN=null,mload=null;
+function loadMusic(){const a=ac();if(!a||mload)return mload;mload=fetch('game_music.mp3').then(r=>r.arrayBuffer()).then(b=>new Promise((res,rej)=>a.decodeAudioData(b,res,rej))).then(b=>{MBUF=b}).catch(()=>{});return mload}
+async function startMusic(){if(!SOUND)return;const a=ac();if(!a)return;try{if(a.state==='suspended')await a.resume()}catch(e){}await loadMusic();if(!MBUF||!SOUND||MSRC)return;
+ try{MGAIN=a.createGain();MGAIN.gain.setValueAtTime(.0001,a.currentTime);MGAIN.gain.exponentialRampToValueAtTime(.32,a.currentTime+.8);MSRC=a.createBufferSource();MSRC.buffer=MBUF;MSRC.loop=true;MSRC.connect(MGAIN);MGAIN.connect(a.destination);MSRC.start()}catch(e){}}
+function stopMusic(fade){const a=AC;if(!MSRC||!a)return;const s=MSRC,g=MGAIN;MSRC=null;try{g.gain.cancelScheduledValues(a.currentTime);g.gain.setValueAtTime(Math.max(.0001,g.gain.value),a.currentTime);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+(fade||.15));s.stop(a.currentTime+(fade||.15)+.05)}catch(e){}}
 /* ---------- состояние ---------- */
 let cell=40,ROWS=12,grid=[],blocks=[],BID=0,shelf=[],TID=0,sel=null,score=0,combo=0,mist=0,got=[],running=false,t0=0,tPaused=0,lastT=0,nextPh=0,nextF=0,raf=0,shield=false,slowUntil=0,free={},lastP='';
 const elapsed=()=>(performance.now()-t0)/1000,prog=()=>Math.min(1,elapsed()/ROUND);
@@ -288,17 +294,17 @@ function loop(now){if(!running)return;const dt=Math.min(.05,(now-(lastT||now))/1
  if(left<=0){end(true);return}raf=requestAnimationFrame(loop)}
 function start(){blocks.forEach(b=>b.el&&b.el.remove());$('board').querySelectorAll('.bk,.tip,.plate').forEach(e=>e.remove());
  grid=[];blocks=[];shelf=[];sel=null;score=0;combo=0;mist=0;got=[];shield=false;slowUntil=0;free={bomb:1,shield:1,hint:1,slow:1};lastP='';acting=false;
- $('start').classList.add('off');$('over').classList.add('off');running=true;ac();fillShelf();hud();layout();t0=performance.now();lastT=0;nextPh=t0+200;nextF=t0+1200;cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);react('hap','Поехали! 🚀')}
-function end(win){if(!running)return;running=false;cancelAnimationFrame(raf);const earn=Math.floor(score/100)+(win?3:0);COINS+=earn;ls('tilashar-coins-test',COINS);hud();
+ $('start').classList.add('off');$('over').classList.add('off');running=true;ac();startMusic();fillShelf();hud();layout();t0=performance.now();lastT=0;nextPh=t0+200;nextF=t0+1200;cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);react('hap','Поехали! 🚀')}
+function end(win){if(!running)return;running=false;cancelAnimationFrame(raf);stopMusic(1.5);const earn=Math.floor(score/100)+(win?3:0);COINS+=earn;ls('tilashar-coins-test',COINS);hud();
  (win?SFX.win:SFX.lose)();if(!win)shake(10);
  $('oico').textContent=win?'🏆':'🕳️';$('otit').textContent=win?'Время вышло — ты выстоял!':'Кубики дошли до края!';$('osc').textContent=score;$('oph').textContent=got.length;$('oco').textContent='+'+earn;
  $('ogot').innerHTML=got.length?got.map(([a,b])=>`<div><span class="kk">${a}</span> — ${b}</div>`).join(''):'<div>Пока ни одной фразы — попробуй ещё 💪</div>';
  setTimeout(()=>$('over').classList.remove('off'),win?300:700)}
-let pausedAt=0;document.addEventListener('visibilitychange',()=>{if(document.hidden&&running){running=false;cancelAnimationFrame(raf);pausedAt=performance.now()}else if(!document.hidden&&pausedAt){const d=performance.now()-pausedAt;t0+=d;nextPh+=d;nextF+=d;slowUntil+=d;pausedAt=0;lastT=0;running=true;raf=requestAnimationFrame(loop)}});
+let pausedAt=0;document.addEventListener('visibilitychange',()=>{try{if(AC){if(document.hidden)AC.suspend();else AC.resume()}}catch(e){}if(document.hidden&&running){running=false;cancelAnimationFrame(raf);pausedAt=performance.now()}else if(!document.hidden&&pausedAt){const d=performance.now()-pausedAt;t0+=d;nextPh+=d;nextF+=d;slowUntil+=d;pausedAt=0;lastT=0;running=true;raf=requestAnimationFrame(loop)}});
 addEventListener('resize',()=>{if(!running)layout()});
-$('play').onclick=start;$('again').onclick=start;$('back').onclick=()=>{if(running){running=false;cancelAnimationFrame(raf)}$('over').classList.add('off');$('start').classList.remove('off')};
-$('snd').onclick=()=>{SOUND=!SOUND;ls('tilashar-tet-snd',SOUND?1:0);$('snd').textContent=SOUND?'🔊':'🔇'};$('snd').textContent=SOUND?'🔊':'🔇';
+$('play').onclick=start;$('again').onclick=start;$('back').onclick=()=>{if(running){running=false;cancelAnimationFrame(raf)}stopMusic(.4);$('over').classList.add('off');$('start').classList.remove('off')};
+$('snd').onclick=()=>{SOUND=!SOUND;ls('tilashar-tet-snd',SOUND?1:0);if(!SOUND)stopMusic(.3);else if(running)startMusic();$('snd').textContent=SOUND?'🔊':'🔇'};$('snd').textContent=SOUND?'🔊':'🔇';
 hud();layout();
-window.__G={floating:()=>blocks.filter(b=>!b.falling).filter(b=>{let sup=0;for(let k=0;k<b.w;k++)sup=Math.max(sup,supBelow(b.c+k,b.row));return sup<b.row}).length,rows:()=>blocks.filter(b=>!b.falling).map(b=>[b.t,b.row,b.c]),blocks:()=>blocks,shelf:()=>shelf,target,needOf,useTail:i=>useTail(i,$('shelf').querySelectorAll('.tl')[i]),useBoost,start,score:()=>score,running:()=>running,acting:()=>acting,info:()=>({el:Math.round(elapsed()),cell,ROWS,got:got.length,mist,COINS})};
+window.__G={mus:()=>({buf:!!MBUF,dur:MBUF?Math.round(MBUF.duration):0,playing:!!MSRC}),floating:()=>blocks.filter(b=>!b.falling).filter(b=>{let sup=0;for(let k=0;k<b.w;k++)sup=Math.max(sup,supBelow(b.c+k,b.row));return sup<b.row}).length,rows:()=>blocks.filter(b=>!b.falling).map(b=>[b.t,b.row,b.c]),blocks:()=>blocks,shelf:()=>shelf,target,needOf,useTail:i=>useTail(i,$('shelf').querySelectorAll('.tl')[i]),useBoost,start,score:()=>score,running:()=>running,acting:()=>acting,info:()=>({el:Math.round(elapsed()),cell,ROWS,got:got.length,mist,COINS})};
 }
 </script></body></html>
