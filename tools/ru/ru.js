@@ -1,12 +1,14 @@
 /* v197: русская озвучка реплик Айны (ТЗ п. 16, этап 1). Спрайт ru1.mp3, карта RUM: ключ → [начало, длина, кусок текста для поиска, текст].
    ruSay(текст) ищет в тексте экрана куски из карты и проигрывает их по очереди; казахские примеры ждут конца (ruAfter).
    🔊 выключает и русскую озвучку. Тап по облачку Айны — повтор. */
+var RUON=['i0','i2','i3','ie']; /* v198: пока озвучка только до первого урока (решение Ерлана); остальные записи лежат в спрайте */
 var RUM=__RUMAP__,RUBUF=null,RUP=null,RUSRC=[],RUEND=0,RUQ=[],RUT0=0,RUDUR=0;
 function ruLeft(){return RUT0?Math.max(0,RUT0+RUDUR*1000+400-Date.now()):0} /* сколько ещё говорит Айна — пауза на чтение ждёт */
 function ruNorm(t){var d=document.createElement('div');d.innerHTML=String(t||'');return (d.textContent||'').toLowerCase().replace(/ё/g,'е').match(/[a-zа-яәғқңөұүһі0-9]+/g)||[]}
 function ruLoad(){if(RUP)return RUP;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)()}catch(e){return Promise.resolve(null)}
-  RUP=fetch('ru1.mp3').then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(b){return new Promise(function(res,rej){AC.decodeAudioData(b,res,rej)})}).then(function(b){RUBUF=b;return b}).catch(function(){RUP=null;return null});return RUP}
-function ruFind(t){if(/^@/.test(t))return RUM[t.slice(1)]?[t.slice(1)]:[];var w=' '+ruNorm(t).join(' ')+' ',hit=[];
+  RUP=fetch('ru2.mp3').then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(b){return new Promise(function(res,rej){AC.decodeAudioData(b,res,rej)})}).then(function(b){RUBUF=b;return b}).catch(function(){RUP=null;return null});return RUP}
+function ruFind(t){return ruFind0(t).filter(function(k){return RUON.indexOf(k)>=0})}
+function ruFind0(t){if(/^@/.test(t))return RUM[t.slice(1)]?[t.slice(1)]:[];var w=' '+ruNorm(t).join(' ')+' ',hit=[];
   Object.keys(RUM).forEach(function(k){if(RUM[k][2].charAt(0)==='@')return;var m=' '+ruNorm(RUM[k][2]).join(' ');var i=w.indexOf(m.trim()?m.trim():'\u0000');if(i>=0)hit.push([i,k])});
   hit.sort(function(a,b){return a[0]-b[0]});return hit.map(function(x){return x[1]})}
 function ruStop(){RUSRC.forEach(function(s){try{s.stop()}catch(e){}});RUSRC=[];RUEND=0;RUQ=[];RUT0=0} /* прервали — очередь прошлого облачка не нужна */

@@ -10,12 +10,13 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v197';")
+rep("var CURV='v185';","var CURV='v198';")
 # v197: русская реплика Айны звучит при появлении облачка, казахские примеры — после неё
 rep("bub.innerHTML=html;svg.classList.add('talk');sBloop();","bub.innerHTML=html;svg.classList.add('talk');sBloop();try{if(ruFind(html).length){bub.dataset.ru=html;ruSay(html)}}catch(e){}")
 rep("(function nx(i){if(i>=au.length||my!==run)return;","ruAfter(function(){(function nx(i){if(i>=au.length||my!==run)return;")
 rep("})(0); /* v116: все примеры по очереди */","})(0)}); /* v116: все примеры по очереди; v197: после русской реплики */")
 rep("if(na)ms=Math.max(ms,1200+na*1700);","if(na)ms=Math.max(ms,1200+na*1700);try{ms+=ruLeft()}catch(e){}")
+rep("Жми на ⚡ — починим!","Жми на облачко над домиком — починим!") # v198
 # ===== v194: ТЗ пункты 2–5 (первый день ребёнка) =====
 # 2) вступление 5 экранов → 3: s0 = падение + прозвища, s2 = город, s3 = город + энергия + «Полетели»
 rep("""if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';""",
@@ -36,7 +37,7 @@ rep("return [I[0],I[1],I[2],I[3],I[4],I[5],h1Name(hd[0]),I[6],I[7],h1Name(sf[0])
     "return [I[0],h1Name(hd[0]),I[1],h1Name(sf[0]),h1NameB(rest[0]),I[2],{task:'name'}]}},")
 rep("end:'Я вспомнила первый хвостик — <b>«это я»</b>! Спасибо, %T%!'","end:'Я вспомнила первый хвостик — <b>«это я»</b>! Я ведь робот-зеркало 🪞 и показываю самого главного человека — тебя, %T%! 😎'")
 # 4) обещание в конце первого дня (только если завтра правда будет тетрис)
-rep("""'<div class="egain">⚡ +'+CGAIN+' энергии Айне</div>""","""'<div class="egain">⚡ +'+CGAIN+' энергии Айне</div>'+(function(){try{return SD().first===TODAY()&&tetAvail().length?'<p class="endsay">🎮 Завтра покажу тебе игру! Приходи — Айна будет ждать.</p>':''}catch(e){return ''}})()+'""")
+rep("""'<div class="egain">⚡ +'+CGAIN+' энергии Айне</div>""","""'<div class="egain">⚡ +'+CGAIN+' энергии Айне</div>'+(function(){try{var D=SD();if(D.first===TODAY()&&!D.prom&&tetAvail().length){D.prom=1;save();return '<p class="endsay">🎮 Завтра покажу тебе игру! Приходи — Айна будет ждать.</p>'}return ''}catch(e){return ''}})()+'""")
 # 5) экран разминки: короче и без «нельзя покидать город»
 _a=s.index("if(n<=0){f='wow';t='Сәлем,");_b=s.index("var cloud=",_a)
 s=s[:_a]+"""if(n<=0){f='happy';t='Сәлем, <b>'+nm+'</b>! 👋 Ночью облако забвения подкралось к городу. Разминка на 1 минуту — и спасём его! 🎮'}
@@ -70,18 +71,18 @@ js=r"""
 /* v187: разминка — мягкий тетрис Темы 1 вместо «Спасаем слова» (исходник tools/tetris-warm) */
 var TETHTML=__TETHTML__;
 var TETCOMBOS=__COMBOS__;
-var T1P={1:['Мен'],3:['Сен'],4:['Сіз'],5:['Ол','Біз'],6:['Сендер','Сіздер','Олар']};
+var T1P={0:['Мен'],2:['Сен','Сіз'],3:['Ол','Біз'],4:['Сендер','Сіздер','Олар']}; /* v198: Тема 1 — 5 уроков */
 var T1CODE={'Мен':'men','Сен':'sen','Сіз':'siz','Ол':'ol','Біз':'biz','Сендер':'sender','Сіздер':'sizder','Олар':'olar'};
 function t1Ready(){return thDone(0)} /* разминка — после всей Темы 1 */
 warmNeeded=function(){var d=SD();return !!d.first&&d.first!==TODAY()&&d.warm!==TODAY()&&tetAvail().length>0}; /* v194: разминка, как только есть тетрис (Тема 1 — после 2 уроков) */
 function seen1(w){w=String(w||'').toLowerCase();if(!w)return;if(!st.seen1)st.seen1=[];if(st.seen1.indexOf(w)<0)st.seen1.push(w)}
-function tetCfg1(dl){dl=dl||[0,1,2,3,4,5,6,7,8];var early=dl.indexOf(2)<0,pr=[],seen=st.seen1||[],combos={};
+function tetCfg1(dl){dl=dl||[0,1,2,3,4,5,6,7,8];var early=dl.indexOf(1)<0,pr=[],seen=st.seen1||[],combos={};
   Object.keys(T1P).forEach(function(k){if(dl.indexOf(+k)>=0)pr=pr.concat(T1P[k])});
   pr.forEach(function(p){var code=T1CODE[p],ok=(TETCOMBOS[p]||[]).filter(function(x){return h1ok(x[0],code)&&H1W.some(function(v){return v[0]===x[0]})&&canSay(p+' '+x[0]+(tailOf(x[0],code)||''))}),
-    sn=ok.filter(function(x){return seen.indexOf(x[0])>=0});if(early){var E1=['бала','оқушы','суретші','спортшы','футболшы','биші','әнші'];ok=ok.filter(function(x){return E1.indexOf(x[0])>=0});sn=[]} /* v194: до урока «Буквы с характером» — только слова уроков 1–2 */if(sn.length>=4)ok=sn;if(ok.length)combos[p]=ok});
+    sn=ok.filter(function(x){return seen.indexOf(x[0])>=0});if(early){var E1=['бала','оқушы','суретші','спортшы','биші','әнші'];ok=ok.filter(function(x){return E1.indexOf(x[0])>=0});sn=[]} /* v194: до урока «Буквы с характером» — только слова уроков 1–2 */if(sn.length>=4)ok=sn;if(ok.length)combos[p]=ok});
   return combos}
 __THEMES__
-var T1K={'Мен':1,'Сен':3,'Сіз':4,'Ол':5,'Біз':5,'Сендер':6,'Сіздер':6,'Олар':6};
+var T1K={'Мен':0,'Сен':2,'Сіз':2,'Ол':3,'Біз':3,'Сендер':4,'Сіздер':4,'Олар':4};
 function tetCfg(TH){var items=tetItems(TH.slot);if(TH.slot===0)items.forEach(function(x){x.k=T1K[x.a]});
   var d=SD(),prio=[],seenP={};
   (d.terr||[]).forEach(function(k){var a=String(k).split('|');if(+a[0]===TH.slot&&items.some(function(x){return x.full===a[1]}))prio.push(a[1])});
@@ -129,11 +130,13 @@ RS=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RSB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','rest3_book.js'),encoding='utf-8').read()
 SP_BOOK=SP_BOOK+'\n'+RSB
 SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','tz6.js'),encoding='utf-8').read() # v196: ТЗ 6–12, 14
+SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','t1b_book.js'),encoding='utf-8').read() # v198
 # v197: русская озвучка Айны (ТЗ 16, этап 1)
 _RU=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'ru')
-_RM=json.load(open(os.path.join(_RU,'ru1.json'),encoding='utf-8'));_RM={k:[v[0],v[1],v[2]] for k,v in _RM.items()}
+_RM=json.load(open(os.path.join(_RU,'ru2.json'),encoding='utf-8'));_RM={k:[v[0],v[1],v[2]] for k,v in _RM.items()}
 SP_BOOK=SP_BOOK+'\n'+open(os.path.join(_RU,'ru.js'),encoding='utf-8').read().replace('__RUMAP__',json.dumps(_RM,ensure_ascii=False))
-js=SP_MAIN+KD+SV+RS+js
+T1B=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','t1b.js'),encoding='utf-8').read() # v198: Тема 1 и Базар по стандарту
+js=SP_MAIN+KD+SV+RS+T1B+js
 js=js.replace('__THEMES__',open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'themes.js'),encoding='utf-8').read()).replace('__TETHTML__',hj).replace('__COMBOS__',combos.strip())
 anchor='window.__c.showCity=showCity;showCity();'
 assert s.count(anchor)==1
