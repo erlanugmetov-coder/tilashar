@@ -10,13 +10,17 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v199';")
+rep("var CURV='v185';","var CURV='v201';")
 # v197: русская реплика Айны звучит при появлении облачка, казахские примеры — после неё
 rep("bub.innerHTML=html;svg.classList.add('talk');sBloop();","bub.innerHTML=html;svg.classList.add('talk');sBloop();try{if(ruFind(html).length){bub.dataset.ru=html;ruSay(html)}}catch(e){}")
 rep("(function nx(i){if(i>=au.length||my!==run)return;","ruAfter(function(){(function nx(i){if(i>=au.length||my!==run)return;")
 rep("})(0); /* v116: все примеры по очереди */","})(0)}); /* v116: все примеры по очереди; v197: после русской реплики */")
 rep("if(na)ms=Math.max(ms,1200+na*1700);","if(na)ms=Math.max(ms,1200+na*1700);try{ms+=ruLeft()}catch(e){}")
 rep("Жми на ⚡ — починим!","Жми на облачко над домиком — починим!") # v198
+# v201: полоска урока — сплошная, плавно наполняется (вместо отрезков)
+rep("""var x='<i id="bar" style="display:none"></i>';for(var j=0;j<n;j++)x+='<b class="'+(j<k?'ok':(j===k&&cur>0&&!done&&si>0?'now':''))+'"></b>';h.innerHTML=x}""",
+    """var pc=done?100:Math.round(k/n*100),f=h.querySelector('.pfill');if(!f){h.innerHTML='<i id="bar" style="display:none"></i><span class="ptrack"><span class="pfill"></span></span>';f=h.querySelector('.pfill');void f.offsetWidth}f.style.width=pc+'%'}""")
+rep(".seg b.ok{background:#4caf50}",".seg b.ok{background:#4caf50}.seg .ptrack{flex:1;display:block;height:10px;border-radius:99px;background:#eadfc6;overflow:hidden}.seg .pfill{display:block;height:100%;width:0;border-radius:99px;background:#4caf50;transition:width .6s ease}.seg.fin .pfill{animation:segf .6s 2}")
 # ===== v194: ТЗ пункты 2–5 (первый день ребёнка) =====
 # 2) вступление 5 экранов → 3: s0 = падение + прозвища, s2 = город, s3 = город + энергия + «Полетели»
 rep("""if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';""",
