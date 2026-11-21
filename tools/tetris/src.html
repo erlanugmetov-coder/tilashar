@@ -226,7 +226,7 @@ function physics(dt){const m=speedMul();const fall=blocks.filter(b=>b.falling).s
  for(const b of fall){let land=0;for(let k=0;k<b.w;k++)land=Math.max(land,topUnder(b.c+k,b.y));let rest=land;
   for(const o of done)if(o.falling&&o.c<b.c+b.w&&b.c<o.c+o.w&&o.y<b.y)rest=Math.max(rest,o.y+cell);
   b.y-=b.v*(b.fastFall?1:m)*dt;
-  if(b.y<=rest){b.y=rest;if(rest===land){b.falling=false;b.row=Math.round(land/cell);b.y=b.row*cell;mark(b,true);b.el.classList.remove('fall');b.el.classList.add('land');setTimeout(()=>b.el&&b.el.classList.remove('land'),260);if(!b.fastFall)SFX.thud();b.fastFall=false;
+  if(b.y<=rest){b.y=rest;if(rest===land){b.falling=false;b.row=Math.round(land/cell);b.y=b.row*cell;mark(b,true);b.el.classList.remove('fall');if(!b.fastFall)SFX.thud();b.fastFall=false;
    if(b.row>=ROWS-1){end(false);return}}}
   done.push(b)}
  for(const b of blocks)if(b.el)b.el.style.bottom=(b.y+1)+'px';
