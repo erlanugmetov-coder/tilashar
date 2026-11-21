@@ -10,11 +10,11 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v190';")
+rep("var CURV='v185';","var CURV='v191';")
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
-_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k26.json'),encoding='utf-8'))
+_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k27.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
-assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk26.mp3'")
+assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk27.mp3'")
 # тексты
 rep("var WARM={title:'Спасаем слова',sub:'3 задания из пройденного'","var WARM={title:'Разминка',sub:'1 минута'")
 rep("Давай вместе? Всего 3 задания!","Давай вместе? Всего 1 минута!")
@@ -83,7 +83,10 @@ SP_BOOK=SP_BOOK+'\n'+KB
 SV=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','svyazi3.js'),encoding='utf-8').read()
 SVB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','svyazi3_book.js'),encoding='utf-8').read()
 SP_BOOK=SP_BOOK+'\n'+SVB
-js=SP_MAIN+KD+SV+js
+RS=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','rest3.js'),encoding='utf-8').read()
+RSB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','rest3_book.js'),encoding='utf-8').read()
+SP_BOOK=SP_BOOK+'\n'+RSB
+js=SP_MAIN+KD+SV+RS+js
 js=js.replace('__THEMES__',open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'themes.js'),encoding='utf-8').read()).replace('__TETHTML__',hj).replace('__COMBOS__',combos.strip())
 anchor='window.__c.showCity=showCity;showCity();'
 assert s.count(anchor)==1
