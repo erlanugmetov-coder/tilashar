@@ -11,6 +11,8 @@ def rep(a,b,n=1):
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
 rep("var CURV='v185';","var CURV='v193';")
+# v193: шаг «Напиши имя» не считается заданием (иначе за урок без ошибок только 2 звезды)
+rep("function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];","function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];if(!remembered)nTasks--;")
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
 _K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k27.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
