@@ -10,7 +10,7 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v194';")
+rep("var CURV='v185';","var CURV='v196';")
 # ===== v194: ТЗ пункты 2–5 (первый день ребёнка) =====
 # 2) вступление 5 экранов → 3: s0 = падение + прозвища, s2 = город, s3 = город + энергия + «Полетели»
 rep("""if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';""",
@@ -123,6 +123,7 @@ SP_BOOK=SP_BOOK+'\n'+SVB
 RS=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','rest3.js'),encoding='utf-8').read()
 RSB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','rest3_book.js'),encoding='utf-8').read()
 SP_BOOK=SP_BOOK+'\n'+RSB
+SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','tz6.js'),encoding='utf-8').read() # v196: ТЗ 6–12, 14
 js=SP_MAIN+KD+SV+RS+js
 js=js.replace('__THEMES__',open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'themes.js'),encoding='utf-8').read()).replace('__TETHTML__',hj).replace('__COMBOS__',combos.strip())
 anchor='window.__c.showCity=showCity;showCity();'
