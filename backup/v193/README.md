@@ -5,7 +5,7 @@
 - `main193.html` — игра (для главной / нового игрока / бота).
 - `test193.html` — тестовая сборка (всё открыто, тетрис после Проверки).
 - Тест-артефакт: https://claude.ai/artifact/5ASTa7ZZSA8JLFyrHJrTm6, версия **1795261456-8540**.
-- В git: тег `v193-reserve`.
+- В git: папка backup/v193 (коммит 7e0dbda).
 - Нужные файлы рядом с index.html: kk27.mp3, game_music.mp3 (лежат в tools/split5/ и в тест-артефакте).
 
-Откат: взять main193.html как index.html или `git checkout v193-reserve`.
+Откат: взять main193.html как index.html.
