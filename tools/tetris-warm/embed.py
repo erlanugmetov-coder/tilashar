@@ -8,7 +8,11 @@ combos=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 def rep(a,b,n=1):
     global s
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
-rep("var CURV='v185';","var CURV='v187';")
+rep("var CURV='v185';","var CURV='v188';")
+# озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
+_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k23.json'),encoding='utf-8'))
+_i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
+assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk23.mp3'")
 # тексты
 rep("var WARM={title:'Спасаем слова',sub:'3 задания из пройденного'","var WARM={title:'Разминка',sub:'1 минута'")
 rep("Давай вместе? Всего 3 задания!","Давай вместе? Всего 1 минута!")
