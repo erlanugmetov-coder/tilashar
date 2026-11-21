@@ -43,7 +43,7 @@ rep("function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];","function 
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
 _K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k27.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
-assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk27.mp3'")
+assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk28.mp3'") # v195: та же озвучка, сжата до 32 кбит/с (4,7 МБ)
 # тексты
 rep("var WARM={title:'Спасаем слова',sub:'3 задания из пройденного'","var WARM={title:'Разминка',sub:'1 минута'")
 rep("Давай вместе? Всего 3 задания!","Давай вместе? Всего 1 минута!")
