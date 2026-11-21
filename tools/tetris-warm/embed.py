@@ -10,7 +10,34 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v193';")
+rep("var CURV='v185';","var CURV='v194';")
+# ===== v194: ТЗ пункты 2–5 (первый день ребёнка) =====
+# 2) вступление 5 экранов → 3: s0 = падение + прозвища, s2 = город, s3 = город + энергия + «Полетели»
+rep("""if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';""",
+    """if(s===0)h='<div class="iav fall">'+AINA('look',110)+'</div><div class="ibub">Бзз-з… 😵 Ой! Сәлем, я — <b>Айна</b>, робот. Кажется, я упала и <b>всё забыла</b>… Как тебя называть?</div><div class="iopts">'+TITLES.map(function(t){return '<button class="opt" data-a="ititle" data-v="'+t+'">'+t+'</button>'}).join('')+'</div>';""")
+rep("""else if(s===3)h='<div class="iav">'+AINA('wow',120)+'</div><div class="ibub"><b>'+esc(st.city_name)+'!</b> Вспомнила — это наш город! Но над ним повисло <b>облако забвения</b> ☁️ Все забыли казахские слова, и город заснул…</div><button class="go" data-a="inext">Дальше</button>';""",
+    """else if(s===3)h='<div class="iav">'+AINA('star',120)+'</div><div class="ibub"><b>'+esc(st.city_name)+'!</b> Это наш город. Над ним повисло <b>облако забвения</b> ☁️ — все забыли казахские слова. Каждое слово, которое ты выучишь, — <b>энергия ⚡</b> для города. Поможешь?</div><button class="go" data-a="iend">Полетели! ☁️</button>';""")
+rep("if(r&&(s===4||s===0))","if(r&&(s===3||s===0))")
+# 3) урок 1.1: до первого задания 1 экран
+import re as _re
+_i=s.index("intro:[\n  {s:'look',t:'<p>Облако забвения стёрло");_j=s.index("{s:'look',t:'<p><b>Синий или розовый?</b>",_i)
+_train=s[s.index("{s:'wow',t:'<p>Смотри, какой поезд",_i):s.index("{s:'wink',t:'<p>Я ведь робот-зеркало",_i)]
+assert _train.count('Смотри, какой поезд собирается из одного слова')==1 and 'Запоминать пока не надо 😄 Начнём с одного хвостика.' in _train
+_train=_train.replace("<p>Смотри, какой поезд собирается из одного слова: 🚂</p>","<p>Ты уже собираешь казахские фразы! 🎉 Смотри, какой поезд ты скоро сможешь собрать 🚂</p>").replace("Запоминать пока не надо 😄 Начнём с одного хвостика.","Запоминать не надо — просто полюбуйся 😄").rstrip().rstrip(',')
+_k=s.index("}],\n  mix:",_j)
+_blue=s[_j:_k+1]
+s=s[:_i]+"intro:[\n  {s:'happy',t:'<p>Казахский язык — это <b>конструктор</b> 🧱: слово + <b>хвостик</b>. Смотри:</p>'+exP('Мен','Айна','мын','Мен Айнамын — я Айна! 👋')+'<p>Теперь ты!</p>'},\n  "+_blue+",\n  "+_train+s[_k+1:]
+rep("return [I[0],I[1],I[2],I[3],I[4],I[5],h1Name(hd[0]),I[6],I[7],h1Name(sf[0]),h1NameB(rest[0]),{task:'name'}]}},",
+    "return [I[0],h1Name(hd[0]),I[1],h1Name(sf[0]),h1NameB(rest[0]),I[2],{task:'name'}]}},")
+rep("end:'Я вспомнила первый хвостик — <b>«это я»</b>! Спасибо, %T%!'","end:'Я вспомнила первый хвостик — <b>«это я»</b>! Я ведь робот-зеркало 🪞 и показываю самого главного человека — тебя, %T%! 😎'")
+# 4) обещание в конце первого дня (только если завтра правда будет тетрис)
+rep("""'<div class="egain">⚡ +'+CGAIN+' энергии Айне</div>""","""'<div class="egain">⚡ +'+CGAIN+' энергии Айне</div>'+(function(){try{return SD().first===TODAY()&&tetAvail().length?'<p class="endsay">🎮 Завтра покажу тебе игру! Приходи — Айна будет ждать.</p>':''}catch(e){return ''}})()+'""")
+# 5) экран разминки: короче и без «нельзя покидать город»
+_a=s.index("if(n<=0){f='wow';t='Сәлем,");_b=s.index("var cloud=",_a)
+s=s[:_a]+"""if(n<=0){f='happy';t='Сәлем, <b>'+nm+'</b>! 👋 Ночью облако забвения подкралось к городу. Разминка на 1 минуту — и спасём его! 🎮'}
+  else if(n===1){f='shy';t='Ой, <b>'+nm+'</b>, тебя вчера не было! ☁️ Облако вернулось. Давай быстро спасём город — 1 минута! 🎮'}
+  else{f='happy';t='Ура, <b>'+nm+'</b>, ты вернулся! 🎉 Облако накрыло город, но мы его быстро спасём — 1 минута! 🎮'}
+  """+s[_b:]
 # v193: шаг «Напиши имя» не считается заданием (иначе за урок без ошибок только 2 звезды)
 rep("function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];","function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];if(!remembered)nTasks--;")
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
@@ -41,12 +68,12 @@ var TETCOMBOS=__COMBOS__;
 var T1P={1:['Мен'],3:['Сен'],4:['Сіз'],5:['Ол','Біз'],6:['Сендер','Сіздер','Олар']};
 var T1CODE={'Мен':'men','Сен':'sen','Сіз':'siz','Ол':'ol','Біз':'biz','Сендер':'sender','Сіздер':'sizder','Олар':'olar'};
 function t1Ready(){return thDone(0)} /* разминка — после всей Темы 1 */
-warmNeeded=function(){var d=SD();return t1Ready()&&!!d.first&&d.first!==TODAY()&&d.warm!==TODAY()};
+warmNeeded=function(){var d=SD();return !!d.first&&d.first!==TODAY()&&d.warm!==TODAY()&&tetAvail().length>0}; /* v194: разминка, как только есть тетрис (Тема 1 — после 2 уроков) */
 function seen1(w){w=String(w||'').toLowerCase();if(!w)return;if(!st.seen1)st.seen1=[];if(st.seen1.indexOf(w)<0)st.seen1.push(w)}
-function tetCfg1(){var dl=[0,1,2,3,4,5,6,7,8],pr=[],seen=st.seen1||[],combos={};
+function tetCfg1(dl){dl=dl||[0,1,2,3,4,5,6,7,8];var early=dl.indexOf(2)<0,pr=[],seen=st.seen1||[],combos={};
   Object.keys(T1P).forEach(function(k){if(dl.indexOf(+k)>=0)pr=pr.concat(T1P[k])});
   pr.forEach(function(p){var code=T1CODE[p],ok=(TETCOMBOS[p]||[]).filter(function(x){return h1ok(x[0],code)&&H1W.some(function(v){return v[0]===x[0]})&&canSay(p+' '+x[0]+(tailOf(x[0],code)||''))}),
-    sn=ok.filter(function(x){return seen.indexOf(x[0])>=0});if(sn.length>=4)ok=sn;if(ok.length)combos[p]=ok});
+    sn=ok.filter(function(x){return seen.indexOf(x[0])>=0});if(early){var E1=['бала','оқушы','суретші','спортшы','футболшы','биші','әнші'];ok=ok.filter(function(x){return E1.indexOf(x[0])>=0});sn=[]} /* v194: до урока «Буквы с характером» — только слова уроков 1–2 */if(sn.length>=4)ok=sn;if(ok.length)combos[p]=ok});
   return combos}
 __THEMES__
 var T1K={'Мен':1,'Сен':3,'Сіз':4,'Ол':5,'Біз':5,'Сендер':6,'Сіздер':6,'Олар':6};

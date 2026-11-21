@@ -107,12 +107,12 @@ function tetWhy(th,it,t){try{var tS=/[әеіөү]/.test(t),nS=/[әеіөү]/.tes
 /* ---------- темы, тема дня ---------- */
 var TETTH=[{slot:0,n:1,name:'Кто я',ico:'🧒'},{slot:1,n:2,name:'Какой я',ico:'🎪'},{slot:4,n:3,name:'Парк',ico:'🌳'},{slot:7,n:4,name:'Менің — мой',ico:'🏠'},{slot:5,n:5,name:'Куда?',ico:'➡️'},{slot:9,n:6,name:'Где?',ico:'📍'},{slot:6,n:7,name:'Откуда?',ico:'⬅️'},{slot:8,n:8,name:'Чей?',ico:'🔗'},{slot:10,n:9,name:'Что? Кого?',ico:'🔍'},{slot:11,n:10,name:'С кем? Чем?',ico:'🤝'},{slot:2,n:11,name:'Зоопарк',ico:'🦁'}];
 var TALLK=[0,1,2,3,4,5,6,7,8,9];
-function tetItems(slot){var dl=TALLK,it; /* v187: тетрис темы открывается после всей темы — берём все её уроки */
-  if(slot===0){var c=tetCfg1();it=[];Object.keys(c).forEach(function(p){c[p].forEach(function(x){var t=tailOf(x[0],TCODE[p])||'';it.push({a:p,w:x[0],need:t,m:x[0]+t,ru:TPR[p]+' '+x[1],full:p+' '+x[0]+t})})});return it}
+function tetItems(slot){var dl=TALLK,it;if(slot===0&&!thDone(0))dl=doneList(0); /* v194: Тема 1 — тетрис уже после 2 уроков, только пройденное */ /* v187: тетрис темы открывается после всей темы — берём все её уроки */
+  if(slot===0){var c=tetCfg1(dl);it=[];Object.keys(c).forEach(function(p){c[p].forEach(function(x){var t=tailOf(x[0],TCODE[p])||'';it.push({a:p,w:x[0],need:t,m:x[0]+t,ru:TPR[p]+' '+x[1],full:p+' '+x[0]+t})})});return it}
   it=slot===1?tet2(dl):slot===4?tet3(dl):slot===7?tet4(dl):slot===5?tet5(dl,'dat'):slot===9?tet5(dl,'loc'):slot===6?tet6():slot===8?tet8():slot===10?tet10():slot===11?tet11():slot===2?tet2z():[];
   return it.filter(function(x){return dl.indexOf(x.k)>=0&&canSay(x.full)})}
 function tetTails(items){var s={};items.forEach(function(x){s[x.need||'∅']=1});return Object.keys(s)}
-function tetAvail(){return TETTH.filter(function(T){try{if(!thDone(T.slot))return false;var it=tetItems(T.slot);return it.length>=4&&tetTails(it).length>=3}catch(e){return false}})}
+function tetAvail(){return TETTH.filter(function(T){try{var full=thDone(T.slot);if(!full&&!(T.slot===0&&doneList(0).length>=2))return false;var it=tetItems(T.slot);return it.length>=4&&tetTails(it).length>=(full?3:2)}catch(e){return false}})}
 function tetErrN(slot){var d=SD(),n=0;(d.errs||[]).forEach(function(e){if(e.th===slot)n++});(d.terr||[]).forEach(function(k){if(String(k).split('|')[0]===String(slot))n++});return n}
 function tetPickTheme(){var av=tetAvail();if(!av.length)return null;var d=SD(),ws=av.map(function(T){return 1+Math.min(4,tetErrN(T.slot))-(av.length>1&&d.tlast===T.slot?.5:0)}),sum=ws.reduce(function(a,b){return a+b},0),r=Math.random()*sum;
   for(var i=0;i<av.length;i++){r-=ws[i];if(r<=0)return av[i]}return av[av.length-1]}
