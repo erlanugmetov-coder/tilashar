@@ -266,7 +266,8 @@ function bubble(a){const d=document.createElement('div');d.className='say';d.tex
 function react(kind){const bt=$('bot');bt.classList.remove('hap','sad','wow');void bt.offsetWidth;bt.classList.add(kind)}
 function note(t){bubble(t)}
 function tipAt(b,html,cls){const d=document.createElement('div');d.className='tip '+(cls||'');d.innerHTML=html;d.style.bottom=Math.min((ROWS-2)*cell,b.y+cell+6)+'px';$('board').appendChild(d);setTimeout(()=>d.remove(),3200)}
-function plateAt(y,a,b){const d=document.createElement('div');d.className='plate';d.innerHTML=`${a}<small>${b}</small>`;d.style.bottom=Math.min((ROWS-2.2)*cell,y+cell*.2)+'px';$('board').appendChild(d);setTimeout(()=>d.remove(),2200)}
+function plateAt(y,a,b,top){const d=document.createElement('div');d.className='plate';d.innerHTML=`${a}<small>${b}</small>`;const y0=Math.min((ROWS-2.2)*cell,y+cell*.2),y1=Math.max(y0,Math.min((ROWS-1.6)*cell,top*cell+cell*.35));d.style.bottom=y0+'px';$('board').appendChild(d);
+ if(!RM&&y1>y0)d.animate([{bottom:y0+'px'},{bottom:y1+'px'}],{duration:420,easing:'cubic-bezier(.3,.9,.4,1)',fill:'forwards'});else d.style.bottom=y1+'px';setTimeout(()=>d.remove(),2200)}
 function bursts(rc,n,col){if(RM)return;const ch=['⭐','✨','🌟','⭐'];for(let i=0;i<n;i++){const f=document.createElement('div');f.className='star';f.textContent=ch[i%4];f.style.left=(rc.left+Math.random()*rc.width)+'px';f.style.top=(rc.top+rc.height/2-10)+'px';
  f.style.setProperty('--dx',(Math.random()*200-100)+'px');f.style.setProperty('--dy',(-50-Math.random()*110)+'px');f.style.setProperty('--r',(Math.random()*300-150)+'deg');document.body.appendChild(f);setTimeout(()=>f.remove(),950)}}
 function shards(rc,cols){if(RM)return;for(let i=0;i<12;i++){const f=document.createElement('div');f.className='shard';f.style.background=pick(cols);f.style.left=(rc.left+Math.random()*rc.width)+'px';f.style.top=(rc.top+Math.random()*rc.height)+'px';const a=Math.random()*Math.PI*2,d=50+Math.random()*110;
@@ -296,7 +297,7 @@ async function useTail(i,btn){if(!running||acting)return;ac();const x=shelf[i];i
  let gone=[b];if(!b.falling){gone=blocks.filter(o=>!o.falling&&o.row===b.row);blocks.forEach(o=>{if(!o.falling&&o.t==='f'&&o.row===b.row-1&&o.c>=b.c&&o.c<b.c+b.w&&!gone.includes(o))gone.push(o)})}
  const fills=gone.filter(o=>o.t==='f').length;const gain=10*Math.min(combo,5)+3*fills;score+=gain;hud();
  SFX.boom();const rc=b.el.getBoundingClientRect();bursts(rc,10);shards(rc,['#ff8a3d','#fff8ea','#ffd23f',...FILLC]);shake(combo>=3?7:4);
- plateAt(b.y,full,tr);
+ const topRow=blocks.filter(o=>!o.falling&&!gone.includes(o)).reduce((m,o)=>Math.max(m,o.row+1),0);plateAt(b.y,full,tr,topRow);
  gone.forEach(o=>{if(!o.falling)mark(o,false);o.el.classList.add('boom')});await wait(360);
  gone.forEach(o=>{o.el.remove();o.el=null});blocks=blocks.filter(o=>!gone.includes(o));gravity();
  acting=false;fillShelf();mk();if(!phrases().length)nextPh=Math.min(nextPh,performance.now()+300)}
