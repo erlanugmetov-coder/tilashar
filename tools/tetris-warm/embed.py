@@ -8,11 +8,11 @@ combos=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 def rep(a,b,n=1):
     global s
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
-rep("var CURV='v185';","var CURV='v188';")
+rep("var CURV='v185';","var CURV='v189';")
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
-_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k23.json'),encoding='utf-8'))
+_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k24.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
-assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk23.mp3'")
+assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk24.mp3'")
 # тексты
 rep("var WARM={title:'Спасаем слова',sub:'3 задания из пройденного'","var WARM={title:'Разминка',sub:'1 минута'")
 rep("Давай вместе? Всего 3 задания!","Давай вместе? Всего 1 минута!")
@@ -75,7 +75,10 @@ hj=json.dumps(w,ensure_ascii=False).replace('</','<\\/').replace('\u2028','\\u20
 SP=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','split5.js'),encoding='utf-8').read()
 m1=SP.index('/* ---------- книжки и карточки ---------- */');m2=SP.index('/* ---------- перенос прогресса')
 SP_MAIN=SP[:m1]+SP[m2:];SP_BOOK=SP[m1:m2]
-js=SP_MAIN+js
+KD=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','kaidan.js'),encoding='utf-8').read()
+KB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','kaidan_book.js'),encoding='utf-8').read()
+SP_BOOK=SP_BOOK+'\n'+KB
+js=SP_MAIN+KD+js
 js=js.replace('__THEMES__',open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'themes.js'),encoding='utf-8').read()).replace('__TETHTML__',hj).replace('__COMBOS__',combos.strip())
 anchor='window.__c.showCity=showCity;showCity();'
 assert s.count(anchor)==1
