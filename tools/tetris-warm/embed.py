@@ -10,7 +10,7 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v198';")
+rep("var CURV='v185';","var CURV='v199';")
 # v197: русская реплика Айны звучит при появлении облачка, казахские примеры — после неё
 rep("bub.innerHTML=html;svg.classList.add('talk');sBloop();","bub.innerHTML=html;svg.classList.add('talk');sBloop();try{if(ruFind(html).length){bub.dataset.ru=html;ruSay(html)}}catch(e){}")
 rep("(function nx(i){if(i>=au.length||my!==run)return;","ruAfter(function(){(function nx(i){if(i>=au.length||my!==run)return;")
@@ -131,6 +131,7 @@ RSB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))
 SP_BOOK=SP_BOOK+'\n'+RSB
 SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','tz6.js'),encoding='utf-8').read() # v196: ТЗ 6–12, 14
 SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','t1b_book.js'),encoding='utf-8').read() # v198
+SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','tz7.js'),encoding='utf-8').read() # v199: короче тексты
 # v197: русская озвучка Айны (ТЗ 16, этап 1)
 _RU=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'ru')
 _RM=json.load(open(os.path.join(_RU,'ru2.json'),encoding='utf-8'));_RM={k:[v[0],v[1],v[2]] for k,v in _RM.items()}
