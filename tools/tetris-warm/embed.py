@@ -10,7 +10,12 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v196';")
+rep("var CURV='v185';","var CURV='v197';")
+# v197: русская реплика Айны звучит при появлении облачка, казахские примеры — после неё
+rep("bub.innerHTML=html;svg.classList.add('talk');sBloop();","bub.innerHTML=html;svg.classList.add('talk');sBloop();try{if(ruFind(html).length){bub.dataset.ru=html;ruSay(html)}}catch(e){}")
+rep("(function nx(i){if(i>=au.length||my!==run)return;","ruAfter(function(){(function nx(i){if(i>=au.length||my!==run)return;")
+rep("})(0); /* v116: все примеры по очереди */","})(0)}); /* v116: все примеры по очереди; v197: после русской реплики */")
+rep("if(na)ms=Math.max(ms,1200+na*1700);","if(na)ms=Math.max(ms,1200+na*1700);try{ms+=ruLeft()}catch(e){}")
 # ===== v194: ТЗ пункты 2–5 (первый день ребёнка) =====
 # 2) вступление 5 экранов → 3: s0 = падение + прозвища, s2 = город, s3 = город + энергия + «Полетели»
 rep("""if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';""",
@@ -124,6 +129,10 @@ RS=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RSB=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','rest3_book.js'),encoding='utf-8').read()
 SP_BOOK=SP_BOOK+'\n'+RSB
 SP_BOOK=SP_BOOK+'\n'+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','tz6.js'),encoding='utf-8').read() # v196: ТЗ 6–12, 14
+# v197: русская озвучка Айны (ТЗ 16, этап 1)
+_RU=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'ru')
+_RM=json.load(open(os.path.join(_RU,'ru1.json'),encoding='utf-8'));_RM={k:[v[0],v[1],v[2]] for k,v in _RM.items()}
+SP_BOOK=SP_BOOK+'\n'+open(os.path.join(_RU,'ru.js'),encoding='utf-8').read().replace('__RUMAP__',json.dumps(_RM,ensure_ascii=False))
 js=SP_MAIN+KD+SV+RS+js
 js=js.replace('__THEMES__',open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'themes.js'),encoding='utf-8').read()).replace('__TETHTML__',hj).replace('__COMBOS__',combos.strip())
 anchor='window.__c.showCity=showCity;showCity();'
