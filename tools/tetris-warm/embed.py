@@ -10,7 +10,7 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v192';")
+rep("var CURV='v185';","var CURV='v193';")
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
 _K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k27.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
@@ -72,6 +72,14 @@ window.tetDone=function(r){r=r||{};var o=document.getElementById('tetov');var d=
   if(!(r.err||[]).length&&(r.n||0)>=5)d.errs=(d.errs||[]).filter(function(x){return x.th!==sl});d.tlast=sl;CGAIN=0;d.woke=sleepLevel()>0;d.warm=TODAY();d.grew=markActive();d.party=TODAY();st.coins+=(+r.earn||0);save();WENTRY=1;
   setTimeout(function(){if(o)o.remove()},60);showCity();setCoins()};
 warmEntry=tetOpen;startWarm=tetOpen;
+/* v193 (тест): после Проверки темы сразу её тетрис, потом назад к экрану «В город — строить!» */
+if(typeof finish==='function'){var _tetFin=finish;finish=function(){var b=!!(L&&L.boss&&!L.warm),sl=THX;_tetFin.apply(this,arguments);
+  if(!window.TETAFTER||!b)return;try{if(!ctl().querySelector('[data-a="city"]'))return;var T=TETTH.filter(function(x){return x.slot===sl})[0];if(!T)return;var it=tetItems(sl);if(it.length<4||tetTails(it).length<3)return;
+    window.TETFROMBOSS=1;setTimeout(function(){tetFrame(T)},1600)}catch(e){}}}
+var _tetDone0=window.tetDone;window.tetDone=function(r){if(!window.TETFROMBOSS)return _tetDone0(r);window.TETFROMBOSS=0;r=r||{};
+  var o=document.getElementById('tetov'),d=SD(),okk=r.ok||[],sl=window.TETCUR?TETCUR.slot:0,K=function(f){return sl+'|'+f};
+  d.terr=(d.terr||[]).filter(function(k){return okk.map(K).indexOf(k)<0});(r.err||[]).forEach(function(f){var k=K(f);if(d.terr.indexOf(k)<0)d.terr.push(k)});while(d.terr.length>16)d.terr.shift();
+  d.tlast=sl;st.coins+=(+r.earn||0);save();setTimeout(function(){if(o)o.remove()},60);try{setCoins()}catch(e){}};
 """
 hj=json.dumps(w,ensure_ascii=False).replace('</','<\\/').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
 SP=open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','split5.js'),encoding='utf-8').read()
