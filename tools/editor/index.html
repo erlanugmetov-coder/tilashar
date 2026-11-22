@@ -30,6 +30,7 @@ button:disabled{opacity:.35}
 <div id="bar">
 <button id="bSm" title="меньше">➖</button><button id="bBg" title="больше">➕</button><button id="bFl" title="отразить">⇋</button><button id="bDel" title="убрать">🗑</button><button id="bUn" title="отменить">↩️</button>
 </div>
+<div id="bar2" style="display:flex;gap:6px;justify-content:center;padding:4px 8px;flex-wrap:wrap"><button id="bL">⬅️</button><button id="bU">⬆️</button><button id="bD">⬇️</button><button id="bR">➡️</button><button id="bFw" style="font-size:14px">Вперёд</button><button id="bBk" style="font-size:14px">Назад</button></div>
 <div class="lbl">Добавить:</div>
 <div id="pal"></div>
 <button id="reset">Вернуть исходную расстановку</button>
@@ -49,11 +50,12 @@ function fit(){sc=stage.clientWidth/W;world.style.transform='scale('+sc+')';rend
 function inPath(x,y){if(x<O||x>O+B||y<O||y>O+B)return true;if(Math.abs(x-CX)<PW||Math.abs(y-CY)<PW)return true;var dx=(x-CX)/PRX,dy=(y-CY)/PRY;return dx*dx+dy*dy<1}
 function bad(it){if(it.n==='fount')return false;var h=it.w*(ASP[it.n]||1),fh=Math.min(h*.12,18),xs=[it.x-it.w*.32,it.x,it.x+it.w*.32],ys=[it.b-fh,it.b-1];
  for(var i=0;i<3;i++)for(var j=0;j<2;j++)if(inPath(xs[i],ys[j]))return true;return false}
+function zi(it){return Math.round(it.b+(it.z||0))+2000}
 function render(){var s='',min=40/sc;
  items.forEach(function(it,i){var h=it.w*(ASP[it.n]||1),bw=Math.max(it.w,min),bh=Math.max(h,min);
-  s+='<div class="it'+(i===sel?' sel':'')+(bad(it)?' bad':'')+'" data-i="'+i+'" style="left:'+(it.x-bw/2)+'px;top:'+(it.b-bh)+'px;width:'+bw+'px;height:'+bh+'px;z-index:'+Math.round(it.b)+'"><img src="art/'+it.n+'.webp" style="width:'+it.w+'px;height:'+h+'px;'+(it.f?'transform:scaleX(-1)':'')+'"></div>'});
+  s+='<div class="it'+(i===sel?' sel':'')+(bad(it)?' bad':'')+'" data-i="'+i+'" style="left:'+(it.x-bw/2)+'px;top:'+(it.b-bh)+'px;width:'+bw+'px;height:'+bh+'px;z-index:'+zi(it)+'"><img src="art/'+it.n+'.webp" style="width:'+it.w+'px;height:'+h+'px;'+(it.f?'transform:scaleX(-1)':'')+'"></div>'});
  world.querySelectorAll('.it').forEach(function(e){e.remove()});world.insertAdjacentHTML('beforeend',s);
- var on=sel>=0;['bSm','bBg','bFl','bDel'].forEach(function(id){document.getElementById(id).disabled=!on});document.getElementById('bUn').disabled=!hist.length;
+ var on=sel>=0;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk'].forEach(function(id){document.getElementById(id).disabled=!on});document.getElementById('bUn').disabled=!hist.length;
  var nb=items.filter(bad).length;document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?'Тащите, меняйте размер кнопками':'Нажмите на постройку и тащите пальцем')}
 function snap(){hist.push(JSON.stringify(items));if(hist.length>40)hist.shift()}
 var stT=null;function setSt(t){document.getElementById('st').textContent=t}
@@ -68,13 +70,19 @@ stage.addEventListener('pointerdown',function(e){var el=e.target.closest('.it');
 stage.addEventListener('pointermove',function(e){if(!drag)return;var it=items[drag.i];
  var dx=(e.clientX-drag.sx)/sc,dy=(e.clientY-drag.sy)/sc;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;
  it.x=Math.round(Math.max(10,Math.min(W-10,drag.x+dx)));it.b=Math.round(Math.max(20,Math.min(W-4,drag.b+dy)));
- var el=world.querySelector('.it[data-i="'+drag.i+'"]');if(el){var h=it.w*(ASP[it.n]||1),min=40/sc,bw=Math.max(it.w,min),bh=Math.max(h,min);el.style.left=(it.x-bw/2)+'px';el.style.top=(it.b-bh)+'px';el.style.zIndex=Math.round(it.b);el.classList.toggle('bad',bad(it))}});
-function end(){if(!drag)return;if(drag.moved)save();else hist.pop();drag=null;render()}
+ var el=world.querySelector('.it[data-i="'+drag.i+'"]');if(el){var h=it.w*(ASP[it.n]||1),min=40/sc,bw=Math.max(it.w,min),bh=Math.max(h,min);el.style.left=(it.x-bw/2)+'px';el.style.top=(it.b-bh)+'px';el.style.zIndex=zi(it);el.classList.toggle('bad',bad(it))}});
+function end(){if(!drag)return;if(drag.moved){items[drag.i].z=0;save()}else hist.pop();drag=null;render()}
 stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
 function act(f){if(sel<0)return;snap();f(items[sel]);render();save()}
 document.getElementById('bSm').onclick=function(){act(function(it){it.w=Math.max(12,Math.round(it.w*.9))})};
 document.getElementById('bBg').onclick=function(){act(function(it){it.w=Math.min(500,Math.round(it.w*1.1))})};
 document.getElementById('bFl').onclick=function(){act(function(it){it.f=it.f?0:1})};
+function nud(dx,dy){act(function(it){it.x+=dx;it.b+=dy})}
+document.getElementById('bL').onclick=function(){nud(-3,0)};document.getElementById('bR').onclick=function(){nud(3,0)};
+document.getElementById('bU').onclick=function(){nud(0,-3)};document.getElementById('bD').onclick=function(){nud(0,3)};
+function others(){return items.filter(function(o,j){return j!==sel}).map(function(o){return o.b+(o.z||0)})}
+document.getElementById('bFw').onclick=function(){act(function(it){var o=others();it.z=(o.length?Math.max.apply(0,o):it.b)-it.b+1})};
+document.getElementById('bBk').onclick=function(){act(function(it){var o=others();it.z=(o.length?Math.min.apply(0,o):it.b)-it.b-1})};
 document.getElementById('bDel').onclick=function(){if(sel<0)return;snap();items.splice(sel,1);sel=-1;render();save()};
 document.getElementById('bUn').onclick=function(){if(!hist.length)return;items=JSON.parse(hist.pop());sel=-1;render();save()};
 document.getElementById('reset').onclick=function(){if(!window.confirm||1){snap();items=JSON.parse(JSON.stringify(INIT));sel=-1;render();save()}};
