@@ -89,10 +89,28 @@ vmyhome=function(x,y){var nm=(st.name||'').toUpperCase().slice(0,10);return im('
 vuyD=function(x,y){return im('hhome1',x,y+10,0,74)};
 vshopD=function(x,y,c1,c2,lab){return im('kshop',x,y+8,0,72)+vlabel(x,y-70,lab,c2)};
 vkiosk=function(x,y){return im('yice',x,y+8,0,74)};
-/* машины (нужные файлы: 'car_side','car2_side','taxi_side','truck_side','car_front','car2_front','taxi_front','truck_front') */
+/* машины (нужные файлы: 'car_side','car2_side','taxi_side','truck_side','car_front','car2_front','taxi_front','truck_front','car_back','car2_back','taxi_back','truck_back') */
 function carPick(col,kind){if(kind==='taxi'||col==='#ffd200')return 'taxi';if(kind==='truck')return 'truck';if(col&&/^#(e2574c|c0392b|ff8a3d|e05a9c)/i.test(col))return 'car2';return 'car'}
 carSide=function(col,kind){var n=carPick(col,kind)+'_side';return '<svg width="58" height="34" viewBox="0 0 58 34">'+im(n,29,33,56,0)+'</svg>'};
-carFront=function(col){var n=carPick(col)+'_front';if(!SZ[n])n='car_front';return '<svg width="36" height="40" viewBox="0 0 36 40">'+im(n,18,39,34,0)+'</svg>'};
+carFront=function(col,kind){var n=carPick(col,kind)+'_front';if(!SZ[n])n='car_front';return '<svg width="36" height="40" viewBox="0 0 36 40">'+im(n,18,39,34,0)+'</svg>'};
+function carBack(col,kind){var n=carPick(col,kind)+'_back';if(!SZ[n])n='car_back';return '<svg width="36" height="40" viewBox="0 0 36 40">'+im(n,18,39,34,0)+'</svg>'}
+/* верхняя дорога под горами: свои полосы; вертикальные дороги начинаются от неё. Едет вверх — видим сзади; доехал до верха — поворачивает */
+var TOPR=[{h:1,y:16,a:-60,b:9999,id:'h0'},{h:1,y:38,a:9999,b:-60,id:'h0'}];
+var _roads=carRoads;carRoads=function(){var R=_roads().map(function(r){if(r.h)return r;var q={};for(var k in r)q[k]=r[k];q.a=30;return q});
+  TOPR[0].b=CW+60;TOPR[1].a=CW+60;return R.concat(TOPR)};
+function carSet(c){var k=c.r.h?'s':c.dir<0?'b':'f';if(c.im===k)return;c.im=k;var f=c.el.querySelector('.cfl');if(f)f.innerHTML=k==='s'?carSide(c.col,c.kind):k==='b'?carBack(c.col,c.kind):carFront(c.col,c.kind)}
+carSpawn=function(){var l=document.getElementById('cmov');if(!l)return;var Rs=carRoads(),r=pick(Rs),kind=pick(['car','car','car','taxi','truck']),col=pick(CCOL);
+  var el=document.createElementNS('http://www.w3.org/2000/svg','svg');el.setAttribute('class','spr mov');el.setAttribute('viewBox','0 0 60 42');el.setAttribute('width','60');el.setAttribute('height','42');
+  el.innerHTML='<g class="ccar"><g class="cb"><g class="cfl"></g></g></g>';l.appendChild(el);
+  var c={el:el,r:r,p:r.a,dir:r.b>r.a?1:-1,sp:(r.h?55:45)+Math.random()*25,wait:0,stop:null,done:false,col:col,kind:kind};el.__c=c;el.firstChild.__c=c;
+  if(r.id==='h1'&&!cdone('pit'))c.stop=c.dir>0?650:750;
+  if(r.id==='h0'&&Math.random()<.6){var vs=Rs.filter(function(v){return !v.h&&(c.dir>0?v.x>60:v.x<CW-60)});if(vs.length)c.turnTo=pick(vs)}
+  carSet(c);CARS.push(c);carPlace(c)};
+var _cp=carPlace;
+carPlace=function(c){
+  if(c.turnTo&&c.r.h&&((c.dir>0&&c.p>=c.turnTo.x)||(c.dir<0&&c.p<=c.turnTo.x))){var v=c.turnTo;c.turnTo=null;c.r=v;c.p=v.a;c.dir=1;c.b2=null;c.stop=null;c.done=false}
+  if(!c.r.h&&c.dir<0&&c.p<=32){var rt=Math.random()<.5,x0=c.r.x;c.r=rt?TOPR[0]:TOPR[1];c.p=x0;c.dir=rt?1:-1;c.b2=null;c.stop=null;c.turned=1;c.done=false}
+  carSet(c);_cp(c)};
 parkedSVG=function(P){P=P||PARKED;var s='';P.forEach(function(p){if(!cdone(p[0]))return;var x=p[1],y=p[2],k=p[3];
   s+=k==='bus'?im('bus_side',x,y+16,96,0):k==='amb'?im('truck_side',x,y+14,74,0):k==='van'?im('truck_side',x,y+14,72,0):im(carPick(p[4])+'_side',x,y+10,62,0)});return s};
 /* жители: каждому — свой персонаж */
@@ -108,7 +126,7 @@ var _sp=spritesHTML;
 spritesHTML=function(){RESPOS={};CTASK.forEach(function(t){var m=CMAN[t.b];if(m&&ROLE[t.b])RESPOS[(t.x+m.dx)+','+(t.y+m.dy)]=ROLE[t.b]});
   return _sp().replace(/<rect x="(-?[\d.]+)" y="(-?[\d.]+)" width="4" height="46" fill="#33505e"\/><circle[^>]*fill="#ffd76a"\/>/g,function(_,x,y){return im('lamp',+x+2,+y+48,0,64)})};
 /* облака забвения — картинки вместо белых шаров */
-var CLI=['cloud1','cloud2','cloud3'].map(function(n){var i=new Image();i.onload=function(){try{clDraw()}catch(e){}};i.src=AP+n+'.webp';return i});
+var CLI=['cloudw1','cloudw2','cloudw3'].map(function(n){var i=new Image();i.onload=function(){try{clDraw()}catch(e){}};i.src=AP+n+'.webp';return i});
 var _cld=clDraw;
 clDraw=function(){if(!CLI.every(function(i){return i.complete&&i.naturalWidth}))return _cld();var cv=document.getElementById('clcv');if(!cv)return;var S=.5,O=200,W=Math.ceil((CW+2*O)*S),H=Math.ceil((CH+2*O)*S);
   if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}cv.style.width=(CW+2*O)+'px';cv.style.height=(CH+2*O)+'px';cv.style.left=(-O)+'px';cv.style.top=(-O)+'px';
@@ -134,6 +152,6 @@ camApply=function(){var w=document.getElementById('cworld'),v=document.getElemen
   w.style.transformOrigin='0 0';w.style.transform='translate('+CAM.x+'px,'+CAM.y+'px) scale('+Z+')'};
 /* стили: исчезающее облачко — тоже картинкой; картинки не перехватывают касания у вывесок */
 var css=document.createElement('style');
-css.textContent='.cl,.cl.alt{background:url('+AP+'cloud1.webp) center/contain no-repeat!important}.cl:before,.cl:after{display:none!important}.spr{overflow:visible}.spr image{image-rendering:auto}';
+css.textContent='.cl,.cl.alt{background:url('+AP+'cloudw1.webp) center/contain no-repeat!important}.cl:before,.cl:after{display:none!important}.spr{overflow:visible}.spr image{image-rendering:auto}';
 document.head.appendChild(css);
 })();
