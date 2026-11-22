@@ -23,7 +23,7 @@ var GREY=' style="filter:grayscale(1) brightness(.85)"';
 var M={
  uyfix:['house','house_broken'],house2:['house2','house2_broken'],mektep:['school','plot'],aurukhana:['hosp','plot'],stadion:['stad','plot',{f:1.05,by:.9}],
  fontan:['fount','fount',{f:1.25,beforeEx:GREY}],studia:['studio','plot'],sakhna:['stage','plot'],fence:['fence','fence_broken',{f:1}],bench:['bench','bench_broken',{f:.8,by:.9}],
- flag:['flag','plot_s',{byH:1,f:.95}],lamp:['lamp','lamp_broken',{byH:1,f:1.05}],library:['library','plot'],post:['post','plot'],busstop:['busstop','busstop_broken',{f:1.2}],
+ flag:['orig','plot_s',{byH:1,f:.95}],lamp:['lamp','lamp_broken',{byH:1,f:1.05}],library:['library','plot'],post:['post','plot'],busstop:['busstop','busstop_broken',{f:1.2}],
  chai:['chai','plot'],play:['play','plot'],pond:['pond','pond_dirty',{f:1.1,by:.7}],yurt:['yurt','plot'],bridge:['bridge','bridge_broken',{f:1.5,by:.6}],
  green:['green','plot'],duken:['duken','plot'],dry:['tree1','dry',{f:1.2}],pit:['flowers','pit',{f:1.2}],dump:['bush_flowers','dump',{f:1}],
  ygate:['ygate','plot'],ytoys:['ytoys','plot'],ycar:['ycar','plot'],yice:['yice','plot'],ylights:['lights','plot_s',{f:.9,by:.5}],ylights2:['lights','plot_s',{f:.9,by:.5}],
@@ -39,7 +39,7 @@ var M={
  mgate:['mgate','plot'],mschool:['mschool','plot',{f:1.05}],mbus:['busstop','plot_s',{f:1.1}],mcanteen:['mcanteen','plot'],mcross:['mcross','plot_s',{byH:1,f:.9}],mlib:['library','plot'],
  mpool:['mpool','plot',{f:1}],mflowers:['flowers','plot_s',{f:.9}],mbike:['mbike','plot_s',{f:1}],mbench:['bench','plot_s',{f:.8}],mlamp:['vlamp','plot_s',{byH:1,f:.95}],
  kshop:['kshop','plot'],kbakery:['kbakery','plot'],kstad:['kstad','plot',{f:1,by:.9}],kfount:['fount','plot_s',{f:1.6}],ktaxi:['ktaxi','plot'],kgym:['kgym','plot'],kbench:['bench','plot_s',{f:.8}],
- kflag:['flag','plot_s',{byH:1,f:.95}],
+ kflag:['orig','plot_s',{byH:1,f:.95}],
  hhome1:['hhome1','plot'],hhome2:['hhome2','plot'],hhome3:['hhome3','plot'],hgarden:['hgarden','plot'],hswing:['hswing','plot'],hcat:['hcat','plot_s',{f:1.3}],hplay:['play','plot'],
  hlamp:['vlamp','plot_s',{byH:1,f:.95}],hbench:['bench','plot_s',{f:.8}],
  vkassa:['vkassa','plot'],vbags:['vbags','plot'],vlamp:['vlamp','plot_s',{byH:1,f:.95}],vclock:['vclock','plot_s',{byH:1,f:.95}],vcafe:['vcafe','plot'],vwait:['vwait','plot'],
@@ -53,12 +53,18 @@ function many(list){return list.join('')}
 var _vb=vbuild,_vf=vbefore;
 vbuild=function(t){var e=M[t.b],orig=_vb(t);
   if(t.b==='clean')return t.id==='log'?'':many([im('bush_flowers',t.x-18,t.y+12,0,30),im('bush',t.x+22,t.y+10,0,26)]);
+  if(t.b==='stadion'){var W=330,H=W*SZ.stad_wide[1]/SZ.stad_wide[0],cx=180,bot=784,top=bot-H,fx=function(n){return cx-W/2+n*W},fy=function(n){return top+n*H};
+    var ky=fy(.66),k1=fx(.36),k2=fx(.64),by=ky-6;
+    return im('stad_wide',cx,bot,W,H)+'<g class="stk1"><g class="resident" data-r="stad"><g transform="translate('+(2*k1)+',0) scale(-1,1)">'+im('sport_boy',k1,ky,0,52)+'</g></g></g>'+
+      '<g class="stk2">'+im('kid_boy',k2,ky,0,52)+'</g>'+
+      '<g class="stbx" style="--d:'+(k2-k1-16)+'px;--g:'+(fx(.86)-k1-8)+'px"><g class="stby"><circle cx="'+(k1+8)+'" cy="'+by+'" r="6" fill="#fff" stroke="#14222c" stroke-width="1.6"/><circle cx="'+(k1+8)+'" cy="'+by+'" r="1.8" fill="#14222c"/></g></g>'+
+      tags(orig,{cx:cx,top:top+6})}
   if(t.b==='sayabaq')return many([im('tree1',t.x-45,t.y+8,0,95),im('tree2',t.x+40,t.y-10,0,105),im('bush_flowers',t.x-38,t.y+52,0,30),im('bench',t.x+28,t.y+44,52,0),im('tree_karagach',t.x+12,t.y+60,0,70)])+tags(orig,{cx:t.x,top:t.y-110});
   if(t.b==='alley'){var s='';for(var i=0;i<5;i++)s+=im('tree_poplar',t.x-90+i*45,t.y+12,0,100);return s}
   if(t.b==='orchard'){var o='';[[-70,-10],[0,-14],[70,-10],[-35,24],[35,24]].forEach(function(p){o+=im('tree_apple',t.x+p[0],t.y+p[1]+20,0,80)});return o}
   if(t.b==='dump')return many([im('bush_flowers',t.x-20,t.y+12,0,30),im('flowers',t.x+26,t.y+14,46,0)]);
   if(t.b==='kroad'||t.b==='hpath'||t.b==='vrail'||t.b==='ypath')return recol(orig);
-  if(!e)return orig;if(e[0]==='keep')return recol(orig);if(e[0]==='')return '';
+  if(!e)return orig;if(e[0]==='orig')return orig;if(e[0]==='keep')return recol(orig);if(e[0]==='')return '';
   var r=fit(e[0],t,e[2]);if(!r)return orig;return r.svg+tags(orig,r)};
 vbefore=function(t){var e=M[t.b],orig=_vf(t);
   if(t.b==='clean')return t.id==='log'?im('log',t.x,t.y+14,80,0):im('trash',t.x,t.y+14,74,0);
@@ -89,7 +95,7 @@ vmyhome=function(x,y){var nm=(st.name||'').toUpperCase().slice(0,10);return im('
 vuyD=function(x,y){return im('hhome1',x,y+10,0,74)};
 vshopD=function(x,y,c1,c2,lab){return im('kshop',x,y+8,0,72)+vlabel(x,y-70,lab,c2)};
 vkiosk=function(x,y){return im('yice',x,y+8,0,74)};
-/* машины (нужные файлы: 'car_side','car2_side','taxi_side','truck_side','car_front','car2_front','taxi_front','truck_front','car_back','car2_back','taxi_back','truck_back') */
+/* (стадион: 'stad_wide') машины (нужные файлы: 'car_side','car2_side','taxi_side','truck_side','car_front','car2_front','taxi_front','truck_front','car_back','car2_back','taxi_back','truck_back') */
 function carPick(col,kind){if(kind==='taxi'||col==='#ffd200')return 'taxi';if(kind==='truck')return 'truck';if(col&&/^#(e2574c|c0392b|ff8a3d|e05a9c)/i.test(col))return 'car2';return 'car'}
 carSide=function(col,kind){var n=carPick(col,kind)+'_side';return '<svg width="58" height="34" viewBox="0 0 58 34">'+im(n,29,33,56,0)+'</svg>'};
 carFront=function(col,kind){var n=carPick(col,kind)+'_front';if(!SZ[n])n='car_front';return '<svg width="36" height="40" viewBox="0 0 36 40">'+im(n,18,39,34,0)+'</svg>'};
@@ -124,7 +130,7 @@ var RESPOS={};
 vperson=function(x,y,shirt,hair,girl,hat){var n=RESPOS[x+','+y]||(girl?'kid_girl':'kid_boy');return im(n,x,y+4,0,62)};
 var _sp=spritesHTML;
 spritesHTML=function(){RESPOS={};CTASK.forEach(function(t){var m=CMAN[t.b];if(m&&ROLE[t.b])RESPOS[(t.x+m.dx)+','+(t.y+m.dy)]=ROLE[t.b]});
-  return _sp().replace(/<rect x="(-?[\d.]+)" y="(-?[\d.]+)" width="4" height="46" fill="#33505e"\/><circle[^>]*fill="#ffd76a"\/>/g,function(_,x,y){return im('lamp',+x+2,+y+48,0,64)})};
+  return _sp().replace(/<svg class="spr res" data-r="stad"[\s\S]*?<\/svg>/,'').replace(/<rect x="(-?[\d.]+)" y="(-?[\d.]+)" width="4" height="46" fill="#33505e"\/><circle[^>]*fill="#ffd76a"\/>/g,function(_,x,y){return im('lamp',+x+2,+y+48,0,64)})};
 /* облака забвения — картинки вместо белых шаров */
 var CLI=['cloudw1','cloudw2','cloudw3'].map(function(n){var i=new Image();i.onload=function(){try{clDraw()}catch(e){}};i.src=AP+n+'.webp';return i});
 var _cld=clDraw;
@@ -152,6 +158,6 @@ camApply=function(){var w=document.getElementById('cworld'),v=document.getElemen
   w.style.transformOrigin='0 0';w.style.transform='translate('+CAM.x+'px,'+CAM.y+'px) scale('+Z+')'};
 /* стили: исчезающее облачко — тоже картинкой; картинки не перехватывают касания у вывесок */
 var css=document.createElement('style');
-css.textContent='.cl,.cl.alt{background:url('+AP+'cloudw1.webp) center/contain no-repeat!important}.cl:before,.cl:after{display:none!important}.spr{overflow:visible}.spr image{image-rendering:auto}';
+css.textContent='.cl,.cl.alt{background:url('+AP+'cloudw1.webp) center/contain no-repeat!important}.cl:before,.cl:after{display:none!important}.spr{overflow:visible}.spr image{image-rendering:auto}.stbx{animation:stbx 8s linear infinite}.stby{animation:stby 8s linear infinite}.stk1{animation:stk1 8s linear infinite}.stk2{animation:stk2 8s linear infinite}@keyframes stbx{0%{transform:translateX(0);opacity:1}15%{transform:translateX(var(--d))}30%{transform:translateX(0)}45%{transform:translateX(var(--d))}60%{transform:translateX(0)}72%{transform:translateX(var(--g))}88%{transform:translateX(var(--g));opacity:1}90%{opacity:0}98%{transform:translateX(0);opacity:0}100%{transform:translateX(0);opacity:1}}@keyframes stby{0%,15%,30%,45%,60%,72%,100%{transform:translateY(0)}7.5%,22.5%,37.5%,52.5%{transform:translateY(-22px)}66%{transform:translateY(-12px)}}@keyframes stk1{0%,4%,30%,34%,60%,64%,75%,79%,83%,100%{transform:translateY(0)}2%,32%,62%{transform:translateY(-7px)}77%,81%{transform:translateY(-14px)}}@keyframes stk2{0%,15%,19%,45%,49%,100%{transform:translateY(0)}17%,47%{transform:translateY(-7px)}}@media (prefers-reduced-motion:reduce){.stbx,.stby,.stk1,.stk2{animation:none}}';
 document.head.appendChild(css);
 })();
