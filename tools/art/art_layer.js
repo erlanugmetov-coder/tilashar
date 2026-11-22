@@ -63,8 +63,8 @@ vbuild=function(t){var e=M[t.b],orig=_vb(t);
   if(t.b==='alley'){var s='';for(var i=0;i<5;i++)s+=im('tree_poplar',t.x-90+i*45,t.y+12,0,100);return s}
   if(t.b==='orchard'){var o='';[[-70,-10],[0,-14],[70,-10],[-35,24],[35,24]].forEach(function(p){o+=im('tree_apple',t.x+p[0],t.y+p[1]+20,0,80)});return o}
   if(t.b==='dump')return many([im('bush_flowers',t.x-20,t.y+12,0,30),im('flowers',t.x+26,t.y+14,46,0)]);
-  if(t.b==='kroad'||t.b==='hpath'){var bb=OBOX[t.b],w=bb[0]+bb[1]+20,x0=t.x-w/2,y0=t.y-28,rs='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="56" rx="6" fill="'+ASPH+'"/><rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="4" fill="'+CURB+'"/><rect x="'+x0+'" y="'+(y0+52)+'" width="'+w+'" height="4" fill="'+CURB+'"/>';
-    for(var dx=x0+14;dx<x0+w-30;dx+=48)rs+='<rect x="'+dx+'" y="'+(t.y-2)+'" width="24" height="4" rx="2" fill="#ffffff"/>';return rs}
+  if(t.b==='bridge')return brSVG(380,false)+tags(orig,{cx:380,top:RIV0-20});
+  if(t.b==='kroad'||t.b==='hpath'){var bb=OBOX[t.b],w=bb[0]+bb[1],x0=t.x-w/2;return '<rect x="'+x0+'" y="'+(t.y-16)+'" width="'+w+'" height="32" rx="10" fill="#ddd6c3" stroke="#c9c1aa" stroke-width="3"/>'}
   if(t.b==='vrail'||t.b==='ypath')return recol(orig);
   if(!e)return orig;if(e[0]==='orig')return orig;if(e[0]==='keep')return recol(orig);if(e[0]==='')return '';
   var r=fit(e[0],t,e[2]);if(!r)return orig;return r.svg+tags(orig,r)};
@@ -72,6 +72,7 @@ vbefore=function(t){var e=M[t.b],orig=_vf(t);
   if(t.b==='clean')return t.id==='log'?im('log',t.x,t.y+14,80,0):im('trash',t.x,t.y+14,74,0);
   if(t.b==='alley'||t.b==='orchard'){var s='';for(var i=0;i<4;i++)s+=im('sapling',t.x-75+i*50,t.y+12,0,40);return s}
   if(t.b==='sayabaq')return fit('plot_l',t,{f:1,by:.6}).svg;
+  if(t.b==='bridge')return brSVG(380,true)+tags(orig,{cx:380,top:RIV0-20});
   if(t.b==='kroad'||t.b==='hpath'||t.b==='vrail'||t.b==='ypath')return recol(orig);
   if(!e)return orig;var n=e[1],o=e[2]||{};
   if(n==='plot')n=plotFor(t);
@@ -103,9 +104,13 @@ carSide=function(col,kind){var n=carPick(col,kind)+'_side';return '<svg width="5
 carFront=function(col,kind){var n=carPick(col,kind)+'_front';if(!SZ[n])n='car_front';return '<svg width="36" height="40" viewBox="0 0 36 40">'+im(n,18,39,34,0)+'</svg>'};
 function carBack(col,kind){var n=carPick(col,kind)+'_back';if(!SZ[n])n='car_back';return '<svg width="36" height="40" viewBox="0 0 36 40">'+im(n,18,39,34,0)+'</svg>'}
 /* верхняя дорога под горами: свои полосы; вертикальные дороги начинаются от неё. Едет вверх — видим сзади; доехал до верха — поворачивает */
-var TOPR=[{h:1,y:19,a:-60,b:9999,id:'h0'},{h:1,y:47,a:9999,b:-60,id:'h0'}],HC={h1:560,h2:807},VC={v1:380,v2:779};
+var TOPR=[{h:1,y:19,a:-60,b:9999,id:'h0'},{h:1,y:47,a:9999,b:-60,id:'h0'}],HC={h1:560,h2:807},VC={v1:380,v2:779},HEND={};
 var _roads=carRoads;carRoads=function(){var R=_roads().map(function(r){var q={};for(var k in r)q[k]=r[k];if(r.h){var c=HC[r.id];if(c!=null)q.y=(r.b>r.a)?c-6:c+22}else{q.a=54;q.cx=VC[r.id]||r.x}return q});
-  TOPR[0].b=CW+60;TOPR[1].a=CW+60;return R.concat(TOPR)};
+  TOPR[0].b=CW+60;TOPR[1].a=CW+60;
+  R.forEach(function(q){if(q.id==='v2')q.b=EMB;if(q.id==='v1'&&cdone('bridge'))q.b=EMB});
+  VNEW.forEach(function(c,i){R.push({x:c,cx:c,a:54,b:VBOT,id:'v'+(3+i)})});
+  HNEW.forEach(function(c,i){R.push({h:1,y:c-6,a:-60,b:CW+60,id:'h'+(3+i),c:c},{h:1,y:c+22,a:CW+60,b:-60,id:'h'+(3+i),c:c})});
+  return R.concat(TOPR)};
 function carSet(c){var k=c.r.h?'s':c.dir<0?'b':'f';if(c.im===k)return;c.im=k;var f=c.el.querySelector('.cfl');if(f)f.innerHTML=k==='s'?carSide(c.col,c.kind):k==='b'?carBack(c.col,c.kind):carFront(c.col,c.kind)}
 carSpawn=function(){var l=document.getElementById('cmov');if(!l)return;var Rs=carRoads(),r=pick(Rs),kind=pick(['car','car','car','taxi','truck']),col=pick(CCOL);
   var el=document.createElementNS('http://www.w3.org/2000/svg','svg');el.setAttribute('class','spr mov');el.setAttribute('viewBox','0 0 60 42');el.setAttribute('width','60');el.setAttribute('height','42');
@@ -117,11 +122,13 @@ carSpawn=function(){var l=document.getElementById('cmov');if(!l)return;var Rs=ca
 var _cp=carPlace;
 carPlace=function(c){
   if(c.turnTo&&c.r.h&&((c.dir>0&&c.p>=c.turnTo.x)||(c.dir<0&&c.p<=c.turnTo.x))){var v=c.turnTo;c.turnTo=null;c.r=v;c.p=v.a;c.dir=1;c.b2=null;c.stop=null;c.done=false}
+  if(!c.r.h&&c.dir>0&&(c.r.b===EMB||c.r.b===VBOT)&&c.p>=c.r.b-2){var rt2=Math.random()<.5,x1=c.r.cx||c.r.x,hc=c.r.b;c.r={h:1,y:rt2?hc-6:hc+22,a:x1,b:rt2?CW+60:-60,id:'hx'};c.p=x1;c.dir=rt2?1:-1;c.b2=null;c.stop=null;c.done=false}
   if(!c.r.h&&c.dir<0&&c.p<=54){var rt=Math.random()<.5,x0=c.r.x;c.r=rt?TOPR[0]:TOPR[1];c.p=x0;c.dir=rt?1:-1;c.b2=null;c.stop=null;c.turned=1;c.done=false}
   if(!c.r.h&&c.r.cx!=null){var lx=c.r.cx+(c.dir>0?-13:13);if(c.r.x!==lx){var q={};for(var k in c.r)q[k]=c.r[k];q.x=lx;c.r=q}}
   carSet(c);_cp(c)};
 parkedSVG=function(P){P=P||PARKED;var s='';P.forEach(function(p){if(!cdone(p[0]))return;var x=p[1],y=p[2],k=p[3];
   s+=k==='bus'?im('bus_side',x,y+16,96,0):k==='amb'?im('truck_side',x,y+14,74,0):k==='van'?im('truck_side',x,y+14,72,0):im(carPick(p[4])+'_side',x,y+10,62,0)});return s};
+setInterval(function(){try{if(document.getElementById('cmov')&&CARS.length<6&&!document.hidden)carSpawn()}catch(e){}},2600);
 /* жители: каждому — свой персонаж */
 var ROLE={mektep:'kid_boy',aurukhana:'doctor',stadion:'sport_boy',studia:'artist',sakhna:'star',sayabaq:'man_taqiya',fontan:'guest',library:'kid_girl',chai:'ata',play:'kid_boy',yurt:'apa',
  duken:'seller',ytoys:'man_taqiya',yice:'kid_girl',ycar:'kid_boy',yyurt:'apa',ystage:'star',ytramp:'sport_boy',yswing:'kid_girl',ywheel:'aga',yvata:'kid_girl',ytir:'kid_boy',ymagic:'magician',
@@ -141,23 +148,52 @@ clDraw=function(){if(!CLI.every(function(i){return i.complete&&i.naturalWidth}))
   if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}cv.style.width=(CW+2*O)+'px';cv.style.height=(CH+2*O)+'px';cv.style.left=(-O)+'px';cv.style.top=(-O)+'px';
   var g=cv.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);g.setTransform(S,0,0,S,O*S,O*S);
   CLP.forEach(function(p){if(p.dead||p.y<230)return;var img=CLI[p.i%3],w=196,h=w*img.naturalHeight/img.naturalWidth;g.drawImage(img,p.x+10-w/2,p.y+5-h/2,w,h)})};
-/* земля: трава в тон картинкам; все дороги одинаковые — шире (56), бордюры, разметка; дорога под горами */
-var RW=56;
-function roadsFix(g){var H=[],V=[],re=/<rect x="(-?[\d.]+)" y="(-?[\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="#f0d9a8"\/>/g,m;
-  while((m=re.exec(g))){var x=+m[1],y=+m[2],w=+m[3],h=+m[4];if(w>h*3)H.push({x:x,w:w,c:y+h/2,path:h<=30&&x>0,y:y,h:h});else if(h>w*3)V.push({y:y,h:h,c:x+w/2})}
+/* земля: трава в тон картинкам; сетка дорог как в городе (чат №4): все дороги 56, бордюры, разметка; река через всю карту; мосты */
+var RW=56,RIV0=1320,RIV1=1438,EMB=1470,HNEW=[EMB,2330,3225],VNEW=[1190,2190],VBOT=3225;
+function brSVG(cx,broken){var r2=RW/2,s='',y0=RIV0-4,y1=RIV1+4;
+  if(!broken){s+='<rect x="'+(cx-r2)+'" y="'+y0+'" width="'+RW+'" height="'+(y1-y0)+'" fill="'+ASPH+'"/>';for(var y=y0+10;y<y1-20;y+=40)s+='<rect x="'+(cx-2)+'" y="'+y+'" width="4" height="20" rx="2" fill="#fff"/>'}
+  else{s+='<rect x="'+(cx-r2)+'" y="'+y0+'" width="'+RW+'" height="30" fill="#8a5a2b"/><rect x="'+(cx-r2)+'" y="'+(y1-30)+'" width="'+RW+'" height="30" fill="#8a5a2b"/>'+
+    '<path d="M'+(cx-r2)+' '+(y0+30)+' l12 10 l10 -8 l12 12 l10 -9 l12 9 V'+(y0+30)+'Z" fill="#8a5a2b"/><path d="M'+(cx-r2)+' '+(y1-30)+' l14 -9 l10 7 l12 -11 l9 8 l11 -7 V'+(y1-30)+'Z" fill="#8a5a2b"/>'}
+  [cx-r2-6,cx+r2].forEach(function(x){if(!broken)s+='<rect x="'+x+'" y="'+y0+'" width="6" height="'+(y1-y0)+'" rx="2" fill="#a8703c" stroke="#6b4423" stroke-width="1.5"/>';
+    else s+='<rect x="'+x+'" y="'+y0+'" width="6" height="34" rx="2" fill="#a8703c" stroke="#6b4423" stroke-width="1.5"/><rect x="'+x+'" y="'+(y1-34)+'" width="6" height="34" rx="2" fill="#a8703c" stroke="#6b4423" stroke-width="1.5"/>';
+    for(var y=y0;y<=y1;y+=22){if(broken&&y>y0+34&&y<y1-34)continue;s+='<rect x="'+(x-1)+'" y="'+(y-3)+'" width="8" height="8" rx="2" fill="#6b4423"/>'}});
+  if(broken)s+=im('plot_cones',cx,y0-2,0,26);return s}
+function riverSVG(){var w=CW,s='',top='M0 1340',bot='',k;for(k=0;k<w;k+=400)top+=' Q'+(k+200)+' '+(k%800?1350:1326)+' '+(k+400)+' 1340';
+  bot='L'+w+' 1420';for(k=w;k>0;k-=380)bot+=' Q'+(k-190)+' '+(k%760?1430:1412)+' '+(k-380)+' 1420';
+  s+='<path d="'+top+' '+bot+' Z" fill="#5fc3db"/>';s+='<path d="'+top+'" stroke="#c9b38a" stroke-width="6" fill="none"/>';
+  var bp='M'+w+' 1420';for(k=w;k>0;k-=380)bp+=' Q'+(k-190)+' '+(k%760?1430:1412)+' '+(k-380)+' 1420';s+='<path d="'+bp+'" stroke="#c9b38a" stroke-width="6" fill="none"/>';
+  for(var x=30,i=0;x<w;x+=82,i++)s+='<path d="M'+x+' '+(1372+(i%3)*12)+' q8 -5 16 0 t16 0" stroke="#bfe9f2" stroke-width="2.5" fill="none" stroke-linecap="round"/>';return s}
+function roadsFix(g){var H=[],V=[],P=[],re=/<rect x="(-?[\d.]+)" y="(-?[\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="#f0d9a8"\/>/g,m;
+  while((m=re.exec(g))){var x=+m[1],y=+m[2],w=+m[3],h=+m[4];if(w>h*3){if(h<=30&&x>0)P.push({x:x,y:y,w:w,h:h});else H.push({x:x,w:w,c:y+h/2})}else if(h>w*3)V.push({y:y,h:h,c:x+w/2})}
   g=g.replace(re,'').replace(/<rect [^>]*fill="#dcc08a"\/>/g,'').replace(/<rect [^>]*fill="#fff6e6"\/>/g,'');
-  H.unshift({x:0,w:CW,c:25});var s='',r2=RW/2,roads=H.filter(function(h){return !h.path});
-  H.forEach(function(h){if(h.path)s+='<rect x="'+h.x+'" y="'+h.y+'" width="'+h.w+'" height="'+h.h+'" rx="6" fill="#ddd6c3"/>'});
-  roads.forEach(function(h){s+='<rect x="'+h.x+'" y="'+(h.c-r2)+'" width="'+h.w+'" height="'+RW+'" fill="'+ASPH+'"/>'});
+  g=g.replace(/<path d="M0 1340[^"]*"[^>]*\/>/g,'').replace(/<path d="M0 1418[^"]*"[^>]*\/>/g,'').replace(/<path d="M\d+ 1[34]\d\d q8 -5 16 0 t16 0"[^>]*\/>/g,'');
+  var V2=[];V.forEach(function(v){if(Math.abs(v.c-380)<4&&v.y>=2200){var py=Math.max(v.y,2330+RW/2);P.push({x:v.c-22,y:py,w:44,h:v.y+v.h-py});return}
+    if(Math.abs(v.c-380)<4&&v.y>RIV0&&v.y<RIV1+20)return;
+    if(Math.abs(v.c-1641)<4){v.h=807+RW/2-v.y}
+    if(Math.abs(v.c-779)<4&&v.y<10){v.h=EMB-v.y}
+    if(Math.abs(v.c-380)<4&&v.y<10){v.h=RIV0-v.y}
+    V2.push(v)});V=V2;
+  VNEW.forEach(function(c){V.push({y:25,h:VBOT-25,c:c})});
+  V.push({y:RIV1,h:1700-RIV1,c:380});
+  H.unshift({x:0,w:CW,c:25});HNEW.forEach(function(c){H.push({x:0,w:CW,c:c})});
+  var BR=[];V2=[];V.forEach(function(v){var y1=v.y+v.h;if(v.y<RIV0&&y1>RIV1){V2.push({y:v.y,h:RIV0-v.y,c:v.c});V2.push({y:RIV1,h:y1-RIV1,c:v.c});BR.push(v.c)}else V2.push(v)});V=V2;
+  var s=riverSVG(),r2=RW/2;
+  P.forEach(function(h){s+='<rect x="'+h.x+'" y="'+h.y+'" width="'+h.w+'" height="'+h.h+'" rx="6" fill="#ddd6c3"/>'});
+  H.forEach(function(h){s+='<rect x="'+h.x+'" y="'+(h.c-r2)+'" width="'+h.w+'" height="'+RW+'" fill="'+ASPH+'"/>'});
   V.forEach(function(v){s+='<rect x="'+(v.c-r2)+'" y="'+v.y+'" width="'+RW+'" height="'+v.h+'" fill="'+ASPH+'"/>'});
-  roads.forEach(function(h){s+='<rect x="'+h.x+'" y="'+(h.c-r2)+'" width="'+h.w+'" height="4" fill="'+CURB+'"/><rect x="'+h.x+'" y="'+(h.c+r2-4)+'" width="'+h.w+'" height="4" fill="'+CURB+'"/>'});
+  H.forEach(function(h){s+='<rect x="'+h.x+'" y="'+(h.c-r2)+'" width="'+h.w+'" height="4" fill="'+CURB+'"/><rect x="'+h.x+'" y="'+(h.c+r2-4)+'" width="'+h.w+'" height="4" fill="'+CURB+'"/>'});
   V.forEach(function(v){s+='<rect x="'+(v.c-r2)+'" y="'+v.y+'" width="4" height="'+v.h+'" fill="'+CURB+'"/><rect x="'+(v.c+r2-4)+'" y="'+v.y+'" width="4" height="'+v.h+'" fill="'+CURB+'"/>'});
   function cross(h,v){return v.y-r2<=h.c&&v.y+v.h+r2>=h.c&&h.x-r2<=v.c&&h.x+h.w+r2>=v.c}
-  roads.forEach(function(h){V.forEach(function(v){if(cross(h,v)){var y0=Math.max(h.c-r2,v.y-(v.y>h.c-r2?0:0));s+='<rect x="'+(v.c-r2+4)+'" y="'+(h.c-r2)+'" width="'+(RW-8)+'" height="'+RW+'" fill="'+ASPH+'"/>';
-    s+='<rect x="'+(v.c-r2)+'" y="'+(h.c-r2+4)+'" width="'+RW+'" height="'+(RW-8)+'" fill="'+ASPH+'"/>'}})});
-  roads.forEach(function(h){for(var x=h.x+12;x<h.x+h.w-24;x+=48){var hit=V.some(function(v){return cross(h,v)&&Math.abs(x+12-v.c)<r2+16});if(!hit)s+='<rect x="'+x+'" y="'+(h.c-2)+'" width="24" height="4" rx="2" fill="#ffffff"/>'}});
-  V.forEach(function(v){for(var y=v.y+12;y<v.y+v.h-24;y+=48){var hit=roads.some(function(h){return cross(h,v)&&Math.abs(y+12-h.c)<r2+16});if(!hit)s+='<rect x="'+(v.c-2)+'" y="'+y+'" width="4" height="24" rx="2" fill="#ffffff"/>'}});
+  H.forEach(function(h){V.forEach(function(v){if(cross(h,v)){var top=Math.max(h.c-r2,v.y),bot=Math.min(h.c+r2,v.y+v.h);
+    s+='<rect x="'+(v.c-r2+4)+'" y="'+(h.c-r2)+'" width="'+(RW-8)+'" height="'+RW+'" fill="'+ASPH+'"/>';s+='<rect x="'+(v.c-r2)+'" y="'+(Math.max(h.c-r2+4,v.y))+'" width="'+RW+'" height="'+(Math.min(h.c+r2-4,v.y+v.h)-Math.max(h.c-r2+4,v.y))+'" fill="'+ASPH+'"/>'}})});
+  H.forEach(function(h){for(var x=h.x+12;x<h.x+h.w-24;x+=48){var hit=V.some(function(v){return cross(h,v)&&Math.abs(x+12-v.c)<r2+16});if(!hit)s+='<rect x="'+x+'" y="'+(h.c-2)+'" width="24" height="4" rx="2" fill="#ffffff"/>'}});
+  V.forEach(function(v){for(var y=v.y+12;y<v.y+v.h-24;y+=48){var hit=H.some(function(h){return cross(h,v)&&Math.abs(y+12-h.c)<r2+16});if(!hit)s+='<rect x="'+(v.c-2)+'" y="'+y+'" width="4" height="24" rx="2" fill="#ffffff"/>'}});
+  BR.forEach(function(c){if(Math.abs(c-380)>4)s+=brSVG(c,false)});
   return g.replace(/<\/svg>\s*$/,s+'</svg>')}
+/* постройки и деревья, стоявшие на новых дорогах и реке */
+[['dcafe',2480,470],['dbooks',2500,1000],['mflag',1880,2515],['pgate',1360,1625],['ptrack',1640,1568],['ptramp',1960,1568],['hpath',2560,1716]].forEach(function(a){CTASK.forEach(function(t){if(t.id===a[0]){t.x=a[1];t.y=a[2]}})});
+for(var bi=BGTREES.length-1;bi>=0;bi--){var tq=BGTREES[bi],tx=tq[0],ty=tq[1];
+  if((Math.abs(tx-1190)<55||Math.abs(tx-2190)<55)&&ty<VBOT+40||HNEW.some(function(h){return Math.abs(ty-h)<58})||Math.abs(ty-25)<50||(ty>1290&&ty<1460)||(Math.abs(tx-779)<50&&ty>1290&&ty<1500))BGTREES.splice(bi,1)}
 var _gsch=groundSched;
 groundSched=function(g){g=roadsFix(g);g=recol(g).replace(/#8fd16a/gi,GRASS).replace(/#82c45e/gi,GRASS2).replace(/#ead39a/gi,'#ddd6c3');return _gsch(g)};
 /* горы сверху: выше них камера не уходит */
