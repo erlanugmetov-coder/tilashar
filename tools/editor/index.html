@@ -114,25 +114,33 @@ function save(){var data={items:items,paths:paths};try{localStorage.setItem(KEY,
   db.doc('layouts/aina').set({items:items,paths:paths,t:Date.now()}).then(function(){setSt('Сохранено ✓')}).catch(function(){setSt('Сохранено на телефоне')})},500)}
 function wpt(e){var r=stage.getBoundingClientRect();return [Math.round((e.clientX-r.left)/sc),Math.round((e.clientY-r.top)/sc)]}
 var drag=null,stroke=null,erasing=false;
-stage.addEventListener('pointerdown',function(e){e.preventDefault();stage.setPointerCapture(e.pointerId);
- if(mode==='draw'){snap();stroke={st:curSty,w:curW,pts:[wpt(e)]};drawPaths(stroke);return}
- if(mode==='erase'){snap();erasing=true;eraseAt(wpt(e));return}
- var el=e.target.closest('.it');
- if(!el){sel=-1;render();return}
- var i=+el.dataset.i;sel=i;snap();drag={i:i,sx:e.clientX,sy:e.clientY,x:items[i].x,b:items[i].b,moved:false};render()});
+function pickAt(p){var best=-1,bz=-1e9;items.forEach(function(it,i){var h=it.w*(ASP[it.n]||1);if(p[0]>=it.x-it.w/2&&p[0]<=it.x+it.w/2&&p[1]>=it.b-h&&p[1]<=it.b){var z=zi(it);if(z>bz){bz=z;best=i}}});return best}
+function startAt(cx,cy,target){var p=wpt({clientX:cx,clientY:cy});
+ if(mode==='draw'){snap();stroke={st:curSty,w:curW,pts:[p]};drawPaths(stroke);return}
+ if(mode==='erase'){snap();erasing=true;eraseAt(p);return}
+ var i=pickAt(p);if(i<0){var el=target&&target.closest&&target.closest('.it');if(el)i=+el.dataset.i}
+ if(i<0){sel=-1;render();return}
+ sel=i;snap();drag={i:i,sx:cx,sy:cy,x:items[i].x,b:items[i].b,moved:false};render()}
+var usingTouch=false;
+stage.addEventListener('pointerdown',function(e){if(usingTouch)return;e.preventDefault();try{stage.setPointerCapture(e.pointerId)}catch(_){ }startAt(e.clientX,e.clientY,e.target)});
+stage.addEventListener('touchstart',function(e){usingTouch=true;e.preventDefault();var t=e.touches[0];startAt(t.clientX,t.clientY,e.target)},{passive:false});
+stage.addEventListener('touchmove',function(e){e.preventDefault();var t=e.touches[0];moveAt(t.clientX,t.clientY)},{passive:false});
+stage.addEventListener('touchend',function(e){e.preventDefault();end()},{passive:false});
+stage.addEventListener('touchcancel',function(e){end()},{passive:false});
 function eraseAt(p){var i=onPath(p[0],p[1],10);if(i>=0){paths.splice(i,1);drawPaths();render()}}
-stage.addEventListener('pointermove',function(e){
- if(stroke){var p=wpt(e),l=stroke.pts[stroke.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])>=10){stroke.pts.push(p);drawPaths(stroke)}return}
- if(erasing){eraseAt(wpt(e));return}
+function moveAt(cx,cy){
+ if(stroke){var p=wpt({clientX:cx,clientY:cy}),l=stroke.pts[stroke.pts.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])>=10){stroke.pts.push(p);drawPaths(stroke)}return}
+ if(erasing){eraseAt(wpt({clientX:cx,clientY:cy}));return}
  if(!drag)return;var it=items[drag.i];
- var dx=(e.clientX-drag.sx)/sc,dy=(e.clientY-drag.sy)/sc;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;
+ var dx=(cx-drag.sx)/sc,dy=(cy-drag.sy)/sc;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;
  it.x=Math.round(Math.max(10,Math.min(W-10,drag.x+dx)));it.b=Math.round(Math.max(20,Math.min(W-4,drag.b+dy)));
- var el=world.querySelector('.it[data-i="'+drag.i+'"]');if(el){var h=it.w*(ASP[it.n]||1),min=40/sc,bw=Math.max(it.w,min),bh=Math.max(h,min);el.style.left=(it.x-bw/2)+'px';el.style.top=(it.b-bh)+'px';el.style.zIndex=zi(it);el.classList.toggle('bad',bad(it))}});
+ var el=world.querySelector('.it[data-i="'+drag.i+'"]');if(el){var h=it.w*(ASP[it.n]||1),min=40/sc,bw=Math.max(it.w,min),bh=Math.max(h,min);el.style.left=(it.x-bw/2)+'px';el.style.top=(it.b-bh)+'px';el.style.zIndex=zi(it);el.classList.toggle('bad',bad(it))}}
+stage.addEventListener('pointermove',function(e){if(usingTouch)return;moveAt(e.clientX,e.clientY)});
 function end(){
  if(stroke){if(stroke.pts.length>1||true){paths.push(stroke)}stroke=null;drawPaths();render();save();return}
  if(erasing){erasing=false;save();return}
  if(!drag)return;if(drag.moved){items[drag.i].z=0;save()}else hist.pop();drag=null;render()}
-stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
+stage.addEventListener('pointerup',function(){if(!usingTouch)end()});stage.addEventListener('pointercancel',function(){if(!usingTouch)end()});
 function act(f){if(sel<0)return;snap();f(items[sel]);render();save()}
 document.getElementById('bSm').onclick=function(){act(function(it){it.w=Math.max(12,Math.round(it.w*.9))})};
 document.getElementById('bBg').onclick=function(){act(function(it){it.w=Math.min(500,Math.round(it.w*1.1))})};
