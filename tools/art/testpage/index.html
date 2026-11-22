@@ -14,19 +14,16 @@
    LAYOUT: узкая шапка с подсказкой, карта, кнопка «Сначала» */
 :root{color-scheme:light;--grass:#99bc65;--ink:#14222c}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:#0d3b4f;color:var(--ink);font:16px/1.4 Nunito,system-ui,sans-serif;overflow-x:clip}
-.top{position:sticky;top:0;z-index:5000;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0d3b4f;color:#fff}
-.top b{font-weight:900;font-size:17px}
-.top span{flex:1;font-size:13px;opacity:.85}
-.top button{flex:none;min-height:40px;padding:0 14px;border:0;border-radius:20px;background:#f2b134;color:#14222c;font:800 14px Nunito,sans-serif;cursor:pointer}
-.top button:focus-visible{outline:3px solid #fff}
+body{margin:0;background:#99bc65;color:var(--ink);font:16px/1.4 Nunito,system-ui,sans-serif;overflow-x:clip}
+#reset{position:fixed;top:10px;right:10px;z-index:6000;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,250,240,.85);color:#14222c;font:900 22px Nunito,sans-serif;box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:pointer}
+#reset:focus-visible{outline:3px solid #f2b134}
 #outer{position:relative;overflow:hidden;background:var(--grass)}
 #world{position:absolute;left:0;top:0;width:1000px;height:1420px;transform-origin:0 0;background:var(--grass)}
 .pano{position:absolute;left:0;top:0;width:1000px;height:565px;background:url(img/panorama.webp) center/100% 100% no-repeat}
 .road{position:absolute;background:#9a9ea3}
 .road.h{left:0;width:1000px;top:880px;height:62px;border-top:4px solid #e7d6a8;border-bottom:4px solid #e7d6a8}
 .road.h::after{content:"";position:absolute;left:0;right:0;top:27px;height:5px;background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 68px)}
-.road.v{left:470px;width:62px;top:600px;height:820px;border-left:4px solid #e7d6a8;border-right:4px solid #e7d6a8}
+.road.v{left:470px;width:62px;top:946px;height:474px;border-left:4px solid #e7d6a8;border-right:4px solid #e7d6a8}
 .road.v::after{content:"";position:absolute;top:0;bottom:0;left:24px;width:5px;background:repeating-linear-gradient(180deg,#fff 0 34px,transparent 34px 68px)}
 .ob{position:absolute;transform:translate(-50%,-100%);pointer-events:none;user-select:none;-webkit-user-drag:none}
 .tap{pointer-events:auto;cursor:pointer;transition:transform .25s}
@@ -45,7 +42,7 @@ body{margin:0;background:#0d3b4f;color:var(--ink);font:16px/1.4 Nunito,system-ui
 </style>
 </head>
 <body>
-<div class="top"><b>Тілашар</b><span id="hint">Нажми на облако, потом почини дом, пруд и убери завал</span><button id="reset" type="button">Сначала</button></div>
+<button id="reset" type="button" aria-label="Сначала" title="Сначала">↺</button>
 <div id="outer"><div id="world"><div class="pano"></div><div class="road v"></div><div class="road h"></div></div></div>
 <script>
 {
@@ -104,7 +101,7 @@ let cars=[];
 function spawn(){const r=Math.random();let c;
  if(r<.7){const right=Math.random()<.5,n=SIDE[Math.floor(Math.random()*SIDE.length)],h=n==='bus_side'?58:44;
   c={el:img(n,right?-80:1080,right?936:906,h),dx:right?1:-1,dy:0,v:70+Math.random()*50};c.x=right?-80:1080;c.y=right?936:906;if(!right)c.el.style.transform='translate(-50%,-100%) scaleX(-1)'}
- else{const n=FRONT[Math.floor(Math.random()*FRONT.length)];c={el:img(n,516,590,52),dx:0,dy:1,v:60+Math.random()*30};c.x=516;c.y=590;c.el.style.opacity=0}
+ else{const n=FRONT[Math.floor(Math.random()*FRONT.length)];c={el:img(n,516,960,52),dx:0,dy:1,v:60+Math.random()*30};c.x=516;c.y=960;c.el.style.opacity=0}
  cars.push(c)}
 // walkers
 const PEOPLE=[['kid_boy',40,876,1],['apa',300,876,-1],['doctor',620,876,1],['kid_girl',800,985,-1],['ata',200,985,1]];
@@ -117,7 +114,7 @@ let last=performance.now(),acc=0,flap=0;
 function tick(t){const dt=Math.min(.05,(t-last)/1000);last=t;acc-=dt;flap+=dt;
  if(acc<=0&&cars.length<4){spawn();acc=1.6+Math.random()*2.5}
  cars=cars.filter(c=>{c.x+=c.dx*c.v*dt;c.y+=c.dy*c.v*dt;c.el.style.left=c.x+'px';c.el.style.top=c.y+'px';c.el.style.zIndex=Math.round(c.y);
-  if(c.dy){c.el.style.opacity=Math.min(1,(c.y-590)/40)}
+  if(c.dy){c.el.style.opacity=Math.min(1,(c.y-960)/40)}
   if(c.x<-140||c.x>1140||c.y>1480){c.el.remove();return false}return true});
  walkers.forEach(w=>{w.x+=w.d*w.v*dt;if(w.x<w.min||w.x>w.max)w.d=-w.d;const bob=Math.abs(Math.sin(t/160+w.min))*4;
   w.el.style.left=w.x+'px';w.el.style.top=(w.y-bob)+'px';w.el.style.transform='translate(-50%,-100%)'+(w.d>0?' scaleX(-1)':'')});
