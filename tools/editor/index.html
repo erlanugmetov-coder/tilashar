@@ -30,7 +30,7 @@ button:disabled{opacity:.35}
 <div id="bar">
 <button id="bSm" title="меньше">➖</button><button id="bBg" title="больше">➕</button><button id="bFl" title="отразить">⇋</button><button id="bDel" title="убрать">🗑</button><button id="bUn" title="отменить">↩️</button>
 </div>
-<div id="bar2" style="display:flex;gap:6px;justify-content:center;padding:4px 8px;flex-wrap:wrap"><button id="bL">⬅️</button><button id="bU">⬆️</button><button id="bD">⬇️</button><button id="bR">➡️</button><button id="bFw" style="font-size:14px">Вперёд</button><button id="bBk" style="font-size:14px">Назад</button></div>
+<div id="bar2" style="display:flex;gap:6px;justify-content:center;padding:4px 8px;flex-wrap:wrap"><button id="bL">⬅️</button><button id="bU">⬆️</button><button id="bD">⬇️</button><button id="bR">➡️</button><button id="bFw" style="font-size:14px">Вперёд</button><button id="bBk" style="font-size:14px">Назад</button><button id="bRs" style="font-size:14px">Сбросить этот</button></div>
 <div class="lbl">Добавить:</div>
 <div id="pal"></div>
 <button id="reset">Вернуть исходную расстановку</button>
@@ -55,11 +55,13 @@ function render(){var s='',min=40/sc;
  items.forEach(function(it,i){var h=it.w*(ASP[it.n]||1),bw=Math.max(it.w,min),bh=Math.max(h,min);
   s+='<div class="it'+(i===sel?' sel':'')+(bad(it)?' bad':'')+'" data-i="'+i+'" style="left:'+(it.x-bw/2)+'px;top:'+(it.b-bh)+'px;width:'+bw+'px;height:'+bh+'px;z-index:'+zi(it)+'"><img src="art/'+it.n+'.webp" style="width:'+it.w+'px;height:'+h+'px;'+(it.f?'transform:scaleX(-1)':'')+'"></div>'});
  world.querySelectorAll('.it').forEach(function(e){e.remove()});world.insertAdjacentHTML('beforeend',s);
- var on=sel>=0;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk'].forEach(function(id){document.getElementById(id).disabled=!on});document.getElementById('bUn').disabled=!hist.length;
+ var on=sel>=0;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk','bRs'].forEach(function(id){document.getElementById(id).disabled=!on});document.getElementById('bUn').disabled=!hist.length;
  var nb=items.filter(bad).length;document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?'Нажмите на газон — объект переедет туда':'Нажмите на постройку, потом на место, куда поставить')}
 function snap(){hist.push(JSON.stringify(items));if(hist.length>40)hist.shift()}
 var stT=null;function setSt(t){document.getElementById('st').textContent=t}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}
+function clampIt(it){it.w=Math.max(12,Math.min(400,Math.round(+it.w||80)));it.x=Math.max(O,Math.min(O+B,Math.round(+it.x||CX)));it.b=Math.max(O+20,Math.min(O+B+10,Math.round(+it.b||CY)));it.z=Math.max(-900,Math.min(900,Math.round(+it.z||0)));it.f=it.f?1:0;return it}
+function clean(a){return (Array.isArray(a)?a:[]).filter(function(it){return it&&typeof it.n==='string'&&ASP[it.n]}).map(clampIt)}
+function save(){items=items.map(clampIt);try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}
  setSt('Сохраняю…');clearTimeout(stT);stT=setTimeout(function(){
   if(!db){setSt('Сохранено на телефоне');return}
   db.doc('layouts/aina').set({items:items,t:Date.now()}).then(function(){setSt('Сохранено ✓')}).catch(function(){setSt('Сохранено на телефоне')})},500)}
@@ -79,9 +81,12 @@ function end(){if(!drag)return;if(drag.moved){items[drag.i].z=0;save()}else hist
 stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
 function act(f){if(sel<0)return;snap();f(items[sel]);render();save()}
 document.getElementById('bSm').onclick=function(){act(function(it){it.w=Math.max(12,Math.round(it.w*.9))})};
-document.getElementById('bBg').onclick=function(){act(function(it){it.w=Math.min(500,Math.round(it.w*1.1))})};
+document.getElementById('bBg').onclick=function(){act(function(it){it.w=Math.min(400,Math.round(it.w*1.1))})};
 document.getElementById('bFl').onclick=function(){act(function(it){it.f=it.f?0:1})};
-function nud(dx,dy){act(function(it){it.x+=dx;it.b+=dy})}
+function nud(dx,dy){act(function(it){it.x+=dx;it.b+=dy;clampIt(it)})}
+document.getElementById('bRs').onclick=function(){act(function(it){var c=INIT.filter(function(q){return q.n===it.n});
+ if(c.length){c.sort(function(a,b){return Math.hypot(a.x-it.x,a.b-it.b)-Math.hypot(b.x-it.x,b.b-it.b)});var q=c[0];it.x=q.x;it.b=q.b;it.w=q.w;it.f=q.f||0;it.z=0}
+ else{it.w=PALW[it.n]||80;it.z=0;it.f=0;clampIt(it)}})};
 document.getElementById('bL').onclick=function(){nud(-3,0)};document.getElementById('bR').onclick=function(){nud(3,0)};
 document.getElementById('bU').onclick=function(){nud(0,-3)};document.getElementById('bD').onclick=function(){nud(0,3)};
 function others(){return items.filter(function(o,j){return j!==sel}).map(function(o){return o.b+(o.z||0)})}
@@ -92,10 +97,10 @@ document.getElementById('bUn').onclick=function(){if(!hist.length)return;items=J
 document.getElementById('reset').onclick=function(){if(!window.confirm||1){snap();items=JSON.parse(JSON.stringify(INIT));sel=-1;render();save()}};
 var pal=document.getElementById('pal');PAL.forEach(function(n){var d=document.createElement('div');d.innerHTML='<img src="art/'+n+'.webp">';d.onclick=function(){snap();items.push({n:n,x:CX+(Math.random()*120-60),b:CY+150,w:PALW[n]||80,f:0});items[items.length-1].x=Math.round(items[items.length-1].x);sel=items.length-1;render();save()};pal.appendChild(d)});
 ground();
-try{var ls=localStorage.getItem(KEY);var _l=ls?JSON.parse(ls):null;items=_l?(Array.isArray(_l)?_l:(_l.items||JSON.parse(JSON.stringify(INIT)))):JSON.parse(JSON.stringify(INIT))}catch(e){items=JSON.parse(JSON.stringify(INIT))}
+try{var ls=localStorage.getItem(KEY);var _l=ls?JSON.parse(ls):null;items=_l?clean(Array.isArray(_l)?_l:_l.items):[];if(!items.length)items=JSON.parse(JSON.stringify(INIT))}catch(e){items=JSON.parse(JSON.stringify(INIT))}
 window.addEventListener('resize',fit);fit();setSt('');
 (async function(){try{if(!window.claude||!claude.use)return;db=await claude.use('db');if(!db){setSt('Сохраняется на телефоне');return}
  var to=setTimeout(function(){setSt('')},10000);var s=await db.doc('layouts/aina').get();clearTimeout(to);
  var d=s&&(s.data?(typeof s.data==='function'?s.data():s.data):s);
- if(d&&d.items&&d.items.length&&!drag){items=d.items;sel=-1;hist=[];render();setSt('Загружено ✓')}else setSt('')}catch(e){setSt('')}})();
+ if(d&&d.items&&clean(d.items).length&&!drag){items=clean(d.items);sel=-1;hist=[];render();setSt('Загружено ✓')}else setSt('')}catch(e){setSt('')}})();
 </script></body></html>
