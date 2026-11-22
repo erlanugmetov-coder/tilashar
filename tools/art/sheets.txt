@@ -17,3 +17,4 @@ s16 bbBKUftdiX9v5tdkftu6 aga,teacher,seller,baker,cook,cashier,taxi_driver,guard
 s17 x5BlekJzkdcTQh6RP81O car_side,car_front,car2_side,car2_front,taxi_side,taxi_front,truck_side,truck_front,bus_side
 s18 l1zWhpQXB2AAQHOOVqwf bus_front,sport_boy,sport_girl,cloud1,cloud2,cloud3
 pano FT1MNsL9Au6fW0LKY5RP panorama
+s19 1RYgdJLzN7hfgEQ6sG5w yard_court,statue_hero,sandbox,workout,gazebo,dovecote,skate,flower_arch,roundabout
