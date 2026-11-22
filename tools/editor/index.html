@@ -161,5 +161,5 @@ window.addEventListener('resize',fit);fit();setSt('');
 (async function(){try{if(!window.claude||!claude.use)return;db=await claude.use('db');if(!db){setSt('Сохраняется на телефоне');return}
  var to=setTimeout(function(){setSt('')},10000);var s=await db.doc('layouts/aina').get();clearTimeout(to);
  var d=s&&(s.data?(typeof s.data==='function'?s.data():s.data):s);
- if(d&&d.items&&clean(d.items).length&&!drag&&!stroke){items=clean(d.items);paths=Array.isArray(d.paths)?cleanPaths(d.paths):defPaths();drawPaths();sel=-1;hist=[];render();setSt('Загружено ✓')}else setSt('')}catch(e){setSt('')}})();
+ if(d&&d.items&&clean(d.items).length&&!drag&&!stroke){var dd=JSON.parse(JSON.stringify(d));items=clean(dd.items);paths=Array.isArray(dd.paths)?cleanPaths(dd.paths):defPaths();drawPaths();sel=-1;hist=[];render();setSt('Загружено ✓')}else setSt('')}catch(e){setSt('')}})();
 </script></body></html>
