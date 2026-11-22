@@ -164,7 +164,7 @@ stage.addEventListener('pointermove',function(e){if(stroke||erasing||hdrag||bdra
 function end(){
  if(hdrag){if(hdrag.moved){save()}else{hist.pop();hpend={e:hdrag.e};mpend=false}hdrag=null;drawPaths();render();return}
  if(bdrag){if(bdrag.moved){save()}else{hist.pop();mpend=!mpend;hpend=null}bdrag=null;drawPaths();render();return}
- if(stroke){var tap=stroke.pts.length<2||Math.hypot(stroke.pts[stroke.pts.length-1][0]-tapStart[0],stroke.pts[stroke.pts.length-1][1]-tapStart[1])<14;
+ if(stroke){var mv=0;stroke.pts.forEach(function(q){mv=Math.max(mv,Math.hypot(q[0]-tapStart[0],q[1]-tapStart[1]))});var onP=onPath(tapStart[0],tapStart[1],10)>=0;var tap=mv<(onP?34:16)/sc;
   if(tap){hist.pop();var k=onPath(tapStart[0],tapStart[1],6);psel=k;hpend=null;mpend=false;stroke=null;drawPaths();render();return}
   if(straight)stroke.pts=straighten(stroke);paths.push(stroke);psel=paths.length-1;hpend=null;mpend=false;stroke=null;drawPaths();render();save();return}if(erasing){erasing=false;save();return}
  if(!drag)return;if(drag.moved){items[drag.i].z=0;save()}else hist.pop();drag=null;render()}
