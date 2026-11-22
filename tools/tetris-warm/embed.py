@@ -10,7 +10,7 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v202';")
+rep("var CURV='v185';","var CURV='v204';")
 # v197: русская реплика Айны звучит при появлении облачка, казахские примеры — после неё
 rep("bub.innerHTML=html;svg.classList.add('talk');sBloop();","bub.innerHTML=html;svg.classList.add('talk');sBloop();try{if(ruFind(html).length){bub.dataset.ru=html;ruSay(html)}}catch(e){}")
 rep("(function nx(i){if(i>=au.length||my!==run)return;","ruAfter(function(){(function nx(i){if(i>=au.length||my!==run)return;")
@@ -22,6 +22,8 @@ rep("""var x='<i id="bar" style="display:none"></i>';for(var j=0;j<n;j++)x+='<b 
     """var pc=done?100:Math.round(k/n*100),f=h.querySelector('.pfill');if(!f){h.innerHTML='<i id="bar" style="display:none"></i><span class="ptrack"><span class="pfill"></span></span>';f=h.querySelector('.pfill');void f.offsetWidth}f.style.width=pc+'%'}""")
 rep(".seg b.ok{background:#4caf50}",".seg b.ok{background:#4caf50}.seg .ptrack{flex:1;display:block;height:10px;border-radius:99px;background:#eadfc6;overflow:hidden}.seg .pfill{display:block;height:100%;width:0;border-radius:99px;background:#4caf50;transition:width .6s ease}.seg.fin .pfill{animation:segf .6s 2}")
 rep("tries=0;ctl().innerHTML='';var my=run;","if(s.joke)msg+='<p class=\"joke\">'+s.joke+'</p>';tries=0;ctl().innerHTML='';var my=run;") # v202: шутка Айны после любого задания
+# v204: в парах не резать цельные слова, похожие на «слово + хвостик»
+rep("function ppLego(t){var w=t.split(' '),last=w.pop(),pre=w.length?'<span class=\"ppre\">'+w.join(' ')+' </span>':'';","var PPNO=['дәптер','сәбіз','қарбыз','досың'];function ppLego(t){var w=t.split(' '),last=w.pop(),pre=w.length?'<span class=\"ppre\">'+w.join(' ')+' </span>':'';if(PPNO.indexOf(last.toLowerCase())>=0)return pre+'<span class=\"plg\"><span class=\"pr\">'+last+'</span></span>';")
 # ===== v194: ТЗ пункты 2–5 (первый день ребёнка) =====
 # 2) вступление 5 экранов → 3: s0 = падение + прозвища, s2 = город, s3 = город + энергия + «Полетели»
 rep("""if(s===0)h='<div class="iav fall">'+AINA('dizzy',120)+'</div><div class="ibub">Бзз-з-з… 😵 Ой! Где я?</div><button class="go" data-a="inext">Дальше</button>';""",
@@ -52,9 +54,9 @@ s=s[:_a]+"""if(n<=0){f='happy';t='Сәлем, <b>'+nm+'</b>! 👋 Ночью о�
 # v193: шаг «Напиши имя» не считается заданием (иначе за урок без ошибок только 2 звезды)
 rep("function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];","function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];if(!remembered)nTasks--;")
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
-_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k29.json'),encoding='utf-8'))
+_K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k30.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
-assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk29.mp3'") # v195: та же озвучка, сжата до 32 кбит/с (4,7 МБ)
+assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk30.mp3'") # v195: та же озвучка, сжата до 32 кбит/с (4,7 МБ)
 # тексты
 rep("var WARM={title:'Спасаем слова',sub:'3 задания из пройденного'","var WARM={title:'Разминка',sub:'1 минута'")
 rep("Давай вместе? Всего 3 задания!","Давай вместе? Всего 1 минута!")
