@@ -26,7 +26,7 @@ button:disabled{opacity:.35}
 </style></head><body>
 <header><h1>Квартал «Айнаның үйі»</h1><span id="st">…</span></header>
 <div id="stage"><div id="world"><svg id="gr" width="832" height="832"></svg></div></div>
-<div id="hint">Нажмите на постройку и тащите пальцем</div>
+<div id="hint">Нажмите на постройку, потом на место, куда поставить</div>
 <div id="bar">
 <button id="bSm" title="меньше">➖</button><button id="bBg" title="больше">➕</button><button id="bFl" title="отразить">⇋</button><button id="bDel" title="убрать">🗑</button><button id="bUn" title="отменить">↩️</button>
 </div>
@@ -56,7 +56,7 @@ function render(){var s='',min=40/sc;
   s+='<div class="it'+(i===sel?' sel':'')+(bad(it)?' bad':'')+'" data-i="'+i+'" style="left:'+(it.x-bw/2)+'px;top:'+(it.b-bh)+'px;width:'+bw+'px;height:'+bh+'px;z-index:'+zi(it)+'"><img src="art/'+it.n+'.webp" style="width:'+it.w+'px;height:'+h+'px;'+(it.f?'transform:scaleX(-1)':'')+'"></div>'});
  world.querySelectorAll('.it').forEach(function(e){e.remove()});world.insertAdjacentHTML('beforeend',s);
  var on=sel>=0;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk'].forEach(function(id){document.getElementById(id).disabled=!on});document.getElementById('bUn').disabled=!hist.length;
- var nb=items.filter(bad).length;document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?'Тащите, меняйте размер кнопками':'Нажмите на постройку и тащите пальцем')}
+ var nb=items.filter(bad).length;document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?'Нажмите на газон — объект переедет туда':'Нажмите на постройку, потом на место, куда поставить')}
 function snap(){hist.push(JSON.stringify(items));if(hist.length>40)hist.shift()}
 var stT=null;function setSt(t){document.getElementById('st').textContent=t}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}
@@ -64,9 +64,13 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}
   if(!db){setSt('Сохранено на телефоне');return}
   db.doc('layouts/aina').set({items:items,t:Date.now()}).then(function(){setSt('Сохранено ✓')}).catch(function(){setSt('Сохранено на телефоне')})},500)}
 var drag=null;
-stage.addEventListener('pointerdown',function(e){var el=e.target.closest('.it');
- if(!el){sel=-1;render();return}
- var i=+el.dataset.i;sel=i;snap();drag={i:i,sx:e.clientX,sy:e.clientY,x:items[i].x,b:items[i].b,moved:false};stage.setPointerCapture(e.pointerId);render();e.preventDefault()});
+function pickAt(px,py){var best=-1,bz=-1e9;items.forEach(function(it,i){var h=it.w*(ASP[it.n]||1);if(px>=it.x-it.w/2&&px<=it.x+it.w/2&&py>=it.b-h&&py<=it.b){var z=zi(it);if(z>bz){bz=z;best=i}}});return best}
+stage.addEventListener('pointerdown',function(e){e.preventDefault();var r=stage.getBoundingClientRect(),px=Math.round((e.clientX-r.left)/sc),py=Math.round((e.clientY-r.top)/sc);
+ var i=pickAt(px,py);
+ if(i<0&&sel>=0){snap();var it=items[sel];it.x=Math.max(10,Math.min(W-10,px));it.b=Math.max(20,Math.min(W-4,py+Math.round(it.w*(ASP[it.n]||1)*0.1)));it.z=0;render();save();return}
+ if(i<0){var el=e.target.closest('.it');if(el)i=+el.dataset.i}
+ if(i<0){sel=-1;render();return}
+ sel=i;snap();drag={i:i,sx:e.clientX,sy:e.clientY,x:items[i].x,b:items[i].b,moved:false};try{stage.setPointerCapture(e.pointerId)}catch(_){}render()});
 stage.addEventListener('pointermove',function(e){if(!drag)return;var it=items[drag.i];
  var dx=(e.clientX-drag.sx)/sc,dy=(e.clientY-drag.sy)/sc;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;
  it.x=Math.round(Math.max(10,Math.min(W-10,drag.x+dx)));it.b=Math.round(Math.max(20,Math.min(W-4,drag.b+dy)));
