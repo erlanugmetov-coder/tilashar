@@ -103,7 +103,7 @@ function render(){var s='',min=40/sc;
  var nb=items.filter(bad).length;if(mode!=='move'){document.getElementById('hint').textContent=mode==='draw'?'Ведите пальцем — дорожка ложится. Потом «✓ Готово»':'Проведите по дорожке — она исчезнет';document.getElementById('pUn').disabled=!hist.length;return}document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?'Нажмите на газон — объект переедет туда':'Нажмите на постройку, потом на место, куда поставить')}
 function snap(){hist.push(JSON.stringify({i:items,p:paths}));if(hist.length>40)hist.shift()}
 var stT=null;function setSt(t){document.getElementById('st').textContent=t}
-function clampIt(it){it.w=Math.max(12,Math.min(400,Math.round(+it.w||80)));it.x=Math.max(O,Math.min(O+B,Math.round(+it.x||CX)));it.b=Math.max(O+20,Math.min(O+B+10,Math.round(+it.b||CY)));it.z=Math.max(-900,Math.min(900,Math.round(+it.z||0)));it.f=it.f?1:0;return it}
+function clampIt(it){it.w=Math.max(12,Math.min(B,Math.round(+it.w||80)));it.x=Math.max(O,Math.min(O+B,Math.round(+it.x||CX)));it.b=Math.max(O+20,Math.min(O+B+10,Math.round(+it.b||CY)));it.z=Math.max(-900,Math.min(900,Math.round(+it.z||0)));it.f=it.f?1:0;return it}
 function clean(a){return (Array.isArray(a)?a:[]).filter(function(it){return it&&typeof it.n==='string'&&ASP[it.n]}).map(clampIt)}
 function save(){items=items.map(clampIt);try{localStorage.setItem(KEY,JSON.stringify({items:items,paths:paths}))}catch(e){}
  setSt('Сохраняю…');clearTimeout(stT);stT=setTimeout(function(){
@@ -129,7 +129,7 @@ function end(){if(stroke){paths.push(stroke);stroke=null;drawPaths();render();sa
 stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
 function act(f){if(sel<0)return;snap();f(items[sel]);render();save()}
 document.getElementById('bSm').onclick=function(){act(function(it){it.w=Math.max(12,Math.round(it.w*.9))})};
-document.getElementById('bBg').onclick=function(){act(function(it){it.w=Math.min(400,Math.round(it.w*1.1))})};
+document.getElementById('bBg').onclick=function(){act(function(it){it.w=Math.min(B,Math.round(it.w*1.1))})};
 document.getElementById('bFl').onclick=function(){act(function(it){it.f=it.f?0:1})};
 function nud(dx,dy){act(function(it){it.x+=dx;it.b+=dy;clampIt(it)})}
 document.getElementById('bRs').onclick=function(){act(function(it){var c=INIT.filter(function(q){return q.n===it.n});
