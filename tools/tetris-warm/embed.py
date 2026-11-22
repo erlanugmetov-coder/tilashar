@@ -10,7 +10,7 @@ def rep(a,b,n=1):
     c=s.count(a);assert c==n,(c,a[:70]);s=s.replace(a,b)
 for _a,_b in [('облако стёрло сцепки между вагонами. И между словами тоже!','облако стёрло связи между вагонами. И между словами тоже!'),('Облако стёрло сцепки','Облако стёрло связи'),('главный сцепщик вокзала','главный по связям'),('сцепки соединяют слова','связи соединяют слова')]:
     s=s.replace(_a,_b)
-rep("var CURV='v185';","var CURV='v204';")
+rep("var CURV='v185';","var CURV='v205';")
 # v197: русская реплика Айны звучит при появлении облачка, казахские примеры — после неё
 rep("bub.innerHTML=html;svg.classList.add('talk');sBloop();","bub.innerHTML=html;svg.classList.add('talk');sBloop();try{if(ruFind(html).length){bub.dataset.ru=html;ruSay(html)}}catch(e){}")
 rep("(function nx(i){if(i>=au.length||my!==run)return;","ruAfter(function(){(function nx(i){if(i>=au.length||my!==run)return;")
@@ -56,6 +56,9 @@ rep("function nameFlow(nm,remembered){ctl().innerHTML='';var add=[];","function 
 # озвучка kk23 (1081 слово: kk21 + Связи + Темы 5–6)
 _K=json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'split5','k30.json'),encoding='utf-8'))
 _i=s.index('SNDW={');_j=s.index('}',_i);s=s[:_i]+'SNDW='+json.dumps(_K,ensure_ascii=False,separators=(',',':'))+s[_j+1:]
+assert s.count("fetch('rv2.mp3')")==1;s=s.replace("fetch('rv2.mp3')","fetch('rv3.mp3')") # v205: Аружан «Сәлем» перезаписан, дописан в конец
+assert s.count('"w|Сәлем!":[7.45,0.57]')==1;s=s.replace('"w|Сәлем!":[7.45,0.57]','"w|Сәлем!":[93.24,0.45]')
+assert s.count('"w|Сәлем, балам!":[37.917,0.855]')==1;s=s.replace('"w|Сәлем, балам!":[37.917,0.855]','"w|Сәлем, балам!":[94.15,0.73]')
 assert s.count("'kk22.mp3'")>=1;s=s.replace("'kk22.mp3'","'kk30.mp3'") # v195: та же озвучка, сжата до 32 кбит/с (4,7 МБ)
 # тексты
 rep("var WARM={title:'Спасаем слова',sub:'3 задания из пройденного'","var WARM={title:'Разминка',sub:'1 минута'")
