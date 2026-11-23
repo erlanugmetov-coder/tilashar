@@ -43,7 +43,8 @@ button{color:#2b2b2b}button.on{background:#2f7df6;color:#fff}
 <header><button id="cityBtn">🗺 Город</button><h1 id="bname">Айнаның үйі</h1><span id="st">…</span></header>
 <div id="cityView" class="hide"><div id="cityGrid"></div><div class="lbl" style="text-align:center;padding:10px">Нажмите на квартал, чтобы его редактировать</div></div>
 <div id="edView">
-<div id="stage"><button id="zReset" style="display:none;position:absolute;right:8px;top:8px;z-index:99999;padding:6px 10px;font-size:13px;min-width:0">Весь квартал</button><div id="world"><svg id="gr" width="832" height="832"><g id="base"></g><g id="paths" clip-path="url(#blk)"></g><g id="handles"></g></svg></div></div>
+<div id="stage"><div id="world"><svg id="gr" width="832" height="832"><g id="base"></g><g id="paths" clip-path="url(#blk)"></g><g id="handles"></g></svg></div></div>
+<div class="row" id="zRow"><button id="zOut">🔍➖</button><span id="zPct" style="align-self:center;min-width:56px;text-align:center;font-size:15px">100%</span><button id="zIn">🔍➕</button><button id="zReset" style="font-size:14px">Весь квартал</button></div>
 <div id="hint">Нажмите на постройку, потом на место, куда поставить</div>
 <div class="row"><button id="mPan">👆 Рука</button><button id="mMove" class="on">✋ Двигать</button><button id="mDraw">✏️ Дорожка</button><button id="mErase">🧽 Ластик</button></div>
 <div id="pathUI" class="hide">
@@ -135,7 +136,7 @@ function ground(){var g='',road='#7f858c';
  document.getElementById('base').innerHTML=g}
 var ZM=1,TX=0,TY=0,BASE=1;
 function clampView(){var Sw=stage.clientWidth;var m=Sw-W*sc;TX=Math.min(0,Math.max(m,TX));TY=Math.min(0,Math.max(m,TY))}
-function applyView(){clampView();world.style.transform='translate('+TX+'px,'+TY+'px) scale('+sc+')';var zb=document.getElementById('zReset');if(zb)zb.style.display=ZM>1.02?'block':'none'}
+function applyView(){clampView();world.style.transform='translate('+TX+'px,'+TY+'px) scale('+sc+')';var zp=document.getElementById('zPct');if(zp)zp.textContent=Math.round(ZM*100)+'%';var zo=document.getElementById('zOut');if(zo)zo.disabled=ZM<=1.001;var zi2=document.getElementById('zIn');if(zi2)zi2.disabled=ZM>=3.999}
 function fit(){BASE=stage.clientWidth/W;sc=BASE*ZM;applyView();render()}
 function inPath(x,y,skip){if(x<O||x>O+B||y<O||y>O+B)return true;return onPath(x,y,0,skip)>=0}
 function bad(it){if(it.n==='fount')return false;var h=it.w*(ASP[it.n]||1),fh=Math.min(h*.12,18),xs=[it.x-it.w*.32,it.x,it.x+it.w*.32],ys=[it.b-fh,it.b-1];
@@ -208,7 +209,8 @@ stage.addEventListener('pointermove',function(e){if(PTR[e.pointerId]){PTR[e.poin
  moveH(e)});
 function upH(e){delete PTR[e.pointerId];if(pinch){if(Object.keys(PTR).length===0){pinch=null;render()}return}end()}
 stage.addEventListener('pointerup',upH);stage.addEventListener('pointercancel',upH);
-document.getElementById('zReset').addEventListener('pointerdown',function(e){e.stopPropagation()});
+function zoomBy(f){var Sw=stage.clientWidth,mx=Sw/2,my=Sw/2,wx=(mx-TX)/sc,wy=(my-TY)/sc;ZM=Math.max(1,Math.min(4,ZM*f));sc=BASE*ZM;TX=mx-wx*sc;TY=my-wy*sc;applyView();render()}
+document.getElementById('zIn').onclick=function(){zoomBy(1.5)};document.getElementById('zOut').onclick=function(){zoomBy(1/1.5)};
 document.getElementById('zReset').onclick=function(e){e.stopPropagation();ZM=1;TX=0;TY=0;fit()};
 function act(f){if(sel<0)return;snap();f(items[sel]);render();save()}
 document.getElementById('bSm').onclick=function(){act(function(it){it.w=Math.max(12,Math.round(it.w*.9))})};
