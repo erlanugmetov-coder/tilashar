@@ -45,7 +45,7 @@ button{color:#2b2b2b}button.on{background:#2f7df6;color:#fff}
 <div id="edView">
 <div id="stage"><button id="zReset" style="display:none;position:absolute;right:8px;top:8px;z-index:99999;padding:6px 10px;font-size:13px;min-width:0">Весь квартал</button><div id="world"><svg id="gr" width="832" height="832"><g id="base"></g><g id="paths" clip-path="url(#blk)"></g><g id="handles"></g></svg></div></div>
 <div id="hint">Нажмите на постройку, потом на место, куда поставить</div>
-<div class="row"><button id="mMove" class="on">✋ Двигать</button><button id="mDraw">✏️ Дорожка</button><button id="mErase">🧽 Ластик</button></div>
+<div class="row"><button id="mPan">👆 Рука</button><button id="mMove" class="on">✋ Двигать</button><button id="mDraw">✏️ Дорожка</button><button id="mErase">🧽 Ластик</button></div>
 <div id="pathUI" class="hide">
  <div class="lbl">Вид дорожки:</div>
  <div id="sty"></div>
@@ -147,7 +147,7 @@ function render(){var s='',min=40/sc;
   s+='<div class="it'+(i===sel&&mode==='move'?' sel':'')+(bad(it)?' bad':'')+'" data-i="'+i+'" style="left:'+(it.x-bw/2)+'px;top:'+(it.b-bh)+'px;width:'+bw+'px;height:'+bh+'px;z-index:'+zi(it)+'"><img src="art/'+it.n+'.webp" style="width:'+it.w+'px;height:'+h+'px;'+(it.f?'transform:scaleX(-1)':'')+'"></div>'});
  world.querySelectorAll('.it').forEach(function(e){e.remove()});world.insertAdjacentHTML('beforeend',s);
  var on=sel>=0;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk','bRs','bRp'].forEach(function(id){document.getElementById(id).disabled=!on});document.getElementById('bUn').disabled=!hist.length;if(on&&items[sel]&&items[sel].t)document.getElementById('bDel').disabled=true;
- var nb=items.filter(bad).length;if(replacing&&sel>=0&&mode==='move'){document.getElementById('hint').textContent='Выберите в ленте «Добавить», на что заменить';var _on=true;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk','bRs','bRp'].forEach(function(id){document.getElementById(id).disabled=false});return}if(mode!=='move'){document.getElementById('hint').textContent=mode==='draw'?(hpend?'Нажмите, куда передвинуть конец':mpend?'Нажмите, куда переставить дорожку':(psel>=0?'Тяните дорожку или кружок на конце. Нажмите на дорожку — потом на место':'Ведите пальцем — дорожка ложится. Нажмите на дорожку, чтобы править')):'Проведите по дорожке — она исчезнет';document.getElementById('pUn').disabled=!hist.length;return}document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?(items[sel]&&items[sel].t?'Постройка из урока: двигать можно, удалять нельзя. Нажмите на газон — переедет':'Нажмите на газон — объект переедет туда'):'Нажмите на постройку, потом на место, куда поставить')}
+ var nb=items.filter(bad).length;if(mode==='pan'){document.getElementById('hint').textContent='Ведите пальцем — двигается карта. Постройки не трогаются';return}if(replacing&&sel>=0&&mode==='move'){document.getElementById('hint').textContent='Выберите в ленте «Добавить», на что заменить';var _on=true;['bSm','bBg','bFl','bDel','bL','bU','bD','bR','bFw','bBk','bRs','bRp'].forEach(function(id){document.getElementById(id).disabled=false});return}if(mode!=='move'){document.getElementById('hint').textContent=mode==='draw'?(hpend?'Нажмите, куда передвинуть конец':mpend?'Нажмите, куда переставить дорожку':(psel>=0?'Тяните дорожку или кружок на конце. Нажмите на дорожку — потом на место':'Ведите пальцем — дорожка ложится. Нажмите на дорожку, чтобы править')):'Проведите по дорожке — она исчезнет';document.getElementById('pUn').disabled=!hist.length;return}document.getElementById('hint').textContent=nb?('Красным — стоит на дорожке ('+nb+')'):(on?(items[sel]&&items[sel].t?'Постройка из урока: двигать можно, удалять нельзя. Нажмите на газон — переедет':'Нажмите на газон — объект переедет туда'):'Нажмите на постройку (выделится синим), потом тяните её или нажмите на место')}
 function snap(){hist.push(JSON.stringify({i:items,p:paths}));if(hist.length>40)hist.shift()}
 var stT=null;function setSt(t){document.getElementById('st').textContent=t}
 function clampIt(it){it.w=Math.max(12,Math.min(B,Math.round(+it.w||80)));it.x=Math.max(O,Math.min(O+B,Math.round(+it.x||CX)));it.b=Math.max(O+20,Math.min(O+B+10,Math.round(+it.b||CY)));it.z=Math.max(-900,Math.min(900,Math.round(+it.z||0)));it.f=it.f?1:0;return it}
@@ -158,7 +158,7 @@ function save(){if(!cur)return;items=items.map(clampIt);var id=cur,data={items:J
   db.doc('layouts/'+id).set({items:data.items,paths:data.paths,t:Date.now()}).then(function(){setSt('Сохранено ✓')}).catch(function(){setSt('Сохранено на телефоне')})},500)}
 var drag=null;
 function pickAt(px,py){var best=-1,bz=-1e9;items.forEach(function(it,i){var h=it.w*(ASP[it.n]||1);if(px>=it.x-it.w/2&&px<=it.x+it.w/2&&py>=it.b-h&&py<=it.b){var z=zi(it);if(z>bz){bz=z;best=i}}});return best}
-function downH(e){var r=stage.getBoundingClientRect(),px=Math.round((e.clientX-r.left-TX)/sc),py=Math.round((e.clientY-r.top-TY)/sc);
+function downH(e){if(mode==='pan'){panD={sx:e.clientX,sy:e.clientY,tx:TX,ty:TY};return}var r=stage.getBoundingClientRect(),px=Math.round((e.clientX-r.left-TX)/sc),py=Math.round((e.clientY-r.top-TY)/sc);
  if(mode!=='move'){try{stage.setPointerCapture(e.pointerId)}catch(_){}
   if(mode==='draw'){var he=handleAt(px,py);
    if(he>=0){snap();hdrag={e:he,moved:false};return}
@@ -171,9 +171,9 @@ function downH(e){var r=stage.getBoundingClientRect(),px=Math.round((e.clientX-r
  if(i<0&&sel>=0){pendPlace={px:px,py:py};return}
  if(i<0){var el=e.target.closest('.it');if(el)i=+el.dataset.i}
  if(i<0){sel=-1;replacing=false;document.getElementById('bRp').classList.remove('on');render();return}
- if(i!==sel){replacing=false;document.getElementById('bRp').classList.remove('on')}sel=i;snap();drag={i:i,sx:e.clientX,sy:e.clientY,x:items[i].x,b:items[i].b,moved:false};try{stage.setPointerCapture(e.pointerId)}catch(_){}render()}
+ if(i!==sel){replacing=false;document.getElementById('bRp').classList.remove('on');sel=i;render();return}sel=i;snap();drag={i:i,sx:e.clientX,sy:e.clientY,x:items[i].x,b:items[i].b,moved:false};try{stage.setPointerCapture(e.pointerId)}catch(_){}render()}
 function eraseAt(x,y){var k=onPath(x,y,10);if(k>=0){paths.splice(k,1);psel=-1;drawPaths();render()}}
-function moveH(e){if(stroke||erasing||hdrag||bdrag){var r=stage.getBoundingClientRect(),px=Math.round((e.clientX-r.left-TX)/sc),py=Math.round((e.clientY-r.top-TY)/sc);
+function moveH(e){if(panD){TX=panD.tx+(e.clientX-panD.sx);TY=panD.ty+(e.clientY-panD.sy);applyView();return}if(stroke||erasing||hdrag||bdrag){var r=stage.getBoundingClientRect(),px=Math.round((e.clientX-r.left-TX)/sc),py=Math.round((e.clientY-r.top-TY)/sc);
   if(hdrag){hdrag.moved=true;moveEnd(psel,hdrag.e,px,py);drawPaths();return}
   if(bdrag){if(Math.abs(px-bdrag.sx)+Math.abs(py-bdrag.sy)>4)bdrag.moved=true;if(bdrag.moved){shiftPath(paths[psel],px-bdrag.sx,py-bdrag.sy,bdrag.orig);drawPaths()}return}
   if(erasing){eraseAt(px,py);return}var l=stroke.pts[stroke.pts.length-1];if(Math.hypot(px-l[0],py-l[1])>=10){stroke.pts.push([px,py]);
@@ -182,7 +182,7 @@ function moveH(e){if(stroke||erasing||hdrag||bdrag){var r=stage.getBoundingClien
  var dx=(e.clientX-drag.sx)/sc,dy=(e.clientY-drag.sy)/sc;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;
  it.x=Math.round(Math.max(10,Math.min(W-10,drag.x+dx)));it.b=Math.round(Math.max(20,Math.min(W-4,drag.b+dy)));
  var el=world.querySelector('.it[data-i="'+drag.i+'"]');if(el){var h=it.w*(ASP[it.n]||1),min=40/sc,bw=Math.max(it.w,min),bh=Math.max(h,min);el.style.left=(it.x-bw/2)+'px';el.style.top=(it.b-bh)+'px';el.style.zIndex=zi(it);el.classList.toggle('bad',bad(it))}}
-function end(){
+function end(){if(panD){panD=null;return}
  if(pendPlace){var pp=pendPlace;pendPlace=null;if(sel>=0&&items[sel]){snap();var it=items[sel];it.x=Math.max(10,Math.min(W-10,pp.px));it.b=Math.max(20,Math.min(W-4,pp.py+Math.round(it.w*(ASP[it.n]||1)*0.1)));it.z=0;render();save()}return}
  if(hdrag){if(hdrag.moved){save()}else{hist.pop();hpend={e:hdrag.e};mpend=false}hdrag=null;drawPaths();render();return}
  if(bdrag){if(bdrag.moved){save()}else{hist.pop();mpend=!mpend;hpend=null}bdrag=null;drawPaths();render();return}
@@ -190,8 +190,8 @@ function end(){
   if(tap){hist.pop();var k=onPath(tapStart[0],tapStart[1],6);psel=k;hpend=null;mpend=false;stroke=null;drawPaths();render();return}
   if(straight)stroke.pts=straighten(stroke);paths.push(stroke);psel=paths.length-1;hpend=null;mpend=false;stroke=null;drawPaths();render();save();return}if(erasing){erasing=false;save();return}
  if(!drag)return;if(drag.moved){items[drag.i].z=0;save()}else hist.pop();drag=null;render()}
-var PTR={},pinch=null,pendPlace=null;
-function cancelOp(){pendPlace=null;
+var PTR={},pinch=null,pendPlace=null,panD=null;
+function cancelOp(){pendPlace=null;panD=null;
  if(drag){var it=items[drag.i];if(it){it.x=drag.x;it.b=drag.b}drag=null;hist.pop()}
  else if(stroke){stroke=null;hist.pop()}
  else if(hdrag||bdrag||erasing){if(hist.length){var o=JSON.parse(hist.pop());if(!Array.isArray(o)){items=o.i;paths=o.p}}hdrag=null;bdrag=null;erasing=false}
@@ -227,9 +227,9 @@ document.getElementById('bBk').onclick=function(){act(function(it){var o=others(
 document.getElementById('bDel').onclick=function(){if(sel<0)return;if(items[sel].t){document.getElementById('hint').textContent='Это постройка из урока — её можно двигать, но не удалять';return}snap();items.splice(sel,1);sel=-1;render();save()};
 function undo(){if(!hist.length)return;psel=-1;hpend=null;mpend=false;var o=JSON.parse(hist.pop());if(Array.isArray(o)){items=o}else{items=o.i;paths=o.p}sel=-1;drawPaths();render();save()}
 document.getElementById('bUn').onclick=undo;document.getElementById('pUn').onclick=undo;
-function setMode(m){mode=m;psel=-1;hpend=null;mpend=false;setTimeout(drawHandles,0);[['mMove','move'],['mDraw','draw'],['mErase','erase']].forEach(function(a){document.getElementById(a[0]).classList.toggle('on',a[1]===m)});
- document.getElementById('pathUI').classList.toggle('hide',m==='move');document.getElementById('objUI').classList.toggle('hide',m!=='move');world.classList.toggle('draw',m!=='move');sel=-1;render()}
-document.getElementById('mMove').onclick=function(){setMode('move')};document.getElementById('mDraw').onclick=function(){setMode('draw')};document.getElementById('mErase').onclick=function(){setMode('erase')};
+function setMode(m){mode=m;psel=-1;hpend=null;mpend=false;setTimeout(drawHandles,0);[['mPan','pan'],['mMove','move'],['mDraw','draw'],['mErase','erase']].forEach(function(a){document.getElementById(a[0]).classList.toggle('on',a[1]===m)});
+ document.getElementById('pathUI').classList.toggle('hide',m==='move'||m==='pan');document.getElementById('objUI').classList.toggle('hide',m==='draw'||m==='erase');world.classList.toggle('draw',m==='draw'||m==='erase');sel=-1;render()}
+document.getElementById('mMove').onclick=function(){setMode('move')};document.getElementById('mPan').onclick=function(){setMode('pan')};document.getElementById('mDraw').onclick=function(){setMode('draw')};document.getElementById('mErase').onclick=function(){setMode('erase')};
 document.getElementById('pDone').onclick=function(){setMode('move')};
 document.getElementById('sStr').onclick=function(){straight=true;this.classList.add('on');document.getElementById('sFree').classList.remove('on')};
 document.getElementById('sFree').onclick=function(){straight=false;this.classList.add('on');document.getElementById('sStr').classList.remove('on')};
