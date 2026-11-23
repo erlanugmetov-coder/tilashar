@@ -37,35 +37,32 @@ button{color:#2b2b2b}button.on{background:#2f7df6;color:#fff}
 #sty svg{width:54px;height:54px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.15);background:#99bc65;display:block;margin:0 auto 2px;border:3px solid transparent}
 #sty div.on svg{border-color:#2f7df6}
 .hide{display:none!important}.draw .it{opacity:.55}
-#zRow button,#bar button{padding:8px 10px;min-width:42px;font-size:15px}
+#zRow button,#bar button,#bar2 button,#pathUI button{padding:8px 10px;min-width:42px;font-size:16px}
+#cityBtn{font-size:20px!important;padding:6px 10px!important}
 #hint{display:none!important}
 #reset{display:block;margin:6px auto 24px;font-size:14px;background:transparent;box-shadow:none;color:#a33}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs id="defs"></defs></svg>
-<header><button id="cityBtn">🗺 Город</button><h1 id="bname">Айнаның үйі</h1><span id="st">…</span></header>
+<header><button id="cityBtn" title="весь город">🗺</button><h1 id="bname">Айнаның үйі</h1><span id="st">…</span></header>
 <div id="cityView" class="hide"><div id="cityGrid"></div><div class="lbl" style="text-align:center;padding:10px">Нажмите на квартал, чтобы его редактировать</div></div>
 <div id="edView">
 <div id="stage"><div id="world"><svg id="gr" width="832" height="832"><g id="base"></g><g id="paths" clip-path="url(#blk)"></g><g id="handles"></g></svg></div></div>
-<div class="row" id="zRow" style="padding:4px 6px 2px;gap:5px"><button id="zOut">🔍➖</button><span id="zPct" style="align-self:center;min-width:48px;text-align:center;font-size:15px">100%</span><button id="zIn">🔍➕</button><button id="zReset" title="весь квартал">⤢</button></div>
+<div class="row" id="zRow" style="padding:4px 6px 2px;gap:5px"><button id="mPan" title="рука">👆</button><button id="mMove" class="on" title="двигать">✋</button><button id="mDraw" title="дорожка">✏️</button><button id="mErase" title="ластик">🧽</button><span style="width:6px"></span><button id="zOut" title="отдалить">🔍➖</button><button id="zIn" title="приблизить">🔍➕</button><button id="zReset" title="весь квартал">⤢</button><span id="zPct" style="display:none">100%</span></div>
 <div class="row" id="bar" style="padding:2px 6px 4px;gap:5px">
 <button id="bSm" title="меньше">➖</button><button id="bBg" title="больше">➕</button><button id="bFl" title="отразить">⇋</button><button id="bDel" title="убрать">🗑</button><button id="bUn" title="отменить">↩️</button>
 </div>
 <div id="warn" style="display:none;text-align:center;color:#d32f2f;font-size:13px;padding:0 0 2px"></div>
 <div id="hint">Нажмите на постройку, потом на место, куда поставить</div>
-<div class="row"><button id="mPan">👆 Рука</button><button id="mMove" class="on">✋ Двигать</button><button id="mDraw">✏️ Дорожка</button><button id="mErase">🧽 Ластик</button></div>
 <div id="pathUI" class="hide">
- <div class="lbl">Вид дорожки:</div>
  <div id="sty"></div>
- <div class="row"><button id="sStr" class="on">📏 Ровная</button><button id="sFree">〰️ Свободная</button></div>
- <div class="row" id="pSelRow" style="display:none"><button id="pShort">Короче</button><button id="pLong">Длиннее</button><button id="pDel">🗑 Убрать</button></div>
+ <div class="row" id="pSelRow" style="display:none"><button id="pShort">➖</button><button id="pLong">➕</button><button id="pDel">🗑</button></div>
  <div class="row" id="pSelRow2" style="display:none"><button id="pmL">⬅️</button><button id="pmU">⬆️</button><button id="pmD">⬇️</button><button id="pmR">➡️</button></div>
- <div class="row"><button id="w1">Узкая</button><button id="w2" class="on">Средняя</button><button id="w3">Широкая</button></div>
- <div class="row"><button id="allSty" style="font-size:14px">Все дорожки — в этот вид</button><button id="pUn">↩️</button><button id="pDone" style="background:#3a9b4a;color:#fff">✓ Готово</button></div>
+ <div class="row"><button id="sStr" class="on">📏</button><button id="sFree">〰️</button><span style="width:8px"></span><button id="w1">─</button><button id="w2" class="on">━</button><button id="w3">▬</button></div>
+ <div class="row"><button id="allSty" style="font-size:14px">🎨 все</button><button id="pUn">↩️</button><button id="pDone" style="background:#3a9b4a;color:#fff">✓</button></div>
 </div>
 <div id="objUI">
 
-<div id="bar2" style="display:flex;gap:6px;justify-content:center;padding:4px 8px;flex-wrap:wrap"><button id="bL">⬅️</button><button id="bU">⬆️</button><button id="bD">⬇️</button><button id="bR">➡️</button><button id="bFw" style="font-size:14px">Вперёд</button><button id="bBk" style="font-size:14px">Назад</button><button id="bRs" style="font-size:14px">Сбросить этот</button><button id="bRp" style="font-size:14px">🔄 Заменить</button></div>
-<div class="lbl">Добавить:</div>
+<div id="bar2" style="display:flex;gap:6px;justify-content:center;padding:4px 8px;flex-wrap:wrap"><button id="bL">⬅️</button><button id="bU">⬆️</button><button id="bD">⬇️</button><button id="bR">➡️</button><button id="bFw" style="font-size:14px">⏫</button><button id="bBk" style="font-size:14px">⏬</button><button id="bRs" style="font-size:14px">♻️</button><button id="bRp" style="font-size:14px">🔄</button></div>
 <div id="pal"></div>
 </div>
 <button id="reset">Вернуть исходную расстановку квартала</button>
@@ -251,7 +248,7 @@ document.getElementById('pDel').onclick=function(){if(psel<0)return;snap();paths
 [['w1',26],['w2',44],['w3',64]].forEach(function(a){document.getElementById(a[0]).onclick=function(){curW=a[1];if(psel>=0&&paths[psel]&&!paths[psel].ell){snap();paths[psel].w=a[1];drawPaths();render();save()}['w1','w2','w3'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===a[0])})}});
 document.getElementById('allSty').onclick=function(){snap();paths.forEach(function(p){p.st=curSty});drawPaths();render();save()};
 (function(){var sty=document.getElementById('sty');STY.forEach(function(t){var d=document.createElement('div');d.dataset.s=t.id;
- d.innerHTML='<svg viewBox="0 0 54 54"><defs>'+patDefs()+'</defs>'+pathSVG({st:t.id,w:22,pts:[[6,40],[27,14],[48,40]]})+'</svg>'+t.nm;
+ d.innerHTML='<svg viewBox="0 0 54 54"><defs>'+patDefs()+'</defs>'+pathSVG({st:t.id,w:22,pts:[[6,40],[27,14],[48,40]]})+'</svg>';
  if(t.id===curSty)d.classList.add('on');d.onclick=function(){curSty=t.id;if(mode==='draw'&&psel>=0&&paths[psel]){snap();paths[psel].st=t.id;drawPaths();render();save()}sty.querySelectorAll('div').forEach(function(x){x.classList.toggle('on',x.dataset.s===t.id)});if(mode!=='draw')setMode('draw')};sty.appendChild(d)})})();
 document.getElementById('reset').onclick=function(){if(!window.confirm||1){snap();items=blkInit(cur);if(cur==='aina')markAina(items);paths=defPaths();sel=-1;drawPaths();render();save()}};
 var pal=document.getElementById('pal');PAL.forEach(function(n){var d=document.createElement('div');d.innerHTML='<img src="art/'+n+'.webp">';d.onclick=function(){if(replacing&&sel>=0&&items[sel]){snap();var it=items[sel];it.n=n;it.w=PALW[n]||it.w;it.f=0;replacing=false;document.getElementById('bRp').classList.remove('on');render();save();document.getElementById('stage').scrollIntoView({behavior:'smooth',block:'center'});return}snap();items.push({n:n,x:CX+(Math.random()*120-60),b:CY+150,w:PALW[n]||80,f:0});items[items.length-1].x=Math.round(items[items.length-1].x);sel=items.length-1;render();save()};pal.appendChild(d)});
