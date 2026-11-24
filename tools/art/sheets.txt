@@ -21,3 +21,4 @@ s19 1RYgdJLzN7hfgEQ6sG5w yard_court,statue_hero,sandbox,workout,gazebo,dovecote,
 s20 B2kEpn2msCiuB8YnzWLj station_big,platform,loco,wagon1,wagon2,rail_barrier,rail_signal,footbridge,rail_track
 s21 l8K509brE8bn02qDL7oH station_f,platform_f,loco_f,wagon1_f,wagon2_f,rails_f,barrier_f,clock_f,benchlamp_f (вид спереди)
 s22 ceAX0Xs3SqQEkHwNIGIn vk_station,vk_platform,vk_fount,vk_tree,vk_flowerbed,vk_flowerbox,vk_lamp,vk_bench,vk_planter (по образцу Ерлана ref/vokzal_ref.webp)
+s23 ZbBE3K8MPKPRoLO5brpS loco_s,wagon_blue,wagon_yellow,wagon_mail,wagon_tail,elek_head,barrier_up,barrier_down,signal_s (строго сбоку, образец ref/wagon_ref.png)
