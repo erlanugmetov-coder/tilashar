@@ -26,3 +26,6 @@ s24 ZbBE3K8MPKPRoLO5brpS pt_spruce,pt_bluespruce,pt_pine,pt_thuja,pt_birch,pt_po
 s25 ZbBE3K8MPKPRoLO5brpS house_fr,house2_fr,hhome1_fr,hhome2_fr,hhome3_fr,hgarden_fr,school_fr,mschool_fr,mcanteen_fr (прямой вид, образцы ref/station_ref.png + ref/front_src1.png)
 s26 ZbBE3K8MPKPRoLO5brpS mpool_fr,mgate_fr,hosp_fr,studio_fr,stage_fr,library_fr,post_fr,chai_fr,duken_fr (прямой вид, front_src2)
 s27 ZbBE3K8MPKPRoLO5brpS green_fr,kshop_fr,kbakery_fr,kgym_fr,ktaxi_fr,kstad_fr,stad_wide_fr,busstop_fr,vcafe_fr (прямой вид, front_src3)
+s28 ZbBE3K8MPKPRoLO5brpS ygate_fr,zgate_fr,bgate_fr,pgate_fr,balma_fr,bbauyr_fr,bfruit_fr,bkurt_fr,bkymyz_fr (прямой вид, front_src4)
+s29 ZbBE3K8MPKPRoLO5brpS bnan_fr,bveg_fr,bshay_fr,ykassa_fr,yice_fr,ytir_fr,ytoys_fr,yvata_fr,ymagic_fr (прямой вид, front_src5)
+s30 ZbBE3K8MPKPRoLO5brpS yballs_fr,yyurt_fr,pcafe_fr,pbooks_fr,pmusic_fr,ycar_fr,ytramp_fr,yswing_fr,ylemon_fr (прямой вид, front_src6; ylemon новый)
