@@ -23,3 +23,6 @@ s21 l8K509brE8bn02qDL7oH station_f,platform_f,loco_f,wagon1_f,wagon2_f,rails_f,b
 s22 ceAX0Xs3SqQEkHwNIGIn vk_station,vk_platform,vk_fount,vk_tree,vk_flowerbed,vk_flowerbox,vk_lamp,vk_bench,vk_planter (по образцу Ерлана ref/vokzal_ref.webp)
 s23 ZbBE3K8MPKPRoLO5brpS loco_s,wagon_blue,wagon_yellow,wagon_mail,wagon_tail,elek_head,barrier_up,barrier_down,signal_s (строго сбоку, образец ref/wagon_ref.png)
 s24 ZbBE3K8MPKPRoLO5brpS pt_spruce,pt_bluespruce,pt_pine,pt_thuja,pt_birch,pt_poplar,pt_elm,pt_apple,pt_ball (деревья в кадках, образец ref/tree_ref.png)
+s25 ZbBE3K8MPKPRoLO5brpS house_fr,house2_fr,hhome1_fr,hhome2_fr,hhome3_fr,hgarden_fr,school_fr,mschool_fr,mcanteen_fr (прямой вид, образцы ref/station_ref.png + ref/front_src1.png)
+s26 ZbBE3K8MPKPRoLO5brpS mpool_fr,mgate_fr,hosp_fr,studio_fr,stage_fr,library_fr,post_fr,chai_fr,duken_fr (прямой вид, front_src2)
+s27 ZbBE3K8MPKPRoLO5brpS green_fr,kshop_fr,kbakery_fr,kgym_fr,ktaxi_fr,kstad_fr,stad_wide_fr,busstop_fr,vcafe_fr (прямой вид, front_src3)
