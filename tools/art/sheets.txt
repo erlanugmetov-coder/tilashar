@@ -33,3 +33,4 @@ s31 ZbBE3K8MPKPRoLO5brpS zbears_fr,zcamels_fr,zlions_fr,zeleph_fr,zmonk_fr,ztige
 s32 ZbBE3K8MPKPRoLO5brpS zgiraffe,zzebra,zpenguin,zpanda,zflamingo,zirbis,zkangaroo,zsaiga,zpetting (новые вольеры, прямой вид). Снежные — чистить fix(white=False)!
 s33 ZbBE3K8MPKPRoLO5brpS st_stadium,st_shop,st_cafe,st_gate,st_flag,st_flood,st_fence,st_hedge,st_cone (по образцу Ерлана ref/stadion_ref.png; вывески пустые)
 s34 ZbBE3K8MPKPRoLO5brpS kt_library,kt_glass,kt_kiosk,kt_pergola,kt_globe,kt_books,kt_chess,kt_flowerbox,kt_bookhouse (по образцу Ерлана ref/kitap_ref.png)
+s35 ZbBE3K8MPKPRoLO5brpS mk_school,mk_observ,mk_class,mk_pond,mk_pitch,mk_track,mk_bikes,mk_arch,mk_green (прямой вид по мотивам ref/mektep_ref.png; планировка извилистая)
