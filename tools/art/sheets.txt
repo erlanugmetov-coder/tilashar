@@ -31,3 +31,4 @@ s29 ZbBE3K8MPKPRoLO5brpS bnan_fr,bveg_fr,bshay_fr,ykassa_fr,yice_fr,ytir_fr,ytoy
 s30 ZbBE3K8MPKPRoLO5brpS yballs_fr,yyurt_fr,pcafe_fr,pbooks_fr,pmusic_fr,ycar_fr,ytramp_fr,yswing_fr,ylemon_fr (прямой вид, front_src6; ylemon новый)
 s31 ZbBE3K8MPKPRoLO5brpS zbears_fr,zcamels_fr,zlions_fr,zeleph_fr,zmonk_fr,ztigers_fr(бегемоты),zcarou_fr(белые медведи),zbirds_fr,zfish_fr (прямой вид, front_src7)
 s32 ZbBE3K8MPKPRoLO5brpS zgiraffe,zzebra,zpenguin,zpanda,zflamingo,zirbis,zkangaroo,zsaiga,zpetting (новые вольеры, прямой вид). Снежные — чистить fix(white=False)!
+s33 ZbBE3K8MPKPRoLO5brpS st_stadium,st_shop,st_cafe,st_gate,st_flag,st_flood,st_fence,st_hedge,st_cone (по образцу Ерлана ref/stadion_ref.png; вывески пустые)
