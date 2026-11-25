@@ -82,7 +82,7 @@ var AINA_T={house:'house',school:'school',hosp:'hosp',studio:'studio',stage:'sta
 function blk(id){return BLOCKS.filter(function(b){return b.id===id})[0]}
 function blkInit(id){var b=blk(id);return JSON.parse(JSON.stringify(b&&b.items?b.items:INIT))}
 function markAina(a){var used={};a.forEach(function(it){if(!it.t&&AINA_T[it.n]&&!used[AINA_T[it.n]]){it.t=AINA_T[it.n]}if(it.t)used[it.t]=1});return a}
-var GROUND='grass',BGIMG='';var items=[],sel=-1,hist=[],sc=1,db=null,replacing=false;
+var GROUND='grass',BGIMG='';var BGDEF={avtobeket:'bg/avtobeket.webp'};var items=[],sel=-1,hist=[],sc=1,db=null,replacing=false;
 var shape='line';var straight=true,psel=-1,hdrag=null,hpend=null,tapStart=null,bdrag=null,mpend=false;
 var paths=[],mode='move',curSty='tile',curW=44,stroke=null,erasing=false;
 var STY=[{id:'grass',nm:'Газон'},{id:'tile',nm:'Плитка'},{id:'tile_grey',nm:'Серая'},{id:'tile_terra',nm:'Терракот'},{id:'stones',nm:'Шаги'},{id:'brick',nm:'Кирпич'},{id:'gravel',nm:'Гравий'},{id:'wood',nm:'Доски'},{id:'rub_g',nm:'Резина'},{id:'rub_r',nm:'Резина'},{id:'asph',nm:'Асфальт'},{id:'asph_l',nm:'Разметка'}];
@@ -277,12 +277,12 @@ function loadLocal(id){try{var ls=localStorage.getItem(keyOf(id));var _l=ls?JSON
 function docData(s){var d=s&&(s.data?(typeof s.data==='function'?s.data():s.data):s);return d?JSON.parse(JSON.stringify(d)):null}
 function fromDb(id,cb){if(!db)return;try{db.doc('layouts/'+id).get().then(function(s){var d=docData(s);if(d&&d.items&&clean(d.items).length){var it=clean(d.items);if(id==='aina')markAina(it);var v={items:it,paths:Array.isArray(d.paths)?cleanPaths(d.paths):defPaths(),ground:d.ground||'grass'};CACHE[id]=v;cb(v)}}).catch(function(){})}catch(e){}}
 function openBlock(id){cur=id;ground();if(stT){clearTimeout(stT);}cur=id;var b=blk(id);document.getElementById('bname').textContent=b.th+' · '+b.nm;
- var v=CACHE[id]||loadLocal(id);items=JSON.parse(JSON.stringify(v.items));paths=JSON.parse(JSON.stringify(v.paths));GROUND=v.ground||'grass';BGIMG=v.bg||'';ground();sel=-1;hist=[];psel=-1;
+ var v=CACHE[id]||loadLocal(id);items=JSON.parse(JSON.stringify(v.items));paths=JSON.parse(JSON.stringify(v.paths));GROUND=v.ground||'grass';BGIMG=v.bg||BGDEF[id]||'';ground();sel=-1;hist=[];psel=-1;
  document.getElementById('cityView').classList.add('hide');document.getElementById('edView').classList.remove('hide');setMode('move');ZM=1;TX=0;TY=0;drawPaths();fit();
  try{localStorage.setItem('tilashar-editor-cur',id)}catch(e){}
- fromDb(id,function(v){if(cur!==id||drag||stroke||hdrag||bdrag)return;items=JSON.parse(JSON.stringify(v.items));paths=JSON.parse(JSON.stringify(v.paths));GROUND=v.ground||'grass';BGIMG=v.bg||'';ground();sel=-1;hist=[];drawPaths();render();setSt('Загружено ✓')})}
+ fromDb(id,function(v){if(cur!==id||drag||stroke||hdrag||bdrag)return;items=JSON.parse(JSON.stringify(v.items));paths=JSON.parse(JSON.stringify(v.paths));GROUND=v.ground||'grass';BGIMG=v.bg||BGDEF[id]||'';ground();sel=-1;hist=[];drawPaths();render();setSt('Загружено ✓')})}
 function tileHTML(b,v,L,T,S){var k=S/832,h='<div class="tile" data-b="'+b.id+'" style="left:'+L+'px;top:'+T+'px;width:'+S+'px;height:'+S+'px"><div class="tw" style="transform:scale('+k+')">';
- h+='<svg width="832" height="832" style="position:absolute;left:0;top:0"><rect width="832" height="832" fill="#7f858c"/><rect x="'+O+'" y="'+O+'" width="'+B+'" height="'+B+'" fill="'+(b.id==='spare'?'#c5dca6':'#99bc65')+'"/>'+(v.ground&&v.ground!=='grass'?'<rect x="'+O+'" y="'+O+'" width="'+B+'" height="'+B+'" fill="'+fillOf(v.ground)+'"/>':'')+(v.bg?'<image href="'+v.bg+'?v=3" x="'+O+'" y="'+O+'" width="'+B+'" height="'+B+'" preserveAspectRatio="none"/>':'')+'<g clip-path="url(#blk)">';
+ h+='<svg width="832" height="832" style="position:absolute;left:0;top:0"><rect width="832" height="832" fill="#7f858c"/><rect x="'+O+'" y="'+O+'" width="'+B+'" height="'+B+'" fill="'+(b.id==='spare'?'#c5dca6':'#99bc65')+'"/>'+(v.ground&&v.ground!=='grass'?'<rect x="'+O+'" y="'+O+'" width="'+B+'" height="'+B+'" fill="'+fillOf(v.ground)+'"/>':'')+((v.bg||BGDEF[b.id])?'<image href="'+(v.bg||BGDEF[b.id])+'?v=3" x="'+O+'" y="'+O+'" width="'+B+'" height="'+B+'" preserveAspectRatio="none"/>':'')+'<g clip-path="url(#blk)">';
  (v.paths||[]).forEach(function(p){h+=pathSVG(p)});h+='</g></svg>';
  (v.items||[]).slice().sort(function(a,c){return zi(a)-zi(c)}).forEach(function(it){var hh=it.w*(ASP[it.n]||1);h+='<img src="art/'+it.n+'.webp?v=3" style="left:'+(it.x-it.w/2)+'px;top:'+(it.b-hh)+'px;width:'+it.w+'px;height:'+hh+'px;'+(it.f?'transform:scaleX(-1)':'')+'">'});
  return h+'</div><div class="tl">'+b.th+' '+b.nm+'</div></div>'}
@@ -300,5 +300,5 @@ window.addEventListener('resize',fit);
  if(last&&blk(last))openBlock(last);else showCity()})();
 (async function(){try{if(window.claude&&claude.use){db=await claude.use('db')}}catch(e){}
  if(!db){setSt('Сохраняется на телефоне');return}
- if(!document.getElementById('cityView').classList.contains('hide'))showCity();else{var id=cur;fromDb(id,function(v){if(cur!==id||drag||stroke||hdrag||bdrag)return;items=JSON.parse(JSON.stringify(v.items));paths=JSON.parse(JSON.stringify(v.paths));GROUND=v.ground||'grass';BGIMG=v.bg||'';ground();sel=-1;hist=[];drawPaths();render();setSt('Загружено ✓')})}})();
+ if(!document.getElementById('cityView').classList.contains('hide'))showCity();else{var id=cur;fromDb(id,function(v){if(cur!==id||drag||stroke||hdrag||bdrag)return;items=JSON.parse(JSON.stringify(v.items));paths=JSON.parse(JSON.stringify(v.paths));GROUND=v.ground||'grass';BGIMG=v.bg||BGDEF[id]||'';ground();sel=-1;hist=[];drawPaths();render();setSt('Загружено ✓')})}})();
 </script></body></html>
