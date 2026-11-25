@@ -36,3 +36,4 @@ s34 ZbBE3K8MPKPRoLO5brpS kt_library,kt_glass,kt_kiosk,kt_pergola,kt_globe,kt_boo
 s35 ZbBE3K8MPKPRoLO5brpS mk_school,mk_observ,mk_class,mk_pond,mk_pitch,mk_track,mk_bikes,mk_arch,mk_green (прямой вид по мотивам ref/mektep_ref.png; планировка извилистая)
 s36 ZbBE3K8MPKPRoLO5brpS fn_log,fn_vine,fn_picket,fn_wattle,fn_stone,fn_iron,fn_bamboo,fn_rope,fn_end (заборы, прямой вид; раздел 🚧 Заборы)
 s37 ZbBE3K8MPKPRoLO5brpS ab_station,ab_canopy,ab_kassa,bus_yellow,bus_white,bus_blue,ab_parking,ab_barrier,ab_sign (по образцу ref/avto_ref.png); в редакторе дорожки asph и asph_l
+s38 ZbBE3K8MPKPRoLO5brpS bus_fy,bus_fw,bus_fb,car_white,car_taxi,car_red,car_blue,car_green,van_white (машины спереди-сбоку); подложка art/bg/avtobeket.webp (земля квартала по ref/avto_ref2.png)
