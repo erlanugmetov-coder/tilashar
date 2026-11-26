@@ -82,12 +82,6 @@ function tFind(id){return CTASK.filter(function(t){return t.id===id})[0]}
   /* почта и остановка (были в Теме 1) — теперь в своих кварталах и открываются с ними */
   var p=tFind('post');if(p){delete p.cl;p.tl=3}var b=tFind('bus');if(b){delete b.cl;b.xl=1}
   var y=tFind('yurt');if(y){delete y.cl;y.lv=4}
-  /* Саябақ (26.11): задания — своими картинками, как в старом парке; середина свободнее */
-  GL.forEach(function(L){if(L.id!=='sayabaq')return;
-    var P={pbooks:['pbooks',330,262,112],ptrack:['ptrack',680,160,150],pbike:['pbike',245,372,150],pwall:['pwall',534,680,118],ptramp:['hopscotch',130,752,96],pdance:['pdance',650,770,140],pfount:['drink_fount',576,500,40]};
-    var DEL={'tree1:344:234':1,'tree2:344:334':1,'tree_poplar:358:626':1,'tree_poplar:482:572':1,'tree1:486:227':1,'tree2:566:193':1,'tree1:173:492':1,'tree2:278:494':1,'bush_flowers:657:370':1,'bench:491:753':1,'flowers:707:753':1,'star:259:756':1};
-    L.items=L.items.filter(function(it){return !DEL[it.n+':'+it.x+':'+it.b]});
-    L.items.forEach(function(it){var p=P[it.t];if(p){it.n=p[0];it.x=p[1];it.b=p[2];it.w=p[3]}});});
   /* предметы из редактора: где стоит задание */
   GL.forEach(function(L){var q=QI[L.id];if(!q)return;L.items.forEach(function(it){if(!it.t)return;var t=tFind(it.t);if(!t){delete it.t;return}
     var w=it.w,h=hgt(it.n,w);t.x=q.x+it.x;t.y=q.y+it.b;t.q=L.id;t.it=it;t.top=t.y-h;t.box={x1:t.x-w*.42,x2:t.x+w*.42,y1:t.y-Math.min(h*.55,140),y2:t.y+4};TI[t.id]=1})});
@@ -124,9 +118,9 @@ var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',70
   Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='ytramp'?70:8})});})();
 ;(function(){var st=document.createElement('style');st.textContent='svg.res[data-r="ytramp"]{animation:yjump 1s cubic-bezier(.3,0,.7,1) infinite}@keyframes yjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}.obj.built[data-t="yballs"]{transform-box:fill-box;animation:ybob 2.6s ease-in-out infinite alternate}@keyframes ybob{from{transform:translateY(0)}to{transform:translateY(-4px)}}.cview.mv svg.res[data-r="ytramp"],.cview.mv .obj.built[data-t="yballs"]{animation-play-state:paused}';document.head.appendChild(st)})();
 try{RESULT.pwheel='Детская площадка готова! Парк готов! 🎉';var tw=tFind('pwheel');if(tw)tw.name='Детская площадка'}catch(e){}
-var PRES={pgate:['pkeeper',512,455],ptrack:['sport_boy',600,175],pbooks:['kid_g3',405,262],pdance:['dancer_g',652,744],pcafe:['ata',243,194],pbench:['apa',530,135]};
-(function(){var L=LAY.sayabaq;if(!L)return;L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});
-  Object.keys(PRES).forEach(function(id){var t=tFind(id),r=PRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='pdance'?70:8})});})();
+var PRES={pgate:['pkeeper',487,455],ptrack:['sport_boy',637,178],pbooks:['kid_g3',207,262],pdance:['dancer_g',640,760],pcafe:['ata',268,194],pbench:['apa',530,135]};
+(function(){var L=LAY.sayabaq;if(!L)return;L.items=L.items.filter(function(it){return !((PERS[it.n]||it.n==='star')&&!it.t&&!it.res)});
+  Object.keys(PRES).forEach(function(id){var t=tFind(id),r=PRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});})();
 (function bindRes(){Object.keys(NOV).forEach(function(b){if(CMAN[b]&&!CMAN[b].v)CMAN[b].v=NOV[b]});
   GL.forEach(function(L){var q=QI[L.id];if(!q)return;var used={};
   L.items.forEach(function(it,k){if(it.selfres){var ts=tFind(it.t);if(ts&&CMAN[ts.b]){used[k]=1;RBIND[L.id+':'+k]=ts.id;CMAN[ts.b].dx=q.x+it.x-ts.x;CMAN[ts.b].dy=q.y+it.b-ts.y;CMAN[ts.b].still=1;ts.rbound=1;ts.selfres=1}return}if(!it.res)return;var t=tFind(it.res);if(!t)return;used[k]=1;RBIND[L.id+':'+k]=t.id;var m=CMAN[t.b];m.dx=q.x+it.x-t.x;m.dy=q.y+it.b-t.y;m.still=1;t.rbound=1});
