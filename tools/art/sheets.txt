@@ -40,3 +40,4 @@ s38 ZbBE3K8MPKPRoLO5brpS bus_fy,bus_fw,bus_fb,car_white,car_taxi,car_red,car_blu
 s39 ZbBE3K8MPKPRoLO5brpS ps_office,ps_warehouse,ps_kiosk,ps_truck,ps_van,ps_locker,ps_board,ps_mailbox,ps_flag; подложка art/bg/poshta.webp (по ref/poshta_ref.png)
 s40 ZbBE3K8MPKPRoLO5brpS busf_y,busf_w,busf_b,carf_white,carf_taxi,carf_red,carf_blue,carf_green,vanf_white (строго спереди)
 s41 ZbBE3K8MPKPRoLO5brpS kid_b2,kid_b3,kid_b4,kid_b5,kid_g2,kid_g3,kid_g4,apa2,ata2 (новые жители, образец ref/people_ref.png, 16:9)
+s42 ZbBE3K8MPKPRoLO5brpS hopscotch,pkeeper,dancer_g,rope_g (2x2, парк)
