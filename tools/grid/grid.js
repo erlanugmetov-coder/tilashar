@@ -99,7 +99,7 @@ var RN={a_lamp2:'Фонарь горит — светло! 💡',lamp:'Фона�
  a_bush1:'Куст расцвёл! 🌺',a_bush2:'Куст посажен — зелено! 🌿'};
 try{Object.keys(RN).forEach(function(k){RESULT[k]=RN[k]})}catch(e){}
 /* жители: тот, кого Ерлан поставил рядом с постройкой, и говорит за неё */
-var PERS={aga:1,apa:1,artist:1,ata:1,baker:1,cashier:1,cook:1,doctor:1,guard:1,guest:1,kid_boy:1,kid_girl:1,magician:1,man_taqiya:1,seller:1,sport_boy:1,sport_girl:1,taxi_driver:1,teacher:1};
+var PERS={kid_b2:1,kid_b3:1,kid_b4:1,kid_b5:1,kid_g2:1,kid_g3:1,kid_g4:1,apa2:1,ata2:1,aga:1,apa:1,artist:1,ata:1,baker:1,cashier:1,cook:1,doctor:1,guard:1,guest:1,kid_boy:1,kid_girl:1,magician:1,man_taqiya:1,seller:1,sport_boy:1,sport_girl:1,taxi_driver:1,teacher:1};
 var RBIND={},RVIRT=[];
 /* кто каким голосом говорит → какие картинки людей ему подходят */
 var VIMG={m:['aga','man_taqiya','guard','guest','baker','cook','taxi_driver','magician'],w:['teacher','seller','cashier','doctor'],g:['apa'],a:['ata'],kb:['kid_boy','sport_boy'],kg:['kid_girl','sport_girl','artist']};
@@ -110,9 +110,15 @@ var ARES={school:['kid_boy',150,272,25],hosp:['doctor',716,240,27],stad:['fb_kic
 (function(){var L=LAY.aina,q=QI.aina;var tb=tFind('a_bench2');if(tb&&CMAN.sayabaq){tb.b='nurlan';CMAN.nurlan=CMAN.sayabaq;CMAN.nurlan.v=CMAN.nurlan.v||'m'}
   Object.keys(ARES).forEach(function(id){var t=tFind(id),r=ARES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:r[3],f:0,res:id,z:id==='stad'?110:id==='stage'?90:id==='school'?130:8})});
   L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});})();
+/* Ярмарка: каждый житель у своей постройки, картинка по возрасту/полу (как в старом приложении) */
+var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',700,392],ytir:['kid_b4',640,218],yyurt:['apa2',572,505],ywheel:['aga',312,522],yurt:['apa',228,509],yswing:['sport_girl',373,617],ytramp:['sport_boy',592,603],yvata:['kid_g4',236,752],yice:['kid_g2',772,750]};
+(function(){var L=LAY.yarmarka;if(!L)return;
+  L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});
+  L.items.forEach(function(it){if(it.t==='yfount'&&it.n==='ata'){it.n='drink_fount';it.w=40}if(it.t==='ystage'&&it.n==='star')it.selfres=1});
+  Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});})();
 (function bindRes(){Object.keys(NOV).forEach(function(b){if(CMAN[b]&&!CMAN[b].v)CMAN[b].v=NOV[b]});
   GL.forEach(function(L){var q=QI[L.id];if(!q)return;var used={};
-  L.items.forEach(function(it,k){if(!it.res)return;var t=tFind(it.res);if(!t)return;used[k]=1;RBIND[L.id+':'+k]=t.id;var m=CMAN[t.b];m.dx=q.x+it.x-t.x;m.dy=q.y+it.b-t.y;m.still=1;t.rbound=1});
+  L.items.forEach(function(it,k){if(it.selfres){var ts=tFind(it.t);if(ts&&CMAN[ts.b]){used[k]=1;RBIND[L.id+':'+k]=ts.id;CMAN[ts.b].dx=q.x+it.x-ts.x;CMAN[ts.b].dy=q.y+it.b-ts.y;CMAN[ts.b].still=1;ts.rbound=1;ts.selfres=1}return}if(!it.res)return;var t=tFind(it.res);if(!t)return;used[k]=1;RBIND[L.id+':'+k]=t.id;var m=CMAN[t.b];m.dx=q.x+it.x-t.x;m.dy=q.y+it.b-t.y;m.still=1;t.rbound=1});
   CTASK.filter(function(t){return t.q===L.id&&t.it&&!t.rbound&&CMAN[t.b]&&!CMAN[t.b].aina}).forEach(function(t){var m=CMAN[t.b],ok=VIMG[m.v]||(m.girl?VIMG.kg:VIMG.kb),best=-1,bd=1e9;
     L.items.forEach(function(it,k){if(it.t||!PERS[it.n]||used[k]||ok.indexOf(it.n)<0)return;var d=Math.hypot(q.x+it.x-t.x,q.y+it.b-t.y);if(d<bd){bd=d;best=k}});
     if(best>=0&&bd<380){used[best]=1;var it=L.items[best];RBIND[L.id+':'+best]=t.id;m.dx=q.x+it.x-t.x;m.dy=q.y+it.b-t.y;m.still=1;return}
@@ -257,9 +263,9 @@ function zOf(L,it){return Math.round(QI[L.id].y+it.b+(it.z||0))}
 spritesHTML=function(){var c=cst(),h='';
   GL.forEach(function(L){var q=QI[L.id];if(!q)return;L.items.forEach(function(it,k){if(it.t&&TI[it.t])return;if(RBIND[L.id+':'+k])return;if(it.need&&!cdone(it.need))return;
     var w=it.w,hh=hgt(it.n,w),x=q.x+it.x,b=q.y+it.b;h+=spr(zOf(L,it),[x-w/2-2,b-hh-2,w+4,hh+4],img(it.n,x,b,w,it.f))})});
-  CTASK.forEach(function(t){var bx=boxOf(t);h+=spr(t.road?t.y-30:(t.it?Math.round(t.y+(t.it.z||0)):t.y),bx,'<g class="obj'+(cdone(t.id)?' built':'')+'" data-t="'+t.id+'">'+taskSVG(t)+'</g>')});
+  CTASK.forEach(function(t){if(t.selfres&&cdone(t.id))return;var bx=boxOf(t);h+=spr(t.road?t.y-30:(t.it?Math.round(t.y+(t.it.z||0)):t.y),bx,'<g class="obj'+(cdone(t.id)?' built':'')+'" data-t="'+t.id+'">'+taskSVG(t)+'</g>')});
   /* жители: свой человек из редактора; до постройки — просто стоит, после — говорит (💬) */
-  GL.forEach(function(L){var q=QI[L.id];if(!q)return;L.items.forEach(function(it,k){var id=RBIND[L.id+':'+k];if(!id)return;var t=tFind(id);if(!t)return;var m=CMAN[t.b],w=resW(it.n,it.w),hh=hgt(it.n,w),px=q.x+it.x,py=q.y+it.b,on=cdone(t.id);
+  GL.forEach(function(L){var q=QI[L.id];if(!q)return;L.items.forEach(function(it,k){var id=RBIND[L.id+':'+k];if(!id)return;var t=tFind(id);if(!t)return;if(t.selfres&&!cdone(t.id))return;var m=CMAN[t.b],w=resW(it.n,it.w),hh=hgt(it.n,w),px=q.x+it.x,py=q.y+it.b,on=cdone(t.id);
     RES[t.id]=RES[t.id]||{dx:0,dy:0,tx:0,ty:0,wait:1e9,k:0};
     h+='<svg class="spr res'+(on&&WALK[t.id]?' walker':'')+'" data-r="'+t.id+'" data-by="'+py+'" style="left:'+(px-w/2-20)+'px;top:'+(py-hh-40)+'px;width:'+(w+40)+'px;height:'+(hh+50)+'px;z-index:'+Math.round(py+(it.z||0))+'" viewBox="'+(px-w/2-20)+' '+(py-hh-40)+' '+(w+40)+' '+(hh+50)+'">'+
      (on?'<g class="resident" data-r="'+t.id+'">':'<g>')+'<g class="rb"><g class="rf">'+(t.id==='stad'?kickSVG(px,py,w):img(it.n,px,py,w,it.f))+'</g></g>'+(on&&rnew(t.id,m)?'<g class="rnew"><circle cx="'+(px+w/2)+'" cy="'+(py-hh-6)+'" r="12" fill="#fff" stroke="#ffd200" stroke-width="3"/><text x="'+(px+w/2)+'" y="'+(py-hh-1)+'" font-size="14" text-anchor="middle">💬</text></g>':'')+
