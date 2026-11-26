@@ -113,7 +113,7 @@ var ARES={school:['kid_boy',150,272,25],hosp:['doctor',716,240,27],stad:['fb_kic
 /* Ярмарка: каждый житель у своей постройки, картинка по возрасту/полу (как в старом приложении) */
 var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',700,392],ytir:['kid_b4',640,218],yyurt:['apa2',572,505],ywheel:['aga',287,497],yurt:['apa',228,509],yswing:['sport_girl',373,617],ytramp:['kid_b5',499,563],yvata:['kid_g4',236,752],yice:['kid_g2',730,752]};
 (function(){var L=LAY.yarmarka;if(!L)return;
-  L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});
+  L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)&&!(!it.t&&/^(pt_|bush|tree)/.test(it.n))});/* без деревьев и кустов — просторнее (решение Ерлана 26.11, можно вернуть) */
   L.items.forEach(function(it){if(it.t==='yfount'&&it.n==='ata'){it.n='drink_fount';it.w=40}if(it.t==='ystage'&&it.n==='star')it.selfres=1});
   Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='ytramp'?70:8})});})();
 ;(function(){var st=document.createElement('style');st.textContent='svg.res[data-r="ytramp"]{animation:yjump 1s cubic-bezier(.3,0,.7,1) infinite}@keyframes yjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}.obj.built[data-t="yballs"]{transform-box:fill-box;animation:ybob 2.6s ease-in-out infinite alternate}@keyframes ybob{from{transform:translateY(0)}to{transform:translateY(-4px)}}.cview.mv svg.res[data-r="ytramp"],.cview.mv .obj.built[data-t="yballs"]{animation-play-state:paused}';document.head.appendChild(st)})();
