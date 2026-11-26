@@ -111,11 +111,12 @@ var ARES={school:['kid_boy',150,272,25],hosp:['doctor',716,240,27],stad:['fb_kic
   Object.keys(ARES).forEach(function(id){var t=tFind(id),r=ARES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:r[3],f:0,res:id,z:id==='stad'?110:id==='stage'?90:id==='school'?130:8})});
   L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});})();
 /* Ярмарка: каждый житель у своей постройки, картинка по возрасту/полу (как в старом приложении) */
-var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',700,392],ytir:['kid_b4',640,218],yyurt:['apa2',572,505],ywheel:['aga',312,522],yurt:['apa',228,509],yswing:['sport_girl',373,617],ytramp:['sport_boy',592,603],yvata:['kid_g4',236,752],yice:['kid_g2',772,750]};
+var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',700,392],ytir:['kid_b4',640,218],yyurt:['apa2',572,505],ywheel:['aga',287,497],yurt:['apa',228,509],yswing:['sport_girl',373,617],ytramp:['sport_boy',508,586],yvata:['kid_g4',236,752],yice:['kid_g2',730,752]};
 (function(){var L=LAY.yarmarka;if(!L)return;
   L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});
   L.items.forEach(function(it){if(it.t==='yfount'&&it.n==='ata'){it.n='drink_fount';it.w=40}if(it.t==='ystage'&&it.n==='star')it.selfres=1});
-  Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});})();
+  Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='ytramp'?40:8})});})();
+;(function(){var st=document.createElement('style');st.textContent='svg.res[data-r="ytramp"]{animation:yjump 1s cubic-bezier(.3,0,.7,1) infinite}@keyframes yjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}.obj.built[data-t="yballs"]{transform-box:fill-box;animation:ybob 2.6s ease-in-out infinite alternate}@keyframes ybob{from{transform:translateY(0)}to{transform:translateY(-4px)}}.cview.mv svg.res[data-r="ytramp"],.cview.mv .obj.built[data-t="yballs"]{animation-play-state:paused}';document.head.appendChild(st)})();
 (function bindRes(){Object.keys(NOV).forEach(function(b){if(CMAN[b]&&!CMAN[b].v)CMAN[b].v=NOV[b]});
   GL.forEach(function(L){var q=QI[L.id];if(!q)return;var used={};
   L.items.forEach(function(it,k){if(it.selfres){var ts=tFind(it.t);if(ts&&CMAN[ts.b]){used[k]=1;RBIND[L.id+':'+k]=ts.id;CMAN[ts.b].dx=q.x+it.x-ts.x;CMAN[ts.b].dy=q.y+it.b-ts.y;CMAN[ts.b].still=1;ts.rbound=1;ts.selfres=1}return}if(!it.res)return;var t=tFind(it.res);if(!t)return;used[k]=1;RBIND[L.id+':'+k]=t.id;var m=CMAN[t.b];m.dx=q.x+it.x-t.x;m.dy=q.y+it.b-t.y;m.still=1;t.rbound=1});
@@ -125,6 +126,12 @@ var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',70
     /* подходящего человека рядом нет — ставим своего у постройки */
     var n=VDEF[m.v]||(m.girl?'kid_girl':'kid_boy'),w=26,px=t.x+Math.min(t.it.w/2+18,110),py=t.y+6;
     var vi={n:n,w:w,x:px-q.x,b:py-q.y,f:1};L.items.push(vi);var k2=L.items.length-1;RBIND[L.id+':'+k2]=t.id;m.dx=px-t.x;m.dy=py-t.y;m.still=1})})})();
+/* сдвиги жителей, которых закрывали деревья/заборы/постройки (проверка occ.py) */
+var RMOVE={mpool:[-70,70],ztigers:[0,70],zcarou:[25,25],zfish:[25,25],pcafe:[-25,0],zbutter:[45,0],zmonk:[-25,25],pbench:[-25,0],hcat:[-25,0]};
+function rmoveApply(){GL.forEach(function(L){var q=QI[L.id];if(!q)return;L.items.forEach(function(it,k){var id=RBIND[L.id+':'+k];if(!id||!RMOVE[id]||it._mv)return;var t=tFind(id),m=t&&CMAN[t.b];if(!m)return;it._mv=1;it.x+=RMOVE[id][0];it.b+=RMOVE[id][1];m.dx=q.x+it.x-t.x;m.dy=q.y+it.b-t.y})})}
+rmoveApply();
+window.__rmove=function(id,dx,dy){GL.forEach(function(L){L.items.forEach(function(it,k){if(RBIND[L.id+':'+k]===id){var o=it._o||[it.x,it.b];it._o=o;it.x=o[0]+dx;it.b=o[1]+dy}})});try{showCity()}catch(e){}};
+
 
 /* ---------- рисование ---------- */
 function f1(v){return Math.round(v*10)/10}
@@ -232,7 +239,7 @@ window.treelineHTML=function(){var T=[['tree2',44],['tree2',52],['tree2',38],['t
   return '<svg class="spr" style="left:0;top:'+top+'px;width:'+CW+'px;height:'+(yb-top+4)+'px;z-index:6" viewBox="0 '+top+' '+CW+' '+(yb-top+4)+'">'+h+'</svg>'};
 
 /* жители квартала Айны гуляют около своих зданий (CSS, легко); при движении карты — пауза */
-var WALK={school:[-38,11,-1],hosp:[-42,13,-5],fount:[40,12,-3],studio:[30,10,-7],a_bench2:[36,14,-9]};
+var WALK={yvata:[40,11,-2],yurt:[34,13,-6],ytir:[38,10,-4],yice:[-38,12,-8],school:[-38,11,-1],hosp:[-42,13,-5],fount:[40,12,-3],studio:[30,10,-7],a_bench2:[36,14,-9]};
 ;(function(){var css='.walker{animation-timing-function:linear;animation-iteration-count:infinite;will-change:transform}.walker .rf{transform-box:fill-box;transform-origin:50% 100%;animation-iteration-count:infinite;animation-timing-function:steps(1,end)}.cview.mv .walker,.cview.mv .walker *{animation-play-state:paused!important}';
   Object.keys(WALK).forEach(function(id){var dx=WALK[id][0],k='',st=8,f='';
     var at=function(p,x,y){k+=p.toFixed(1)+'%{transform:translate('+x.toFixed(1)+'px,'+y+'px)}'};
