@@ -118,6 +118,9 @@ var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',70
   Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='ytramp'?70:8})});})();
 ;(function(){var st=document.createElement('style');st.textContent='svg.res[data-r="ytramp"]{animation:yjump 1s cubic-bezier(.3,0,.7,1) infinite}@keyframes yjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}.obj.built[data-t="yballs"]{transform-box:fill-box;animation:ybob 2.6s ease-in-out infinite alternate}@keyframes ybob{from{transform:translateY(0)}to{transform:translateY(-4px)}}.cview.mv svg.res[data-r="ytramp"],.cview.mv .obj.built[data-t="yballs"]{animation-play-state:paused}';document.head.appendChild(st)})();
 try{RESULT.pwheel='Детская площадка готова! Парк готов! 🎉';var tw=tFind('pwheel');if(tw)tw.name='Детская площадка'}catch(e){}
+var URES={hhome1:['apa2',252,226],hhome2:['kid_boy',598,262],hgarden:['ata2',648,746],hcat:['kid_girl',195,540],hbench:['aga',392,228]};
+(function(){var L=LAY.uyler;if(!L)return;L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});
+  Object.keys(URES).forEach(function(id){var t=tFind(id),r=URES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});})();
 var PRES={pgate:['pkeeper',487,455],ptrack:['sport_boy',637,178],pbooks:['kid_g3',207,262],pdance:['dancer_g',640,760],pcafe:['ata',268,194],pbench:['apa',530,135]};
 (function(){var L=LAY.sayabaq;if(!L)return;L.items=L.items.filter(function(it){return !((PERS[it.n]||it.n==='star')&&!it.t&&!it.res)});
   Object.keys(PRES).forEach(function(id){var t=tFind(id),r=PRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});})();
