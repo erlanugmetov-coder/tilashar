@@ -12,7 +12,7 @@ loadRV=function(){if(RVP4)return RVP4;RVP4=fetch('rv4.mp3').then(function(r){if(
 
 /* футбол: Санжар бьёт (нога на шарнирах бедро+колено), Әли на воротах ловит */
 var FB={kx:205,kb:668,kw:42,gx:290,gb:652,T:3,W0:1033,H0:1324,HIP:[480,830],KN:[652,858],TOE:[945,975],kxw:40};
-FB.kx=205;FB.kw=42;FB.kb=668;FB.kx2=FB.gx;
+FB.kx=205;FB.kw=38;FB.kb=668;FB.kx2=FB.gx;
 function fbPts(A){var px=A.x+FB.kx,py=A.y+FB.kb,w=resW('fb_kick_body',FB.kw),s=w/FB.W0,X0=px-w/2,Y0=py-FB.H0*s,hx=X0+FB.HIP[0]*s,hy=Y0+FB.HIP[1]*s,tx=X0+FB.TOE[0]*s,ty=Y0+FB.TOE[1]*s,a=-8*Math.PI/180,
   F=[hx+(tx-hx)*Math.cos(a)-(ty-hy)*Math.sin(a),hy+(tx-hx)*Math.sin(a)+(ty-hy)*Math.cos(a)];
   var KW2=resW('fb_keep',FB.kw2),gs=KW2/997,gx=A.x+FB.gx,gb=A.y+FB.gb,G=[gx-KW2/2+300*gs,gb-1347*gs+600*gs];
@@ -106,7 +106,7 @@ var VIMG={m:['aga','man_taqiya','guard','guest','baker','cook','taxi_driver','ma
 var NOV={mektep:'kb',aurukhana:'w',stadion:'kb',studia:'kg',sakhna:'kg',fontan:'m',sayabaq:'m'};
 var VDEF={m:'aga',w:'teacher',g:'apa',a:'ata',kb:'kid_boy',kg:'kid_girl'};
 /* квартал Айны: жители у входов своих зданий (как в старом Центре) */
-var ARES={school:['kid_boy',150,272,25],hosp:['doctor',716,240,27],stad:['fb_kick_body',205,668,42],fount:['guest',484,470,27],studio:['artist',642,352,28],stage:['star',624,666,30],a_bench2:['man_taqiya',572,530,27]};
+var ARES={school:['kid_boy',150,272,25],hosp:['doctor',716,240,27],stad:['fb_kick_body',205,668,38],fount:['guest',484,470,27],studio:['artist',642,352,28],stage:['star',624,666,30],a_bench2:['man_taqiya',572,530,27]};
 (function(){var L=LAY.aina,q=QI.aina;var tb=tFind('a_bench2');if(tb&&CMAN.sayabaq){tb.b='nurlan';CMAN.nurlan=CMAN.sayabaq;CMAN.nurlan.v=CMAN.nurlan.v||'m'}
   Object.keys(ARES).forEach(function(id){var t=tFind(id),r=ARES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:r[3],f:0,res:id,z:id==='stad'?110:id==='stage'?90:id==='school'?130:8})});
   L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});})();
