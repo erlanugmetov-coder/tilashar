@@ -99,7 +99,7 @@ var RN={a_lamp2:'Фонарь горит — светло! 💡',lamp:'Фона�
  a_bush1:'Куст расцвёл! 🌺',a_bush2:'Куст посажен — зелено! 🌿'};
 try{Object.keys(RN).forEach(function(k){RESULT[k]=RN[k]})}catch(e){}
 /* жители: тот, кого Ерлан поставил рядом с постройкой, и говорит за неё */
-var PERS={pkeeper:1,dancer_g:1,rope_g:1,kid_b2:1,kid_b3:1,kid_b4:1,kid_b5:1,kid_g2:1,kid_g3:1,kid_g4:1,apa2:1,ata2:1,aga:1,apa:1,artist:1,ata:1,baker:1,cashier:1,cook:1,doctor:1,guard:1,guest:1,kid_boy:1,kid_girl:1,magician:1,man_taqiya:1,seller:1,sport_boy:1,sport_girl:1,taxi_driver:1,teacher:1};
+var PERS={erlan:1,pkeeper:1,dancer_g:1,rope_g:1,kid_b2:1,kid_b3:1,kid_b4:1,kid_b5:1,kid_g2:1,kid_g3:1,kid_g4:1,apa2:1,ata2:1,aga:1,apa:1,artist:1,ata:1,baker:1,cashier:1,cook:1,doctor:1,guard:1,guest:1,kid_boy:1,kid_girl:1,magician:1,man_taqiya:1,seller:1,sport_boy:1,sport_girl:1,taxi_driver:1,teacher:1};
 var RBIND={},RVIRT=[];
 /* кто каким голосом говорит → какие картинки людей ему подходят */
 var VIMG={m:['aga','man_taqiya','guard','guest','baker','cook','taxi_driver','magician'],w:['teacher','seller','cashier','doctor'],g:['apa'],a:['ata'],kb:['kid_boy','sport_boy'],kg:['kid_girl','sport_girl','artist']};
@@ -118,7 +118,7 @@ var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',70
   Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='ytramp'?70:8})});})();
 ;(function(){var st=document.createElement('style');st.textContent='svg.res[data-r="ytramp"]{animation:yjump 1s cubic-bezier(.3,0,.7,1) infinite}@keyframes yjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}.obj.built[data-t="yballs"]{transform-box:fill-box;animation:ybob 2.6s ease-in-out infinite alternate}@keyframes ybob{from{transform:translateY(0)}to{transform:translateY(-4px)}}.cview.mv svg.res[data-r="ytramp"],.cview.mv .obj.built[data-t="yballs"]{animation-play-state:paused}';document.head.appendChild(st)})();
 try{RESULT.pwheel='Детская площадка готова! Парк готов! 🎉';var tw=tFind('pwheel');if(tw)tw.name='Детская площадка'}catch(e){}
-var URES={hhome1:['apa2',252,226],hhome2:['kid_boy',598,262],hgarden:['ata2',648,746],hcat:['kid_girl',195,540],hbench:['aga',392,228]};
+var URES={hhome1:['apa2',252,226],hhome2:['kid_boy',598,262],hgarden:['ata2',648,746],hcat:['kid_girl',195,540],hbench:['erlan',392,228]};
 (function(){var L=LAY.uyler;if(!L)return;L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});
   Object.keys(URES).forEach(function(id){var t=tFind(id),r=URES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});})();
 var PRES={pgate:['pkeeper',487,455],ptrack:['sport_boy',637,178],pbooks:['kid_g3',207,262],pdance:['dancer_g',640,760],pcafe:['ata',268,194],pbench:['apa',530,135]};
