@@ -118,7 +118,7 @@ var YRES={ytoys:['kid_b3',232,198],ymagic:['magician',378,222],ycar:['kid_b2',70
   Object.keys(YRES).forEach(function(id){var t=tFind(id),r=YRES[id];if(!t||!CMAN[t.b])return;L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:id==='ytramp'?70:8})});})();
 ;(function(){var st=document.createElement('style');st.textContent='svg.res[data-r="ytramp"]{animation:yjump 1s cubic-bezier(.3,0,.7,1) infinite}@keyframes yjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}.obj.built[data-t="yballs"]{transform-box:fill-box;animation:ybob 2.6s ease-in-out infinite alternate}@keyframes ybob{from{transform:translateY(0)}to{transform:translateY(-4px)}}svg.res[data-r=\"pdance\"]{transform-box:fill-box;transform-origin:50% 100%;animation:pdsw 1.6s ease-in-out infinite alternate}@keyframes pdsw{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}.cview.mv svg.res[data-r=\"pdance\"]{animation-play-state:paused}.cview.mv svg.res[data-r="ytramp"],.cview.mv .obj.built[data-t="yballs"]{animation-play-state:paused}';document.head.appendChild(st)})();
 try{RESULT.pwheel='Детская площадка готова! Парк готов! 🎉';var tw=tFind('pwheel');if(tw)tw.name='Детская площадка'}catch(e){}
-var MRES={mgate:['teacher',345,668],mbus:['kid_boy',178,488],mpool:['sport_boy',312,640]};
+var MRES={mgate:['teacher',345,668],mbus:['kid_boy',118,640],mpool:['sport_boy',312,640]};
 (function(){var L=LAY.mektep;if(!L)return;Object.keys(MRES).forEach(function(id){var t=tFind(id),r=MRES[id];if(!t||!CMAN[t.b])return;var e=null;L.items.forEach(function(it){if(!e&&it.n===r[0]&&!it.t&&!it.res&&!it._ed)e=it});if(e){e.res=id;e._ed=1;e.w=26;e.z=e.z||8;return}L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});})();
 var URES={hhome1:['apa2',252,226],hhome2:['kid_boy',598,262],hgarden:['ata2',648,746],hcat:['kid_girl',195,540],hbench:['erlan',392,228]};
 (function(){var L=LAY.uyler;if(!L)return;Object.keys(URES).forEach(function(id){var t=tFind(id),r=URES[id];if(!t||!CMAN[t.b])return;var e=null;L.items.forEach(function(it){if(!e&&it.n===r[0]&&!it.t&&!it.res&&!it._ed)e=it});if(e){e.res=id;e._ed=1;e.w=26;e.z=e.z||8;return}L.items.push({n:r[0],x:r[1],b:r[2],w:26,f:0,res:id,z:8})});L.items=L.items.filter(function(it){return !(PERS[it.n]&&!it.t&&!it.res)});})();
@@ -241,12 +241,15 @@ window.boatsHTML=function(){var h='',wl=RIVY0+(RIVY1-RIVY0)*.62,segs=[];
   return h};
 
 /* полоса деревьев вдоль шва с горами (над верхней дорогой) — разбавить */
+/* зебра на левой дороге у школы (напротив бассейна) */
+window.zebraHTML=function(){var q=GRIDQ&&GRIDQ.mektep;if(!q)return'';var y=q.y+608,h='';for(var i=0;i<5;i++)h+='<rect x="'+(q.x+7+i*9)+'" y="'+y+'" width="6" height="36" rx="1" fill="#f4f4f0" opacity=".92"/>';
+  return '<svg class="spr" style="left:0;top:0;width:'+CW+'px;height:'+CH+'px;z-index:2;pointer-events:none" viewBox="0 0 '+CW+' '+CH+'">'+h+'</svg>'};
 window.treelineHTML=function(){var T=[['tree2',44],['tree2',52],['tree2',38],['tree2',48],['tree2',56],['tree2',42]],h='',x=-20,i=0,yb=QY(0)-8,top=yb-140;
   while(x<CW+40){var t=T[(i*7+3)%T.length],w=t[1]*1.35*(0.85+((i*37)%30)/100),b=yb-((i*13)%3)*6;h+=img(t[0],x,b,w,(i%3)===1);x+=w*0.55+((i*29)%24);i++}
   return '<svg class="spr" style="left:0;top:'+top+'px;width:'+CW+'px;height:'+(yb-top+4)+'px;z-index:6" viewBox="0 '+top+' '+CW+' '+(yb-top+4)+'">'+h+'</svg>'};
 
 /* жители квартала Айны гуляют около своих зданий (CSS, легко); при движении карты — пауза */
-var WALK={mbus:[32,11,-3],mpool:[-28,12,-6],ptrack:[-70,6,-1],pbooks:[30,11,-3],pcafe:[-28,14,-7],hhome2:[-35,11,-2],hcat:[34,12,-5],hbench:[-30,13,-8],yvata:[40,11,-2],yurt:[34,13,-6],ytir:[38,10,-4],yice:[-38,12,-8],school:[-38,11,-1],hosp:[-42,13,-5],fount:[40,12,-3],studio:[30,10,-7],a_bench2:[36,14,-9]};
+var WALK={mbus:[-100,12,-3],mpool:[-28,12,-6],ptrack:[-70,6,-1],pbooks:[30,11,-3],pcafe:[-28,14,-7],hhome2:[-35,11,-2],hcat:[34,12,-5],hbench:[-30,13,-8],yvata:[40,11,-2],yurt:[34,13,-6],ytir:[38,10,-4],yice:[-38,12,-8],school:[-38,11,-1],hosp:[-42,13,-5],fount:[40,12,-3],studio:[30,10,-7],a_bench2:[36,14,-9]};
 ;(function(){var css='.walker{animation-timing-function:linear;animation-iteration-count:infinite;will-change:transform}.walker .rf{transform-box:fill-box;transform-origin:50% 100%;animation-iteration-count:infinite;animation-timing-function:steps(1,end)}.cview.mv .walker,.cview.mv .walker *{animation-play-state:paused!important}';
   Object.keys(WALK).forEach(function(id){var dx=WALK[id][0],k='',st=8,f='';
     var at=function(p,x,y){k+=p.toFixed(1)+'%{transform:translate('+x.toFixed(1)+'px,'+y+'px)}'};
@@ -413,4 +416,4 @@ var NEWQ=[['kitaphana','garr','Слышишь? 📚 Рядом со школой
 ainaFix=function(c){var x=c.ax,y=c.ay;if(!x||!qAt(x,y)||!qOpen(qAt(x,y))){x=QI.aina.x+520;y=QI.aina.y+640}if(!spotOK(x,y)){var s=freeSpot(x,y);x=s.x;y=s.y}c.ax=x;c.ay=y};
 })();
 /* подключить машины/поезд/лодки к отрисовке (после определения spritesHTML) */
-(function(){var _sp=spritesHTML;spritesHTML=function(){var b=_sp();if(window.trainOn&&trainOn())b=b.replace(/<image href="art\/(loco_s|wagon_yellow|wagon_blue|wagon_tail)\.webp\?v=5"[^>]*\/>/g,'');return b+(window.treelineHTML?treelineHTML():'')+(window.carsHTML?carsHTML():'')+(window.trainHTML?trainHTML():'')+(window.boatsHTML?boatsHTML():'')};var st=document.createElement('style');st.textContent='.ccars{display:none!important}';document.head.appendChild(st)})();
+(function(){var _sp=spritesHTML;spritesHTML=function(){var b=_sp();if(window.trainOn&&trainOn())b=b.replace(/<image href="art\/(loco_s|wagon_yellow|wagon_blue|wagon_tail)\.webp\?v=5"[^>]*\/>/g,'');return b+(window.treelineHTML?treelineHTML():'')+(window.carsHTML?carsHTML():'')+(window.trainHTML?trainHTML():'')+(window.boatsHTML?boatsHTML():'')+(window.zebraHTML?zebraHTML():'')};var st=document.createElement('style');st.textContent='.ccars{display:none!important}';document.head.appendChild(st)})();
