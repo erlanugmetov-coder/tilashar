@@ -242,7 +242,7 @@ window.boatsHTML=function(){var h='',wl=RIVY0+(RIVY1-RIVY0)*.62,segs=[];
 
 /* полоса деревьев вдоль шва с горами (над верхней дорогой) — разбавить */
 /* зебра на левой дороге у школы (напротив бассейна) */
-window.zebraHTML=function(){var q=GRIDQ&&GRIDQ.mektep;if(!q)return'';var y=q.y+608,h='';for(var i=0;i<5;i++)h+='<rect x="'+(q.x+7+i*9)+'" y="'+y+'" width="6" height="36" rx="1" fill="#f4f4f0" opacity=".92"/>';
+window.zebraHTML=function(){var q=GRIDQ&&GRIDQ.mektep;if(!q)return'';var y=q.y+620,h='';for(var i=0;i<5;i++)h+='<rect x="'+(q.x+7+i*9)+'" y="'+y+'" width="6" height="36" rx="1" fill="#f4f4f0" opacity=".92"/>';
   return '<svg class="spr" style="left:0;top:0;width:'+CW+'px;height:'+CH+'px;z-index:2;pointer-events:none" viewBox="0 0 '+CW+' '+CH+'">'+h+'</svg>'};
 window.treelineHTML=function(){var T=[['tree2',44],['tree2',52],['tree2',38],['tree2',48],['tree2',56],['tree2',42]],h='',x=-20,i=0,yb=QY(0)-8,top=yb-140;
   while(x<CW+40){var t=T[(i*7+3)%T.length],w=t[1]*1.35*(0.85+((i*37)%30)/100),b=yb-((i*13)%3)*6;h+=img(t[0],x,b,w,(i%3)===1);x+=w*0.55+((i*29)%24);i++}
